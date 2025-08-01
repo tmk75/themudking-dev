@@ -8,8 +8,8 @@
       <!-- Header -->
       <AppHeader />
       
-      <!-- Sidebar Navigation -->
-      <SidebarNav />
+      <!-- Floating Tab Bar -->
+      <FloatingTabBar />
       
       <!-- Main Content -->
       <main class="main-content">
@@ -33,7 +33,7 @@
 import { ref, onMounted } from 'vue'
 import { useAppStore } from '@/stores/app'
 import AppHeader from '@/components/layout/AppHeader.vue'
-import SidebarNav from '@/components/layout/SidebarNav.vue'
+import FloatingTabBar from '@/components/layout/FloatingTabBar.vue'
 import LoadingScreen from '@/components/common/LoadingScreen.vue'
 import ToastContainer from '@/components/common/ToastContainer.vue'
 import GlobalModal from '@/components/common/GlobalModal.vue'
@@ -42,7 +42,7 @@ export default {
   name: 'App',
   components: {
     AppHeader,
-    SidebarNav,
+    FloatingTabBar,
     LoadingScreen,
     ToastContainer,
     GlobalModal
@@ -79,7 +79,6 @@ export default {
   transition: all 0.3s ease;
 
   @media (min-width: 1024px) {
-    margin-left: 80px;
     padding: 100px 40px 40px 40px;
   }
 }

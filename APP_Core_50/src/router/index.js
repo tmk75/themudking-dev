@@ -92,7 +92,7 @@ router.beforeEach((to, from, next) => {
   const appStore = useAppStore()
   
   // Update page title
-  document.title = `${to.meta.title} - Core 50`
+  document.title = `${to.meta.title} - Global Talents Management`
   
   // Set loading state
   appStore.setLoading(true)

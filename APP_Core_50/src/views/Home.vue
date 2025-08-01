@@ -7,7 +7,7 @@
           <i class="fas fa-star"></i>
           <span>高管人才发展框架</span>
         </div>
-        <h1 class="hero-title">Core 50</h1>
+        <h1 class="hero-title">Global Talents Management</h1>
         <p class="hero-subtitle">构建卓越领导力的综合评估与发展体系</p>
         <p class="hero-description">
           通过科学的评估方法和个性化的发展路径，帮助高管人才实现职业突破与组织价值最大化
@@ -46,7 +46,7 @@
           核心特性
         </h2>
         <p class="section-description">
-          Core 50 框架提供全方位的人才评估和发展解决方案
+          Global Talents Management 框架提供全方位的人才评估和发展解决方案
         </p>
       </div>
 
@@ -138,7 +138,7 @@
       <div class="cta-content">
         <h2 class="cta-title">准备开始您的人才发展之旅？</h2>
         <p class="cta-description">
-          立即体验 Core 50 框架，解锁您团队的无限潜能
+          立即体验 Global Talents Management 框架，解锁您团队的无限潜能
         </p>
         <div class="cta-actions">
           <button class="btn primary large" @click="startTrial">

@@ -110,7 +110,7 @@ export const useAppStore = defineStore('app', () => {
       name: '张经理',
       email: 'zhang@company.com',
       role: 'manager',
-      avatar: '/avatars/default.jpg',
+      avatar: 'https://ui-avatars.com/api/?name=张经理&background=dd2525&color=fff&size=128',
       department: '人力资源部'
     }
   }

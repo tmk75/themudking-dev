@@ -1,7 +1,7 @@
 {
-  "name": "core50-vue-app",
+  "name": "global-talents-management-app",
   "version": "1.0.0",
-  "description": "Core 50 Executive Talent Framework - Vue.js Frontend",
+  "description": "Global Talents Management Executive Talent Framework - Vue.js Frontend",
   "main": "index.js",
   "scripts": {
     "dev": "vite",

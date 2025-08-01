@@ -5,26 +5,14 @@
       <div class="header-left">
         <router-link to="/" class="logo">
           <i class="fas fa-compass"></i>
-          <span>Core 50</span>
+          <span>Global Talents Management</span>
         </router-link>
         <div class="breadcrumb">
           <span class="breadcrumb-item">{{ currentPageTitle }}</span>
         </div>
       </div>
 
-      <!-- Navigation Links -->
-      <nav class="header-nav">
-        <router-link 
-          v-for="link in navLinks" 
-          :key="link.name"
-          :to="link.path" 
-          class="nav-link"
-          :class="{ active: $route.name === link.name }"
-        >
-          <i :class="link.icon"></i>
-          <span>{{ link.title }}</span>
-        </router-link>
-      </nav>
+      <!-- Navigation removed - using floating tab bar instead -->
 
       <!-- Right Side Actions -->
       <div class="header-right">
@@ -75,9 +63,16 @@
 
         <!-- User Menu -->
         <div class="user-dropdown" @click="toggleUserMenu">
-          <div class="user-avatar">
-            <img :src="currentUser?.avatar || '/avatars/default.jpg'" :alt="currentUser?.name">
-            <div class="user-status online"></div>
+          <div class="user-info-display">
+            <div class="user-name">{{ currentUser?.name || '用户' }}</div>
+            <div class="user-avatar">
+              <img 
+                :src="currentUser?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.name || '用户')}&background=dd2525&color=fff&size=128`" 
+                :alt="currentUser?.name || '用户'"
+                @error="handleAvatarError"
+              >
+              <div class="user-status online"></div>
+            </div>
           </div>
           
           <div v-if="showUserMenu" class="user-panel">
@@ -124,13 +119,7 @@ export default {
     const showNotifications = ref(false)
     const showUserMenu = ref(false)
 
-    const navLinks = [
-      { name: 'Home', path: '/', title: '首页', icon: 'fas fa-home' },
-      { name: 'Framework', path: '/framework', title: '框架', icon: 'fas fa-compass' },
-      { name: 'Dashboard', path: '/dashboard', title: '仪表盘', icon: 'fas fa-tachometer-alt' },
-      { name: 'Analytics', path: '/analytics', title: '分析', icon: 'fas fa-chart-line' },
-      { name: 'Reports', path: '/reports', title: '报告', icon: 'fas fa-file-alt' }
-    ]
+    // Navigation links removed - using floating tab bar instead
 
     const currentPageTitle = computed(() => {
       return route.meta.title || '首页'
@@ -169,6 +158,11 @@ export default {
       showUserMenu.value = false
     }
 
+    const handleAvatarError = (event) => {
+      // Fallback to a default avatar if image fails to load
+      event.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.value?.name || '用户')}&background=dd2525&color=fff&size=128`
+    }
+
     const formatTime = (timestamp) => {
       const now = new Date()
       const time = new Date(timestamp)
@@ -202,7 +196,6 @@ export default {
       searchActive,
       showNotifications,
       showUserMenu,
-      navLinks,
       currentPageTitle,
       currentUser,
       notifications,
@@ -213,7 +206,8 @@ export default {
       markAsRead,
       clearAllNotifications,
       logout,
-      formatTime
+      formatTime,
+      handleAvatarError
     }
   }
 }
@@ -278,44 +272,13 @@ export default {
 
 .breadcrumb {
   .breadcrumb-item {
-    color: rgba(255, 255, 255, 0.8);
+    color: #666;
     font-size: 0.9rem;
     font-weight: 500;
   }
 }
 
-.header-nav {
-  display: flex;
-  gap: 15px;
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  color: #666;
-  text-decoration: none;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  font-size: 14px;
-
-  &:hover,
-  &.active {
-    color: #dd2525;
-    background: rgba(221, 37, 37, 0.1);
-    transform: translateY(-2px);
-  }
-
-  i {
-    font-size: 16px;
-  }
-}
+/* Navigation links removed - using floating tab bar instead */
 
 .header-right {
   display: flex;
@@ -496,24 +459,48 @@ export default {
   font-size: 0.9rem;
 }
 
+.user-info-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(221, 37, 37, 0.1);
+  }
+}
+
+.user-name {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
 .user-avatar {
   position: relative;
   width: 40px;
   height: 40px;
-  cursor: pointer;
+  flex-shrink: 0;
 
   img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(221, 37, 37, 0.3);
     transition: all 0.3s ease;
   }
 
-  &:hover img {
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: scale(1.1);
+  .user-info-display:hover & img {
+    border-color: #dd2525;
+    transform: scale(1.05);
   }
 
   .user-status {
@@ -526,15 +513,15 @@ export default {
     border: 2px solid white;
 
     &.online {
-      background: #2ed573;
+      background: #28a745;
     }
 
     &.away {
-      background: #ffa502;
+      background: #ffc107;
     }
 
     &.offline {
-      background: #747d8c;
+      background: #6c757d;
     }
   }
 }

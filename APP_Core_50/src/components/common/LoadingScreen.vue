@@ -6,7 +6,7 @@
         <div class="logo-circle">
           <i class="fas fa-compass"></i>
         </div>
-        <div class="logo-text">Core 50</div>
+        <div class="logo-text">Global Talents Management</div>
       </div>
 
       <!-- Progress Bar -->
