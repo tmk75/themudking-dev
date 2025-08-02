@@ -68,6 +68,20 @@ export default {
         tooltip: '仪表盘'
       },
       {
+        name: 'FiveB',
+        path: '/5b',
+        icon: 'fas fa-star',
+        label: '5B框架',
+        tooltip: '5B核心能力'
+      },
+      {
+        name: 'NineGrid',
+        path: '/9grid',
+        icon: 'fas fa-th',
+        label: '九宫格',
+        tooltip: '九宫格人才矩阵'
+      },
+      {
         name: 'Assessment',
         path: '/assessment',
         icon: 'fas fa-clipboard-check',

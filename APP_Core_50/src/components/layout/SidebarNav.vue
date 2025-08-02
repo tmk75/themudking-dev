@@ -74,6 +74,18 @@ export default {
         icon: 'fas fa-tachometer-alt'
       },
       {
+        name: 'FiveB',
+        path: '/5b',
+        title: '5B框架',
+        icon: 'fas fa-layer-group'
+      },
+      {
+        name: 'NineGrid',
+        path: '/9grid',
+        title: '九宫格矩阵',
+        icon: 'fas fa-th'
+      },
+      {
         name: 'Assessment',
         path: '/assessment',
         title: '评估中心',

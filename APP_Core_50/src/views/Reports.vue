@@ -62,9 +62,46 @@ export default {
   margin: 0 auto;
 }
 
+.reports-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #ffffff;
+  min-height: 100vh;
+}
+
 .page-header {
-  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 40px;
+  gap: 20px;
+
+  .header-content {
+    flex: 1;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    letter-spacing: -0.02em;
+
+    i {
+      font-size: 2rem;
+      color: #dd2525;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 1.125rem;
+    color: #6c757d;
+    line-height: 1.5;
+  }
 }
 
 .header-content {
@@ -96,8 +133,12 @@ export default {
 }
 
 .coming-soon {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
   padding: 80px 40px;
   text-align: center;
+  margin-top: 40px;
 }
 
 .coming-soon-content {
@@ -136,10 +177,18 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 20px;
-  background: rgba(221, 37, 37, 0.05);
-  border-radius: 15px;
+  gap: 12px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #dd2525;
+    box-shadow: 0 4px 12px rgba(221, 37, 37, 0.1);
+    transform: translateY(-2px);
+  }
 
   i {
     font-size: 2rem;
@@ -147,32 +196,39 @@ export default {
   }
 
   span {
-    color: #333;
-    font-weight: 500;
-    font-size: 0.9rem;
+    color: #212529;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-align: center;
   }
 }
 
 .btn {
-  padding: 12px 24px;
-  border: 2px solid transparent;
-  border-radius: 25px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  
   &.primary {
-    background: linear-gradient(135deg, #dd2525, #b91c1c);
-    color: white;
-
+    background: #dd2525;
+    color: #ffffff;
+    
     &:hover {
-      background: linear-gradient(135deg, #c41e1e, #991b1b);
-      transform: translateY(-2px);
+      background: #c41e1e;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(221, 37, 37, 0.3);
     }
+  }
+  
+  i {
+    font-size: 0.875rem;
   }
 }
 

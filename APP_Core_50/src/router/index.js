@@ -7,7 +7,7 @@ const routes = [
     name: 'Home',
     component: () => import('@/views/Home.vue'),
     meta: {
-      title: '首页',
+      title: 'Home',
       transition: 'fade'
     }
   },
@@ -16,7 +16,7 @@ const routes = [
     name: 'Framework',
     component: () => import('@/views/Framework.vue'),
     meta: {
-      title: '框架概述',
+      title: 'Framework',
       transition: 'slide-left'
     }
   },
@@ -25,8 +25,26 @@ const routes = [
     name: 'Dashboard',
     component: () => import('@/views/Dashboard.vue'),
     meta: {
-      title: '仪表盘',
+      title: 'Dashboard',
       transition: 'slide-up'
+    }
+  },
+  {
+    path: '/5b',
+    name: 'FiveB',
+    component: () => import('@/views/FiveB.vue'),
+    meta: {
+      title: '5B Framework',
+      transition: 'slide-left'
+    }
+  },
+  {
+    path: '/9grid',
+    name: 'NineGrid',
+    component: () => import('@/views/NineGrid.vue'),
+    meta: {
+      title: '九宫格人才矩阵',
+      transition: 'slide-left'
     }
   },
   {
@@ -34,7 +52,7 @@ const routes = [
     name: 'Analytics',
     component: () => import('@/views/Analytics.vue'),
     meta: {
-      title: '数据分析',
+      title: 'Analytics',
       transition: 'slide-left'
     }
   },
@@ -43,7 +61,7 @@ const routes = [
     name: 'Reports',
     component: () => import('@/views/Reports.vue'),
     meta: {
-      title: '报告中心',
+      title: 'Reports',
       transition: 'slide-up'
     }
   },
@@ -52,7 +70,7 @@ const routes = [
     name: 'Assessment',
     component: () => import('@/views/Assessment.vue'),
     meta: {
-      title: '评估中心',
+      title: 'Assessment',
       transition: 'slide-left'
     }
   },
@@ -61,7 +79,7 @@ const routes = [
     name: 'Profile',
     component: () => import('@/views/Profile.vue'),
     meta: {
-      title: '个人档案',
+      title: 'Profile',
       transition: 'fade'
     }
   },
@@ -70,7 +88,7 @@ const routes = [
     name: 'Settings',
     component: () => import('@/views/Settings.vue'),
     meta: {
-      title: '系统设置',
+      title: 'Settings',
       transition: 'slide-up'
     }
   }

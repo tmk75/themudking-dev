@@ -107,10 +107,10 @@ export const useAppStore = defineStore('app', () => {
     await new Promise(resolve => setTimeout(resolve, 500))
     currentUser.value = {
       id: 1,
-      name: '张经理',
-      email: 'zhang@company.com',
+      name: 'Carol Wen',
+      email: 'carol.wen@company.com',
       role: 'manager',
-      avatar: 'https://ui-avatars.com/api/?name=张经理&background=dd2525&color=fff&size=128',
+      avatar: 'https://ui-avatars.com/api/?name=Carol+Wen&background=dd2525&color=fff&size=128',
       department: '人力资源部'
     }
   }

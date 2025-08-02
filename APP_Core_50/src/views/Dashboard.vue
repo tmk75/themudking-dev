@@ -1,218 +1,196 @@
 <template>
   <div class="dashboard-page">
-    <!-- Dashboard Header -->
-    <div class="dashboard-header glass animate__animated animate__fadeInDown">
+    <div class="page-header">
       <div class="header-content">
-        <div class="header-left">
-          <h1 class="page-title">
-            <i class="fas fa-tachometer-alt"></i>
-            仪表盘
-          </h1>
-          <p class="page-subtitle">实时监控团队发展状况和关键指标</p>
+        <h1 class="page-title">
+          <i class="fas fa-tachometer-alt"></i>
+          Dashboard
+        </h1>
+        <p class="page-subtitle">Real-time monitoring of team development status and key metrics</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" @click="refreshData">
+          <i class="fas fa-sync-alt" :class="{ 'fa-spin': isRefreshing }"></i>
+          Refresh Data
+        </button>
+        <button class="btn btn-outline" @click="exportReport">
+          <i class="fas fa-download"></i>
+          Export Report
+        </button>
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      <div 
+        v-for="(metric, index) in metricsData" 
+        :key="index"
+        class="metric-card"
+        @click="showMetricDetail(metric)"
+      >
+        <div class="metric-icon">
+          <i :class="metric.icon"></i>
         </div>
-        <div class="header-actions">
-          <button class="btn primary" @click="refreshData">
-            <i class="fas fa-sync-alt" :class="{ 'fa-spin': isRefreshing }"></i>
-            刷新数据
+        <div class="metric-content">
+          <div class="metric-value">{{ metric.value }}</div>
+          <div class="metric-label">{{ metric.label }}</div>
+          <div class="metric-trend" :class="metric.trend.type">
+            <i :class="getTrendIcon(metric.trend.type)"></i>
+            {{ metric.trend.value }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title">Talent Status Overview</h2>
+      <div class="section-actions">
+        <select v-model="selectedDepartment" class="filter-select">
+          <option value="all">All Departments</option>
+          <option value="sales">Sales</option>
+          <option value="marketing">Marketing</option>
+          <option value="tech">Technology</option>
+          <option value="hr">Human Resources</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="traffic-lights-grid">
+      <div 
+        v-for="(light, index) in trafficLightsData" 
+        :key="index"
+        class="traffic-light-card"
+        @click="showLightDetail(light)"
+      >
+        <div class="light-header">
+          <div class="light-icon">
+            <i class="fas fa-circle" :class="`text-${light.status}`"></i>
+          </div>
+          <div class="light-info">
+            <h3 class="light-title">{{ light.title }}</h3>
+            <span class="urgency-badge" :class="light.urgency">{{ light.urgencyText }}</span>
+          </div>
+        </div>
+        
+        <div class="light-metrics">
+          <div class="light-percentage">{{ light.percentage }}%</div>
+          <div class="percentage-label">{{ light.count }} people</div>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-track">
+            <div 
+              class="progress-fill" 
+              :class="light.status"
+              :style="{ width: light.percentage + '%' }"
+            ></div>
+          </div>
+        </div>
+
+        <div class="light-actions">
+          <button class="btn btn-outline btn-sm" @click.stop="viewDetails(light)">
+            <i class="fas fa-eye"></i>
+            View Details
           </button>
-          <button class="btn outline" @click="exportReport">
-            <i class="fas fa-download"></i>
-            导出报告
+          <button class="btn btn-primary btn-sm" @click.stop="takeAction(light)">
+            <i class="fas fa-play"></i>
+            Take Action
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Metrics Overview -->
-    <section class="metrics-section">
-      <div class="metrics-grid">
-        <div 
-          v-for="(metric, index) in metricsData" 
-          :key="index"
-          class="metric-card glass animate__animated animate__zoomIn"
-          :class="metric.type"
-          :style="{ animationDelay: (index * 0.1) + 's' }"
-          @click="showMetricDetail(metric)"
-        >
-          <div class="metric-icon">
-            <i :class="metric.icon"></i>
-          </div>
-          <div class="metric-content">
-            <div class="metric-value">{{ metric.value }}</div>
-            <div class="metric-label">{{ metric.label }}</div>
-            <div class="metric-trend" :class="metric.trend.type">
-              <i :class="getTrendIcon(metric.trend.type)"></i>
-              {{ metric.trend.value }}
-            </div>
-          </div>
-          <div class="metric-chart">
-            <canvas :ref="'chart-' + index" width="60" height="40"></canvas>
+    <div class="section-header">
+      <h2 class="section-title">Team Members</h2>
+      <div class="section-actions">
+        <div class="search-box">
+          <input 
+            v-model="searchQuery" 
+            type="text" 
+            placeholder="Search members..."
+            class="search-input"
+          >
+          <i class="fas fa-search"></i>
+        </div>
+        <button class="btn btn-primary" @click="addMember">
+          <i class="fas fa-plus"></i>
+          Add Member
+        </button>
+      </div>
+    </div>
+
+    <div class="team-grid">
+      <div 
+        v-for="member in filteredMembers" 
+        :key="member.id"
+        class="member-card"
+        @click="viewMemberProfile(member)"
+      >
+        <div class="member-avatar">
+          <img :src="member.avatar" :alt="member.name">
+          <div class="member-status" :class="member.status"></div>
+        </div>
+        
+        <div class="member-info">
+          <h4 class="member-name">{{ member.name }}</h4>
+          <p class="member-position">{{ member.position }}</p>
+          <p class="member-department">{{ member.department }}</p>
+        </div>
+
+        <div class="member-score">
+          <div class="score-display">
+            <span class="score-value">{{ member.score }}</span>
+            <span class="score-label">Overall Score</span>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Traffic Light System -->
-    <section class="traffic-lights-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-traffic-light"></i>
-          人才状态概览
-        </h2>
-        <div class="section-actions">
-          <select v-model="selectedDepartment" class="filter-select">
-            <option value="all">全部部门</option>
-            <option value="sales">销售部</option>
-            <option value="marketing">市场部</option>
-            <option value="tech">技术部</option>
-            <option value="hr">人力资源部</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="traffic-lights">
-        <div 
-          v-for="(light, index) in trafficLightsData" 
-          :key="index"
-          class="traffic-light glass animate__animated animate__fadeInUp"
-          :class="light.status + '-light'"
-          :style="{ animationDelay: (index * 0.2) + 's' }"
-          @click="showLightDetail(light)"
-        >
-          <div class="light-header">
-            <span class="light-emoji">{{ light.emoji }}</span>
-            <div class="light-info">
-              <h3 class="light-title">{{ light.title }}</h3>
-              <span class="urgency-badge" :class="light.urgency">{{ light.urgencyText }}</span>
-            </div>
-          </div>
-          
-          <div class="light-metrics">
-            <div class="light-percentage">{{ light.percentage }}%</div>
-            <div class="percentage-label">{{ light.count }} 人</div>
-          </div>
-
-          <div class="progress-container">
-            <div 
-              class="progress-bar" 
-              :class="light.status"
-              :style="{ width: light.percentage + '%' }"
-            >
-              <span class="progress-label">{{ light.percentage }}%</span>
-            </div>
-          </div>
-
-          <div class="light-actions">
-            <button class="action-btn" @click.stop="viewDetails(light)">
-              <i class="fas fa-eye"></i>
-              查看详情
-            </button>
-            <button class="action-btn" @click.stop="takeAction(light)">
-              <i class="fas fa-play"></i>
-              采取行动
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Team Members -->
-    <section class="team-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-users"></i>
-          团队成员
-        </h2>
-        <div class="section-actions">
-          <div class="search-box">
-            <input 
-              v-model="searchQuery" 
-              type="text" 
-              placeholder="搜索成员..."
-              class="search-input"
-            >
-            <i class="fas fa-search"></i>
-          </div>
-          <button class="btn primary" @click="addMember">
-            <i class="fas fa-plus"></i>
-            添加成员
+        <div class="member-actions">
+          <button class="btn btn-outline btn-sm" @click.stop="startAssessment(member)">
+            <i class="fas fa-clipboard-check"></i>
+            Assess
+          </button>
+          <button class="btn btn-primary btn-sm" @click.stop="viewProgress(member)">
+            <i class="fas fa-chart-line"></i>
+            Progress
           </button>
         </div>
       </div>
+    </div>
 
-      <div class="team-grid">
-        <div 
-          v-for="member in filteredMembers" 
-          :key="member.id"
-          class="member-card glass animate__animated animate__fadeInUp"
-          @click="viewMemberProfile(member)"
-        >
-          <div class="member-avatar">
-            <img :src="member.avatar" :alt="member.name">
-            <div class="member-status" :class="member.status"></div>
-          </div>
-          
-          <div class="member-info">
-            <h4 class="member-name">{{ member.name }}</h4>
-            <p class="member-position">{{ member.position }}</p>
-            <p class="member-department">{{ member.department }}</p>
-          </div>
-
-          <div class="member-score">
-            <div class="score-circle" :class="getScoreClass(member.score)">
-              <span class="score-value">{{ member.score }}</span>
-            </div>
-            <div class="score-label">综合评分</div>
-          </div>
-
-          <div class="member-actions">
-            <button class="action-btn" @click.stop="startAssessment(member)">
-              <i class="fas fa-clipboard-check"></i>
-              评估
-            </button>
-            <button class="action-btn" @click.stop="viewProgress(member)">
-              <i class="fas fa-chart-line"></i>
-              进度
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Recent Activities -->
-    <section class="activities-section glass">
+    <div class="activities-section">
       <div class="section-header">
         <h2 class="section-title">
           <i class="fas fa-clock"></i>
-          最近活动
+          Recent Activities
         </h2>
-        <button class="btn outline small" @click="viewAllActivities">
-          查看全部
+        <button class="btn btn-outline" @click="viewAllActivities">
+          View All
         </button>
       </div>
 
-      <div class="activities-list">
-        <div 
-          v-for="activity in recentActivities" 
-          :key="activity.id"
-          class="activity-item"
-        >
-          <div class="activity-icon" :class="activity.type">
-            <i :class="activity.icon"></i>
-          </div>
-          <div class="activity-content">
-            <h4 class="activity-title">{{ activity.title }}</h4>
-            <p class="activity-description">{{ activity.description }}</p>
-            <span class="activity-time">{{ formatTime(activity.timestamp) }}</span>
-          </div>
-          <div class="activity-actions">
-            <button class="action-btn small" @click="viewActivity(activity)">
-              查看
-            </button>
+      <div class="activities-container">
+        <div class="activities-list">
+          <div 
+            v-for="activity in recentActivities" 
+            :key="activity.id"
+            class="activity-item"
+          >
+            <div class="activity-icon">
+              <i :class="activity.icon"></i>
+            </div>
+            <div class="activity-content">
+              <h4 class="activity-title">{{ activity.title }}</h4>
+              <p class="activity-description">{{ activity.description }}</p>
+              <span class="activity-time">{{ formatTime(activity.timestamp) }}</span>
+            </div>
+            <div class="activity-actions">
+              <button class="btn btn-outline btn-sm" @click="viewActivity(activity)">
+                View
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -221,6 +199,8 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { useDashboardStore } from '@/stores/dashboard'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 export default {
   name: 'Dashboard',
@@ -236,30 +216,30 @@ export default {
     const metricsData = computed(() => [
       {
         icon: 'fas fa-exclamation-triangle',
-        label: '需要关注',
+        label: 'Needs Attention',
         value: dashboardStore.metrics.critical,
-        type: 'critical',
+        color: 'secondary',
         trend: { type: 'down', value: '↓ 5%' }
       },
       {
         icon: 'fas fa-clock',
-        label: '发展中',
+        label: 'In Development',
         value: dashboardStore.metrics.development,
-        type: 'warning',
+        color: 'red',
         trend: { type: 'up', value: '↑ 12%' }
       },
       {
         icon: 'fas fa-check-circle',
-        label: '已就绪',
+        label: 'Ready',
         value: dashboardStore.metrics.ready,
-        type: 'success',
+        color: 'green',
         trend: { type: 'up', value: '↑ 8%' }
       },
       {
         icon: 'fas fa-users',
-        label: '总人数',
+        label: 'Total People',
         value: dashboardStore.metrics.total,
-        type: 'info',
+        color: 'purple',
         trend: { type: 'stable', value: '→ 0%' }
       }
     ])
@@ -268,27 +248,27 @@ export default {
       {
         status: 'red',
         emoji: '🔴',
-        title: '需要立即关注',
+        title: 'Needs Immediate Attention',
         urgency: 'high',
-        urgencyText: '高优先级',
+        urgencyText: 'High Priority',
         percentage: dashboardStore.trafficLights.red,
         count: Math.round(dashboardStore.metrics.total * dashboardStore.trafficLights.red / 100)
       },
       {
         status: 'yellow',
         emoji: '🟡',
-        title: '持续发展中',
+        title: 'In Development',
         urgency: 'moderate',
-        urgencyText: '中等优先级',
+        urgencyText: 'Medium Priority',
         percentage: dashboardStore.trafficLights.yellow,
         count: Math.round(dashboardStore.metrics.total * dashboardStore.trafficLights.yellow / 100)
       },
       {
         status: 'green',
         emoji: '🟢',
-        title: '表现优秀',
+        title: 'Excellent Performance',
         urgency: 'low',
-        urgencyText: '低优先级',
+        urgencyText: 'Low Priority',
         percentage: dashboardStore.trafficLights.green,
         count: Math.round(dashboardStore.metrics.total * dashboardStore.trafficLights.green / 100)
       }
@@ -319,24 +299,24 @@ export default {
         id: 1,
         type: 'assessment',
         icon: 'fas fa-clipboard-check',
-        title: '张三完成了360度评估',
-        description: '销售部高级经理张三完成了本季度的360度评估',
+        title: 'Carol Wen completed 360-degree assessment',
+        description: 'Sales Director Carol Wen completed this quarter\'s 360-degree assessment',
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000)
       },
       {
         id: 2,
         type: 'development',
         icon: 'fas fa-graduation-cap',
-        title: '李四开始了领导力培训',
-        description: '市场部总监李四参加了为期3个月的领导力提升培训',
+        title: 'John Smith started leadership training',
+        description: 'Marketing Director John Smith joined a 3-month leadership enhancement program',
         timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000)
       },
       {
         id: 3,
         type: 'achievement',
         icon: 'fas fa-trophy',
-        title: '王五获得了优秀表现认证',
-        description: '技术部项目经理王五在能力评估中获得优秀等级',
+        title: 'Jane Doe received excellence certification',
+        description: 'Tech Project Manager Jane Doe achieved excellent rating in capability assessment',
         timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000)
       }
     ])
@@ -362,19 +342,19 @@ export default {
       const time = new Date(timestamp)
       const diff = now - time
       
-      if (diff < 60000) return '刚刚'
-      if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`
-      if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`
-      return `${Math.floor(diff / 86400000)}天前`
+      if (diff < 60000) return 'Just now'
+      if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
+      if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
+      return `${Math.floor(diff / 86400000)}d ago`
     }
 
     const refreshData = async () => {
       isRefreshing.value = true
       try {
         await dashboardStore.loadDashboardData()
-        appStore.showToast('数据刷新', '仪表盘数据已更新', 'success')
+        appStore.showToast('Data Refresh', 'Dashboard data updated', 'success')
       } catch (error) {
-        appStore.showToast('刷新失败', '数据刷新失败，请重试', 'error')
+        appStore.showToast('Refresh Failed', 'Failed to refresh data, please try again', 'error')
       } finally {
         setTimeout(() => {
           isRefreshing.value = false
@@ -383,13 +363,13 @@ export default {
     }
 
     const exportReport = () => {
-      appStore.showToast('导出报告', '报告导出功能即将推出', 'info')
+      appStore.showToast('Export Report', 'Report export feature coming soon', 'info')
     }
 
     const showMetricDetail = (metric) => {
       appStore.showModal({
         title: metric.label,
-        content: `当前有 ${metric.value} 名员工处于"${metric.label}"状态。趋势：${metric.trend.value}`,
+        content: `Currently ${metric.value} employees are in "${metric.label}" status. Trend: ${metric.trend.value}`,
         type: 'info'
       })
     }
@@ -397,7 +377,7 @@ export default {
     const showLightDetail = (light) => {
       appStore.showModal({
         title: light.title,
-        content: `${light.count} 名员工（${light.percentage}%）当前处于"${light.title}"状态。建议采取相应的发展措施。`,
+        content: `${light.count} employees (${light.percentage}%) are currently in "${light.title}" status. Consider taking appropriate development measures.`,
         type: 'info'
       })
     }
@@ -407,7 +387,7 @@ export default {
     }
 
     const takeAction = (light) => {
-      appStore.showToast('操作', `正在为"${light.title}"状态的员工制定行动计划`, 'info')
+      appStore.showToast('Action', `Creating action plan for employees in "${light.title}" status`, 'info')
     }
 
     const viewMemberProfile = (member) => {
@@ -416,14 +396,14 @@ export default {
 
     const addMember = () => {
       appStore.showModal({
-        title: '添加团队成员',
-        content: '添加新成员功能即将推出，敬请期待！',
+        title: 'Add Team Member',
+        content: 'Add new member feature coming soon!',
         type: 'info'
       })
     }
 
     const startAssessment = (member) => {
-      appStore.showToast('评估', `正在为 ${member.name} 启动评估流程`, 'info')
+      appStore.showToast('Assessment', `Starting assessment process for ${member.name}`, 'info')
     }
 
     const viewProgress = (member) => {
@@ -442,11 +422,24 @@ export default {
       })
     }
 
+    const animateMetric = (index) => {
+      // Add metric animation logic
+      console.log(`Animating metric ${index}`)
+    }
+
     onMounted(async () => {
+      // Initialize AOS
+      AOS.init({
+        duration: 800,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 100
+      })
+
       try {
         await dashboardStore.loadDashboardData()
       } catch (error) {
-        appStore.showToast('加载失败', '仪表盘数据加载失败', 'error')
+        appStore.showToast('Load Failed', 'Failed to load dashboard data', 'error')
       }
     })
 
@@ -461,6 +454,7 @@ export default {
       getTrendIcon,
       getScoreClass,
       formatTime,
+      animateMetric,
       refreshData,
       exportReport,
       showMetricDetail,
@@ -480,168 +474,146 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-page {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 32px;
+  background: #ffffff;
+  min-height: 100vh;
 }
 
-// Dashboard Header
-.dashboard-header {
-  padding: 30px 40px;
-  margin-bottom: 40px;
-}
-
-.header-content {
+.page-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  margin-bottom: 40px;
   gap: 20px;
-}
 
-.header-left {
-  flex: 1;
-}
-
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-
-  i {
-    font-size: 2.2rem;
-    color: #dd2525;
+  .header-content {
+    flex: 1;
   }
-}
 
-.page-subtitle {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.5;
-}
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    letter-spacing: -0.02em;
 
-.header-actions {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
+    i {
+      font-size: 2rem;
+      color: #dd2525;
+    }
+  }
 
-// Metrics Section
-.metrics-section {
-  margin-bottom: 50px;
+  .page-subtitle {
+    font-size: 1.125rem;
+    color: #6c757d;
+    line-height: 1.5;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 }
 
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
+  gap: 24px;
+  margin-bottom: 40px;
 }
 
 .metric-card {
-  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 32px;
+  transition: all 0.3s ease;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 20px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border-left: 4px solid transparent;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: all 0.6s ease;
-  }
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-color: #dd2525;
+    box-shadow: 0 8px 25px rgba(221, 37, 37, 0.1);
+    transform: translateY(-4px);
+  }
 
-    &::before {
-      left: 100%;
+  .metric-icon {
+    width: 56px;
+    height: 56px;
+    background: #dd2525;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    i {
+      font-size: 1.5rem;
+      color: #ffffff;
     }
   }
 
-  &.critical { border-left-color: #dc3545; }
-  &.warning { border-left-color: #ffc107; }
-  &.success { border-left-color: #28a745; }
-  &.info { border-left-color: #17a2b8; }
-}
-
-.metric-icon {
-  font-size: 2.5rem;
-  color: #dd2525;
-  opacity: 0.8;
-  flex-shrink: 0;
-}
-
-.metric-content {
-  flex: 1;
-}
-
-.metric-value {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #dd2525;
-  margin-bottom: 5px;
-}
-
-.metric-label {
-  font-size: 0.9rem;
-  color: #666;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.metric-trend {
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-
-  &.up {
-    background: rgba(40, 167, 69, 0.2);
-    color: #28a745;
+  .metric-content {
+    flex: 1;
   }
 
-  &.down {
-    background: rgba(220, 53, 69, 0.2);
-    color: #dc3545;
+  .metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 4px;
   }
 
-  &.stable {
-    background: rgba(108, 117, 125, 0.2);
+  .metric-label {
+    font-size: 0.875rem;
     color: #6c757d;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .metric-trend {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    &.up {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    &.down {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    &.stable {
+      color: #6b7280;
+      background: rgba(107, 114, 128, 0.1);
+    }
   }
 }
 
-.metric-chart {
-  width: 60px;
-  height: 40px;
-  flex-shrink: 0;
-}
+// Clean McKinsey-Style Metrics - No Excessive Animations
 
-// Traffic Lights Section
-.traffic-lights-section {
-  margin-bottom: 50px;
-}
-
+// Section Headers
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .section-title {
@@ -679,469 +651,425 @@ export default {
   }
 }
 
-.traffic-lights {
+.traffic-lights-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 25px;
+  gap: 32px;
+  margin-bottom: 48px;
 }
 
-.traffic-light {
-  padding: 30px;
-  transition: all 0.4s ease;
+.traffic-light-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 32px;
+  transition: all 0.3s ease;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: all 0.6s ease;
-  }
 
   &:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #007bff;
+  }
 
-    &::before {
-      left: 100%;
+  .light-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .light-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .text-red {
+      color: #dc3545;
+    }
+    
+    .text-yellow {
+      color: #ffc107;
+    }
+    
+    .text-green {
+      color: #28a745;
+    }
+    
+    i {
+      font-size: 1.5rem;
     }
   }
 
-  &.red-light { border-left: 5px solid #dc3545; }
-  &.yellow-light { border-left: 5px solid #ffc107; }
-  &.green-light { border-left: 5px solid #28a745; }
-}
-
-.light-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.light-emoji {
-  font-size: 2.5rem;
-}
-
-.light-info {
-  flex: 1;
-}
-
-.light-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.urgency-badge {
-  font-size: 0.75rem;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-weight: 600;
-
-  &.high {
-    background: rgba(220, 53, 69, 0.2);
-    color: #dc3545;
+  .light-info {
+    flex: 1;
   }
 
-  &.moderate {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
+  .light-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 8px;
   }
 
-  &.low {
-    background: rgba(40, 167, 69, 0.2);
-    color: #28a745;
-  }
-}
+  .urgency-badge {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 
-.light-metrics {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    &.high {
+      background: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
 
-.light-percentage {
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: #dd2525;
-  margin-bottom: 5px;
-}
+    &.moderate {
+      background: rgba(255, 193, 7, 0.1);
+      color: #ffc107;
+    }
 
-.percentage-label {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.progress-container {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  height: 20px;
-  margin: 20px 0;
-  overflow: hidden;
-  position: relative;
-}
-
-.progress-bar {
-  height: 100%;
-  border-radius: 10px;
-  position: relative;
-  transition: width 1.5s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.red {
-    background: linear-gradient(90deg, #dc3545, #c82333);
+    &.low {
+      background: rgba(40, 167, 69, 0.1);
+      color: #28a745;
+    }
   }
 
-  &.yellow {
-    background: linear-gradient(90deg, #ffc107, #e0a800);
+  .light-metrics {
+    text-align: center;
+    margin-bottom: 24px;
   }
 
-  &.green {
-    background: linear-gradient(90deg, #28a745, #218838);
-  }
-}
-
-.progress-label {
-  color: white;
-  font-weight: 600;
-  font-size: 0.8rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.light-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-// Team Section
-.team-section {
-  margin-bottom: 50px;
-}
-
-.search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  padding: 8px 40px 8px 15px;
-  background: white;
-  border: 1px solid rgba(221, 37, 37, 0.2);
-  border-radius: 20px;
-  color: #333;
-  font-size: 14px;
-  width: 200px;
-
-  &::placeholder {
-    color: #999;
+  .light-percentage {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 4px;
   }
 
-  &:focus {
-    outline: none;
-    background: white;
-    border-color: #dd2525;
+  .percentage-label {
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
-}
 
-.search-box i {
-  position: absolute;
-  right: 15px;
-  color: #999;
-  pointer-events: none;
+  .progress-container {
+    margin: 24px 0;
+  }
+
+  .progress-track {
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 1s ease;
+
+    &.red {
+      background: #dc3545;
+    }
+
+    &.yellow {
+      background: #ffc107;
+    }
+
+    &.green {
+      background: #28a745;
+    }
+  }
+
+  .light-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
 }
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  margin-bottom: 48px;
 }
 
 .member-card {
-  padding: 25px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 32px;
   transition: all 0.3s ease;
   cursor: pointer;
   text-align: center;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    border-color: #007bff;
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
+  }
+
+  .member-avatar {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f8f9fa;
+    }
+
+    .member-status {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+
+      &.ready { background: #28a745; }
+      &.development { background: #ffc107; }
+      &.critical { background: #dc3545; }
+    }
+  }
+
+  .member-info {
+    margin-bottom: 24px;
+  }
+
+  .member-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 8px;
+  }
+
+  .member-position {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .member-department {
+    color: #adb5bd;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .member-score {
+    margin-bottom: 24px;
+  }
+
+  .score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .score-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #007bff;
+  }
+
+  .score-label {
+    color: #6c757d;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .member-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
   }
 }
 
-.member-avatar {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .member-status {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 3px solid white;
-
-    &.ready { background: #6bcf7f; }
-    &.development { background: #ffd93d; }
-    &.critical { background: #ff6b6b; }
-  }
-}
-
-.member-info {
-  margin-bottom: 20px;
-}
-
-.member-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.member-position {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 3px;
-}
-
-.member-department {
-  color: #999;
-  font-size: 0.8rem;
-}
-
-.member-score {
-  margin-bottom: 20px;
-}
-
-.score-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 10px;
-  border: 3px solid;
-
-  &.excellent {
-    background: rgba(40, 167, 69, 0.2);
-    border-color: #28a745;
-  }
-
-  &.good {
-    background: rgba(255, 193, 7, 0.2);
-    border-color: #ffc107;
-  }
-
-  &.average {
-    background: rgba(255, 165, 2, 0.2);
-    border-color: #fd7e14;
-  }
-
-  &.poor {
-    background: rgba(220, 53, 69, 0.2);
-    border-color: #dc3545;
-  }
-}
-
-.score-value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #dd2525;
-}
-
-.score-label {
-  color: #666;
-  font-size: 0.8rem;
-}
-
-.member-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-// Activities Section
 .activities-section {
-  padding: 30px 40px;
-}
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 32px;
 
-.activities-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.activity-item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
-  }
-}
-
-.activity-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  color: white;
-  flex-shrink: 0;
-
-  &.assessment {
-    background: rgba(255, 193, 7, 0.2);
-    border: 2px solid #ffc107;
+  .activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 
-  &.development {
-    background: rgba(23, 162, 184, 0.2);
-    border: 2px solid #17a2b8;
-  }
-
-  &.achievement {
-    background: rgba(40, 167, 69, 0.2);
-    border: 2px solid #28a745;
-  }
-}
-
-.activity-content {
-  flex: 1;
-}
-
-.activity-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.activity-description {
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  margin-bottom: 5px;
-}
-
-.activity-time {
-  color: #999;
-  font-size: 0.8rem;
-}
-
-.activity-actions {
-  flex-shrink: 0;
-}
-
-// Buttons
-.btn {
-  padding: 12px 24px;
-  border: 2px solid transparent;
-  border-radius: 25px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  backdrop-filter: blur(10px);
-
-  &.primary {
-    background: linear-gradient(135deg, #dd2525, #b91c1c);
-    color: white;
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: all 0.3s ease;
 
     &:hover {
-      background: linear-gradient(135deg, #c41e1e, #991b1b);
+      background: #e9ecef;
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(221, 37, 37, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
   }
 
-  &.outline {
-    background: transparent;
-    color: #dd2525;
-    border-color: rgba(221, 37, 37, 0.5);
+  .activity-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #ffffff;
+    flex-shrink: 0;
 
-    &:hover {
-      background: rgba(221, 37, 37, 0.1);
-      transform: translateY(-2px);
+    i {
+      &.fa-clipboard-check {
+        background: #007bff;
+      }
+      
+      &.fa-graduation-cap {
+        background: #17a2b8;
+      }
+      
+      &.fa-trophy {
+        background: #28a745;
+      }
     }
   }
 
-  &.small {
-    padding: 8px 16px;
-    font-size: 12px;
+  .activity-content {
+    flex: 1;
+  }
+
+  .activity-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 8px;
+  }
+
+  .activity-description {
+    color: #6c757d;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .activity-time {
+    color: #adb5bd;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .activity-actions {
+    flex-shrink: 0;
+  }
+}
+
+// Search Box
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  
+  input {
+    width: 200px;
+    padding: 8px 40px 8px 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(221, 37, 37, 0.2);
+    border-radius: 20px;
+    color: #333;
+    font-size: 14px;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+      color: #999;
+    }
+
+    &:focus {
+      outline: none;
+      background: white;
+      border-color: #dd2525;
+      width: 250px;
+    }
   }
 
   i {
-    font-size: 1em;
-  }
-}
-
-.action-btn {
-  padding: 8px 16px;
-  background: rgba(221, 37, 37, 0.1);
-  border: 1px solid rgba(221, 37, 37, 0.2);
-  border-radius: 20px;
-  color: #dd2525;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 12px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  &:hover {
-    background: rgba(221, 37, 37, 0.2);
-    transform: translateY(-1px);
-  }
-
-  &.small {
-    padding: 6px 12px;
-    font-size: 11px;
+    position: absolute;
+    right: 15px;
+    color: #999;
+    pointer-events: none;
   }
 }
 
 // Responsive Design
 @media (max-width: 1024px) {
-  .header-content {
+  .dashboard-page {
+    padding: 20px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .traffic-lights-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 15px;
+  }
+
+  .page-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .header-actions {
-    width: 100%;
-    justify-content: flex-start;
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .traffic-lights-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .section-header {
@@ -1152,46 +1080,544 @@ export default {
 
   .section-actions {
     width: 100%;
-    justify-content: flex-start;
+    justify-content: space-between;
+  }
+
+  .search-box input {
+    width: 150px;
+    
+    &:focus {
+      width: 200px;
+    }
   }
 }
 
-@media (max-width: 768px) {
-  .dashboard-header {
-    padding: 20px;
+@media (max-width: 480px) {
+  .dashboard-page {
+    padding: 10px;
   }
 
   .page-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
 
-  .metrics-grid {
-    grid-template-columns: 1fr;
+  .metric-card {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
   }
 
-  .traffic-lights {
-    grid-template-columns: 1fr;
+  .traffic-light-card {
+    padding: 20px;
   }
 
-  .team-grid {
-    grid-template-columns: 1fr;
+  .member-card {
+    padding: 20px;
   }
 
   .activities-section {
     padding: 20px;
   }
 
-  .activity-item {
-    flex-direction: column;
+  .search-box {
+    display: none;
+  }
+}
+
+// Removed duplicate search-input styles - using the ones below
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  
+  &.btn-primary {
+    background: #007bff;
+    color: #ffffff;
+    
+    &:hover {
+      background: #0056b3;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    }
+  }
+  
+  &.btn-outline {
+    background: transparent;
+    color: #6c757d;
+    border: 1px solid #e9ecef;
+    
+    &:hover {
+      background: #f8f9fa;
+      border-color: #007bff;
+      color: #007bff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  &.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.75rem;
+  }
+  
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+// Removed duplicate action-btn styles - using btn classes instead
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #212529;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  i {
+    font-size: 1.25rem;
+    color: #007bff;
+  }
+}
+
+.section-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.filter-select {
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  color: #212529;
+  font-size: 0.875rem;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+}
+
+.traffic-lights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.traffic-light-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 32px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #007bff;
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
+    transform: translateY(-4px);
+  }
+
+  .light-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .light-icon {
+    font-size: 1.5rem;
+
+    .text-red { color: #dc3545; }
+    .text-yellow { color: #ffc107; }
+    .text-green { color: #28a745; }
+  }
+
+  .light-info {
+    flex: 1;
+  }
+
+  .light-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 4px;
+  }
+
+  .urgency-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.high {
+      background: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
+
+    &.moderate {
+      background: rgba(255, 193, 7, 0.1);
+      color: #ffc107;
+    }
+
+    &.low {
+      background: rgba(40, 167, 69, 0.1);
+      color: #28a745;
+    }
+  }
+
+  .light-metrics {
     text-align: center;
-    gap: 15px;
+    margin-bottom: 24px;
+  }
+
+  .light-percentage {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 4px;
+  }
+
+  .percentage-label {
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+
+  .progress-container {
+    margin-bottom: 24px;
+  }
+
+  .progress-track {
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s ease;
+
+    &.red { background: #dc3545; }
+    &.yellow { background: #ffc107; }
+    &.green { background: #28a745; }
+  }
+
+  .light-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  padding: 8px 40px 8px 16px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  color: #212529;
+  font-size: 0.875rem;
+  width: 200px;
+
+  &::placeholder {
+    color: #6c757d;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+}
+
+.search-box i {
+  position: absolute;
+  right: 12px;
+  color: #6c757d;
+  pointer-events: none;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.member-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    border-color: #007bff;
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
+    transform: translateY(-4px);
+  }
+
+  .member-avatar {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e9ecef;
+    }
+
+    .member-status {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid white;
+
+      &.ready { background: #28a745; }
+      &.development { background: #ffc107; }
+      &.critical { background: #dc3545; }
+    }
+  }
+
+  .member-info {
+    margin-bottom: 16px;
+  }
+
+  .member-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 4px;
+  }
+
+  .member-position {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-bottom: 2px;
+  }
+
+  .member-department {
+    color: #6c757d;
+    font-size: 0.75rem;
+  }
+
+  .member-score {
+    margin-bottom: 16px;
+  }
+
+  .score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .score-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #007bff;
+  }
+
+  .score-label {
+    color: #6c757d;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .member-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+}
+
+.activities-section {
+  margin-bottom: 40px;
+}
+
+.activities-container {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.activities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #e9ecef;
+  }
+
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    background: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+
+    i {
+      font-size: 1rem;
+    }
   }
 
   .activity-content {
+    flex: 1;
+  }
+
+  .activity-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 4px;
+  }
+
+  .activity-description {
+    color: #6c757d;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+
+  .activity-time {
+    color: #6c757d;
+    font-size: 0.75rem;
+  }
+
+  .activity-actions {
+    flex-shrink: 0;
+  }
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 1024px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .section-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .metric-card {
+    flex-direction: column;
     text-align: center;
+    gap: 16px;
+  }
+
+  .traffic-lights-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .activity-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
   }
 
   .search-input {
@@ -1199,15 +1625,13 @@ export default {
   }
 }
 
+// Removed duplicate 768px media query - using the one above
+
 @media (max-width: 480px) {
   .metric-card {
     flex-direction: column;
     text-align: center;
     gap: 15px;
-  }
-
-  .metric-content {
-    text-align: center;
   }
 
   .light-header {

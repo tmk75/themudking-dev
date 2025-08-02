@@ -7,9 +7,6 @@
           <i class="fas fa-compass"></i>
           <span>Global Talents Management</span>
         </router-link>
-        <div class="breadcrumb">
-          <span class="breadcrumb-item">{{ currentPageTitle }}</span>
-        </div>
       </div>
 
       <!-- Navigation removed - using floating tab bar instead -->
@@ -21,7 +18,7 @@
           <input 
             v-model="searchQuery"
             type="text" 
-            placeholder="搜索..."
+            placeholder="Search..."
             @focus="searchActive = true"
             @blur="searchActive = false"
           >
@@ -37,8 +34,8 @@
           
           <div v-if="showNotifications" class="notification-panel">
             <div class="notification-header">
-              <h4>通知</h4>
-              <button @click="clearAllNotifications" class="clear-btn">清空</button>
+              <h4>Notifications</h4>
+              <button @click="clearAllNotifications" class="clear-btn">Clear</button>
             </div>
             <div class="notification-list">
               <div 
@@ -55,7 +52,7 @@
                 </div>
               </div>
               <div v-if="notifications.length === 0" class="no-notifications">
-                暂无通知
+                No notifications
               </div>
             </div>
           </div>
@@ -64,11 +61,11 @@
         <!-- User Menu -->
         <div class="user-dropdown" @click="toggleUserMenu">
           <div class="user-info-display">
-            <div class="user-name">{{ currentUser?.name || '用户' }}</div>
+            <div class="user-name">{{ currentUser?.name || 'User' }}</div>
             <div class="user-avatar">
               <img 
-                :src="currentUser?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.name || '用户')}&background=dd2525&color=fff&size=128`" 
-                :alt="currentUser?.name || '用户'"
+                :src="currentUser?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.name || 'User')}&background=dd2525&color=fff&size=128`" 
+                :alt="currentUser?.name || 'User'"
                 @error="handleAvatarError"
               >
               <div class="user-status online"></div>
@@ -82,13 +79,13 @@
             </div>
             <div class="user-actions">
               <router-link to="/profile" class="user-action">
-                <i class="fas fa-user"></i> 个人资料
+                <i class="fas fa-user"></i> Profile
               </router-link>
               <router-link to="/settings" class="user-action">
-                <i class="fas fa-cog"></i> 设置
+                <i class="fas fa-cog"></i> Settings
               </router-link>
               <button @click="logout" class="user-action logout">
-                <i class="fas fa-sign-out-alt"></i> 退出登录
+                <i class="fas fa-sign-out-alt"></i> Logout
               </button>
             </div>
           </div>
@@ -122,7 +119,7 @@ export default {
     // Navigation links removed - using floating tab bar instead
 
     const currentPageTitle = computed(() => {
-      return route.meta.title || '首页'
+      return route.meta.title || 'Home'
     })
 
     const currentUser = computed(() => appStore.currentUser)
@@ -154,13 +151,13 @@ export default {
 
     const logout = () => {
       // Implement logout logic
-      appStore.showToast('系统', '已退出登录', 'success')
+      appStore.showToast('System', 'Logged out successfully', 'success')
       showUserMenu.value = false
     }
 
     const handleAvatarError = (event) => {
       // Fallback to a default avatar if image fails to load
-      event.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.value?.name || '用户')}&background=dd2525&color=fff&size=128`
+      event.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.value?.name || 'User')}&background=dd2525&color=fff&size=128`
     }
 
     const formatTime = (timestamp) => {
@@ -168,10 +165,10 @@ export default {
       const time = new Date(timestamp)
       const diff = now - time
       
-      if (diff < 60000) return '刚刚'
-      if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`
-      if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`
-      return `${Math.floor(diff / 86400000)}天前`
+      if (diff < 60000) return 'Just now'
+      if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
+      if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
+      return `${Math.floor(diff / 86400000)}d ago`
     }
 
     const handleClickOutside = (event) => {

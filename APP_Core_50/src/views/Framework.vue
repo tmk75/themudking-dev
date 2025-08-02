@@ -1,65 +1,55 @@
 <template>
   <div class="framework-page">
-    <!-- Page Header -->
-    <div class="page-header glass animate__animated animate__fadeInDown">
+    <div class="page-header">
       <div class="header-content">
-        <div class="header-left">
-          <h1 class="page-title">
-            <i class="fas fa-compass"></i>
-            框架概述
-          </h1>
-          <p class="page-subtitle">Global Talents Management 高管人才发展框架的核心理念与实施方法</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn primary" @click="downloadFramework">
-            <i class="fas fa-download"></i>
-            下载框架
-          </button>
+        <h1 class="page-title">
+          <i class="fas fa-compass"></i>
+          Framework
+        </h1>
+        <p class="page-subtitle">Core concepts and implementation methods of the Global Talents Management executive talent development framework</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" @click="downloadFramework">
+          <i class="fas fa-download"></i>
+          Download Framework
+        </button>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h2 class="section-title">
+        <i class="fas fa-lightbulb"></i>
+        Framework Introduction
+      </h2>
+      <p class="intro-text">
+        The Global Talents Management framework is a comprehensive executive talent assessment and development system based on modern leadership theory and best practices, covering 50 core competency dimensions through scientific assessment methods and personalized development recommendations.
+      </p>
+      
+      <div class="framework-pillars">
+        <div class="pillar-item" v-for="(pillar, index) in frameworkPillars" :key="index">
+          <div class="pillar-icon">
+            <i :class="pillar.icon"></i>
+          </div>
+          <h3 class="pillar-title">{{ pillar.title }}</h3>
+          <p class="pillar-description">{{ pillar.description }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Framework Introduction -->
-    <section class="intro-section glass">
-      <div class="intro-content">
-        <h2 class="section-title">
-          <i class="fas fa-lightbulb"></i>
-          框架介绍
-        </h2>
-        <p class="intro-text">
-          Global Talents Management 框架是一个综合性的高管人才评估与发展体系，基于现代领导力理论和最佳实践，
-          涵盖50个核心能力维度，通过科学的评估方法和个性化的发展建议，帮助组织培养卓越的领导人才。
-        </p>
-        
-        <div class="framework-pillars">
-          <div class="pillar-card" v-for="(pillar, index) in frameworkPillars" :key="index">
-            <div class="pillar-icon">
-              <i :class="pillar.icon"></i>
-            </div>
-            <h3 class="pillar-title">{{ pillar.title }}</h3>
-            <p class="pillar-description">{{ pillar.description }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5B Framework -->
-    <section class="five-b-section glass">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-star"></i>
-          5B 核心框架
-        </h2>
-        <p class="section-description">
-          Global Talents Management 基于5B框架构建，涵盖高管人才发展的五个关键维度
-        </p>
-      </div>
+    <div class="content-section">
+      <h2 class="section-title">
+        <i class="fas fa-star"></i>
+        5B Core Framework
+      </h2>
+      <p class="section-description">
+        Global Talents Management is built on the 5B framework, covering five key dimensions of executive talent development
+      </p>
 
       <div class="five-b-grid">
         <div 
           v-for="(dimension, index) in fiveBDimensions" 
           :key="index"
-          class="dimension-card glass-subtle"
+          class="dimension-card"
           @click="showDimensionDetail(dimension)"
         >
           <div class="dimension-header">
@@ -74,7 +64,7 @@
             <p class="dimension-description">{{ dimension.description }}</p>
             
             <div class="competencies-list">
-              <h4>核心能力</h4>
+              <h4>Core Competencies</h4>
               <ul>
                 <li v-for="competency in dimension.competencies" :key="competency">
                   {{ competency }}
@@ -84,26 +74,23 @@
           </div>
 
           <div class="dimension-footer">
-            <span class="competency-count">{{ dimension.competencies.length }} 项能力</span>
+            <span class="competency-count">{{ dimension.competencies.length }} competencies</span>
             <button class="detail-btn" @click.stop="showDimensionDetail(dimension)">
               <i class="fas fa-arrow-right"></i>
             </button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Implementation Process -->
-    <section class="process-section glass">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-cogs"></i>
-          实施流程
-        </h2>
-        <p class="section-description">
-          标准化的实施流程确保框架的有效应用
-        </p>
-      </div>
+    <div class="content-section">
+      <h2 class="section-title">
+        <i class="fas fa-cogs"></i>
+        Implementation Process
+      </h2>
+      <p class="section-description">
+        Standardized implementation process ensures effective framework application
+      </p>
 
       <div class="process-timeline">
         <div 
@@ -125,7 +112,7 @@
             <p class="phase-description">{{ phase.description }}</p>
             
             <div class="phase-deliverables">
-              <h4>主要交付物</h4>
+              <h4>Key Deliverables</h4>
               <ul>
                 <li v-for="deliverable in phase.deliverables" :key="deliverable">
                   {{ deliverable }}
@@ -135,25 +122,22 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Success Metrics -->
-    <section class="metrics-section glass">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-chart-line"></i>
-          成功指标
-        </h2>
-        <p class="section-description">
-          通过关键指标衡量框架实施效果
-        </p>
-      </div>
+    <div class="content-section">
+      <h2 class="section-title">
+        <i class="fas fa-chart-line"></i>
+        Success Metrics
+      </h2>
+      <p class="section-description">
+        Measure framework implementation effectiveness through key indicators
+      </p>
 
       <div class="metrics-grid">
         <div 
           v-for="(metric, index) in successMetrics" 
           :key="index"
-          class="metric-item"
+          class="metric-card"
         >
           <div class="metric-icon">
             <i :class="metric.icon"></i>
@@ -165,7 +149,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -181,23 +165,23 @@ export default {
     const frameworkPillars = [
       {
         icon: 'fas fa-eye',
-        title: '科学评估',
-        description: '基于心理学和管理学理论，采用多维度评估方法，确保评估结果的客观性和准确性。'
+        title: 'Scientific Assessment',
+        description: 'Based on psychology and management theory, using multi-dimensional assessment methods to ensure objectivity and accuracy of results.'
       },
       {
         icon: 'fas fa-user-cog',
-        title: '个性化发展',
-        description: '根据个人特点和组织需求，制定针对性的发展计划和学习路径。'
+        title: 'Personalized Development',
+        description: 'Develop targeted development plans and learning paths based on individual characteristics and organizational needs.'
       },
       {
         icon: 'fas fa-sync-alt',
-        title: '持续改进',
-        description: '建立持续的反馈机制，定期评估和调整发展策略，确保持续进步。'
+        title: 'Continuous Improvement',
+        description: 'Establish continuous feedback mechanisms, regularly evaluate and adjust development strategies to ensure continuous progress.'
       },
       {
         icon: 'fas fa-users',
-        title: '组织协同',
-        description: '将个人发展与组织目标相结合，实现个人成长与组织发展的双赢。'
+        title: 'Organizational Synergy',
+        description: 'Combine individual development with organizational goals to achieve win-win personal growth and organizational development.'
       }
     ]
 
@@ -286,47 +270,47 @@ export default {
 
     const implementationPhases = [
       {
-        title: '准备阶段',
-        duration: '2-4周',
-        description: '明确评估目标，准备评估工具，培训评估团队。',
+        title: 'Preparation Phase',
+        duration: '2-4 weeks',
+        description: 'Define assessment objectives, prepare assessment tools, train assessment team.',
         deliverables: [
-          '评估计划书',
-          '评估工具包',
-          '团队培训材料',
-          '项目启动会议'
+          'Assessment Plan',
+          'Assessment Toolkit',
+          'Team Training Materials',
+          'Project Kickoff Meeting'
         ]
       },
       {
-        title: '评估阶段',
-        duration: '4-6周',
-        description: '执行360度评估，收集多维度数据。',
+        title: 'Assessment Phase',
+        duration: '4-6 weeks',
+        description: 'Execute 360-degree assessment, collect multi-dimensional data.',
         deliverables: [
-          '评估数据收集',
-          '数据质量检查',
-          '初步分析报告',
-          '反馈收集'
+          'Assessment Data Collection',
+          'Data Quality Check',
+          'Preliminary Analysis Report',
+          'Feedback Collection'
         ]
       },
       {
-        title: '分析阶段',
-        duration: '2-3周',
-        description: '深入分析评估结果，生成个性化报告。',
+        title: 'Analysis Phase',
+        duration: '2-3 weeks',
+        description: 'In-depth analysis of assessment results, generate personalized reports.',
         deliverables: [
-          '个人评估报告',
-          '团队分析报告',
-          '发展建议书',
-          '行动计划模板'
+          'Individual Assessment Report',
+          'Team Analysis Report',
+          'Development Recommendations',
+          'Action Plan Template'
         ]
       },
       {
-        title: '发展阶段',
-        duration: '6-12个月',
-        description: '实施个性化发展计划，持续跟踪进展。',
+        title: 'Development Phase',
+        duration: '6-12 months',
+        description: 'Implement personalized development plans, continuously track progress.',
         deliverables: [
-          '发展计划执行',
-          '进度跟踪报告',
-          '阶段性评估',
-          '调整优化方案'
+          'Development Plan Execution',
+          'Progress Tracking Report',
+          'Periodic Assessment',
+          'Adjustment Optimization Plan'
         ]
       }
     ]
@@ -334,27 +318,27 @@ export default {
     const successMetrics = [
       {
         icon: 'fas fa-chart-line',
-        title: '能力提升',
+        title: 'Capability Enhancement',
         value: '85%',
-        description: '参与者在核心能力方面平均提升85%'
+        description: 'Participants average 85% improvement in core competencies'
       },
       {
         icon: 'fas fa-users',
-        title: '参与满意度',
+        title: 'Participation Satisfaction',
         value: '92%',
-        description: '参与者对框架实施过程满意度达92%'
+        description: 'Participant satisfaction with framework implementation reaches 92%'
       },
       {
         icon: 'fas fa-trophy',
-        title: '晋升成功率',
+        title: 'Promotion Success Rate',
         value: '78%',
-        description: '完成发展计划的参与者晋升成功率78%'
+        description: '78% promotion success rate for participants completing development plans'
       },
       {
         icon: 'fas fa-building',
-        title: '组织效益',
+        title: 'Organizational Benefits',
         value: '65%',
-        description: '组织整体绩效提升65%'
+        description: '65% improvement in overall organizational performance'
       }
     ]
 
@@ -384,78 +368,84 @@ export default {
 
 <style lang="scss" scoped>
 .framework-page {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 24px;
+  background: #ffffff;
+  min-height: 100vh;
 }
 
-// Page Header
 .page-header {
-  padding: 30px 40px;
-  margin-bottom: 40px;
-}
-
-.header-content {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 20px;
-}
-
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-
-  i {
-    font-size: 2.2rem;
-    color: #dd2525;
-  }
-}
-
-.page-subtitle {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.5;
-}
-
-// Section Styling
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-
-  i {
-    font-size: 1.8rem;
-    color: #dd2525;
-  }
-}
-
-.section-description {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 30px;
-}
-
-// Introduction Section
-.intro-section {
-  padding: 40px;
-  margin-bottom: 50px;
-}
-
-.intro-text {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.8;
   margin-bottom: 40px;
+  gap: 20px;
+
+  .header-content {
+    flex: 1;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    letter-spacing: -0.02em;
+
+    i {
+      font-size: 2rem;
+      color: #dd2525;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 1.125rem;
+    color: #6c757d;
+    line-height: 1.5;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+}
+
+.content-section {
+  margin-bottom: 50px;
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    i {
+      font-size: 1.25rem;
+      color: #dd2525;
+    }
+  }
+
+  .section-description {
+    font-size: 1rem;
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .intro-text {
+    font-size: 1rem;
+    color: #6c757d;
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
 }
 
 .framework-pillars {
@@ -464,42 +454,37 @@ export default {
   gap: 25px;
 }
 
-.pillar-card {
-  padding: 30px;
-  background: rgba(221, 37, 37, 0.05);
-  border: 1px solid rgba(221, 37, 37, 0.1);
-  border-radius: 15px;
+.pillar-item {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 32px;
   text-align: center;
   transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(221, 37, 37, 0.15);
+    border-color: #dd2525;
+    box-shadow: 0 8px 25px rgba(221, 37, 37, 0.1);
+    transform: translateY(-4px);
   }
-}
 
-.pillar-icon {
-  font-size: 3rem;
-  color: #dd2525;
-  margin-bottom: 20px;
-}
+  .pillar-icon {
+    font-size: 2.5rem;
+    color: #dd2525;
+    margin-bottom: 20px;
+  }
 
-.pillar-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 15px;
-}
+  .pillar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 12px;
+  }
 
-.pillar-description {
-  color: #666;
-  line-height: 1.6;
-}
-
-// 5B Framework Section
-.five-b-section {
-  padding: 40px;
-  margin-bottom: 50px;
+  .pillar-description {
+    color: #6c757d;
+    line-height: 1.6;
+  }
 }
 
 .five-b-grid {
@@ -509,127 +494,121 @@ export default {
 }
 
 .dimension-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
   padding: 30px;
   transition: all 0.3s ease;
   cursor: pointer;
-  border: 1px solid rgba(221, 37, 37, 0.1);
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(221, 37, 37, 0.15);
-    border-color: rgba(221, 37, 37, 0.2);
+    border-color: #dd2525;
+    box-shadow: 0 4px 12px rgba(221, 37, 37, 0.1);
   }
-}
 
-.dimension-header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
+  .dimension-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
 
-.dimension-letter {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #dd2525, #b91c1c);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 900;
-  flex-shrink: 0;
-}
+  .dimension-letter {
+    width: 60px;
+    height: 60px;
+    background: #dd2525;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
 
-.dimension-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.dimension-subtitle {
-  color: #dd2525;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.dimension-description {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.competencies-list {
-  h4 {
+  .dimension-title {
+    font-size: 1.4rem;
+    font-weight: 600;
     color: #333;
-    font-size: 1rem;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
-  ul {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  li {
-    color: #666;
+  .dimension-subtitle {
+    color: #dd2525;
+    font-weight: 500;
     font-size: 0.9rem;
-    padding: 5px 0;
-    position: relative;
-    padding-left: 15px;
+  }
 
-    &::before {
-      content: '•';
-      color: #dd2525;
-      position: absolute;
-      left: 0;
+  .dimension-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .competencies-list {
+    h4 {
+      color: #333;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    li {
+      color: #666;
+      font-size: 0.9rem;
+      padding: 5px 0;
+      position: relative;
+      padding-left: 15px;
+
+      &::before {
+        content: '•';
+        color: #dd2525;
+        position: absolute;
+        left: 0;
+      }
     }
   }
-}
 
-.dimension-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(221, 37, 37, 0.1);
-}
-
-.competency-count {
-  color: #999;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.detail-btn {
-  background: rgba(221, 37, 37, 0.1);
-  border: 1px solid rgba(221, 37, 37, 0.2);
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #dd2525;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(221, 37, 37, 0.2);
-    transform: scale(1.1);
+  .dimension-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e5e5;
   }
-}
 
-// Process Section
-.process-section {
-  padding: 40px;
-  margin-bottom: 50px;
+  .competency-count {
+    color: #999;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .detail-btn {
+    background: rgba(221, 37, 37, 0.1);
+    border: 1px solid rgba(221, 37, 37, 0.2);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #dd2525;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(221, 37, 37, 0.2);
+      transform: scale(1.1);
+    }
+  }
 }
 
 .process-timeline {
@@ -643,7 +622,7 @@ export default {
     top: 0;
     bottom: 0;
     width: 2px;
-    background: linear-gradient(180deg, #dd2525, rgba(221, 37, 37, 0.3));
+    background: #dd2525;
   }
 }
 
@@ -680,10 +659,10 @@ export default {
 }
 
 .timeline-content {
-  background: rgba(255, 255, 255, 0.8);
+  background: #f8f9fa;
   padding: 25px;
-  border-radius: 15px;
-  border: 1px solid rgba(221, 37, 37, 0.1);
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
 }
 
 .phase-header {
@@ -746,65 +725,61 @@ export default {
   }
 }
 
-// Metrics Section
-.metrics-section {
-  padding: 40px;
-  margin-bottom: 50px;
-}
-
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 25px;
 }
 
-.metric-item {
+.metric-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 25px;
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 25px;
-  background: rgba(221, 37, 37, 0.05);
-  border: 1px solid rgba(221, 37, 37, 0.1);
-  border-radius: 15px;
   transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(221, 37, 37, 0.15);
+    border-color: #dd2525;
+    box-shadow: 0 4px 12px rgba(221, 37, 37, 0.1);
+  }
+
+  .metric-icon {
+    font-size: 2.5rem;
+    color: #dd2525;
+    flex-shrink: 0;
+  }
+
+  .metric-content {
+    flex: 1;
+  }
+
+  .metric-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .metric-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #dd2525;
+    margin-bottom: 5px;
+  }
+
+  .metric-description {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
 }
 
-.metric-icon {
-  font-size: 2.5rem;
-  color: #dd2525;
-  flex-shrink: 0;
-}
-
-.metric-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.metric-value {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #dd2525;
-  margin-bottom: 5px;
-}
-
-.metric-description {
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-// Buttons
 .btn {
   padding: 12px 24px;
   border: 2px solid transparent;
-  border-radius: 25px;
+  border-radius: 6px;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
@@ -814,21 +789,20 @@ export default {
   gap: 8px;
   text-decoration: none;
 
-  &.primary {
-    background: linear-gradient(135deg, #dd2525, #b91c1c);
+  &.btn-primary {
+    background: #dd2525;
     color: white;
+    border-color: #dd2525;
 
     &:hover {
-      background: linear-gradient(135deg, #c41e1e, #991b1b);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(221, 37, 37, 0.3);
+      background: #b91c1c;
+      border-color: #b91c1c;
     }
   }
 }
 
-// Responsive Design
 @media (max-width: 1024px) {
-  .header-content {
+  .page-header {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -847,8 +821,8 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    padding: 20px;
+  .framework-page {
+    padding: 15px;
   }
 
   .page-title {
@@ -856,13 +830,6 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-  }
-
-  .intro-section,
-  .five-b-section,
-  .process-section,
-  .metrics-section {
-    padding: 30px 20px;
   }
 
   .framework-pillars {
@@ -873,7 +840,7 @@ export default {
     grid-template-columns: 1fr;
   }
 
-  .metric-item {
+  .metric-card {
     flex-direction: column;
     text-align: center;
   }
