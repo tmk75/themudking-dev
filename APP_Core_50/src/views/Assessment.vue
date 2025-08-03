@@ -13,8 +13,7 @@
           </h1>
           
           <p class="hero-subtitle">
-            Multi-dimensional leadership evaluation system providing comprehensive insights 
-            into executive capabilities and development opportunities.
+            多维度领导力评估系统，为高管能力和发展机会提供全面洞察。
           </p>
           
           <div class="hero-actions">
@@ -40,7 +39,7 @@
           <div class="visual-card">
             <div class="card-header">
               <div class="card-title">评估概览</div>
-              <div class="card-status">Active</div>
+              <div class="card-status">活跃</div>
             </div>
             <div class="card-content">
               <div class="metric-row">
@@ -129,11 +128,11 @@
                   {{ feature }}
                 </span>
                 <span v-if="type.features.length > 2" class="more-tag">
-                  +{{ type.features.length - 2 }} more
+                  +{{ type.features.length - 2 }} 更多
                 </span>
               </div>
               <div class="participants-preview">
-                <span class="participants-count">{{ type.participants.length }} participants</span>
+                <span class="participants-count">{{ type.participants.length }} 位参与者</span>
               </div>
             </div>
           </div>
@@ -147,7 +146,7 @@
         <div class="stats-content">
           <div class="stats-header">
             <h3 class="stats-title">最近评估</h3>
-            <p class="stats-subtitle">Current assessment activities and participant progress</p>
+            <p class="stats-subtitle">当前评估活动和参与者进度</p>
             <div class="stats-actions">
               <button class="btn btn-outline" @click="viewAllAssessments">
                 <span>查看所有评估</span>
@@ -201,8 +200,7 @@
             </h2>
             
             <p class="action-description">
-              Transform your organization's leadership capabilities with comprehensive 
-              360-degree assessments and data-driven development insights.
+              通过全面的360度评估和数据驱动的发展洞察，转变您组织的领导力能力。
             </p>
           </div>
           
@@ -217,7 +215,7 @@
               
               <div class="card-content">
                 <p class="card-description">
-                  Begin comprehensive leadership evaluation process
+                  开始全面的领导力评估流程
                 </p>
                 
                 <div class="card-features">
@@ -227,11 +225,11 @@
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>50+ competency dimensions</span>
+                    <span>50+ 能力维度</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Personalized insights</span>
+                    <span>个性化洞察</span>
                   </div>
                 </div>
                 
@@ -258,15 +256,15 @@
                 <div class="card-features">
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Progress tracking</span>
+                    <span>进度跟踪</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Comparative analysis</span>
+                    <span>对比分析</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Trend insights</span>
+                    <span>趋势洞察</span>
                   </div>
                 </div>
                 
@@ -322,28 +320,28 @@ export default {
 
     const overviewCards = [
       {
-        type: 'total',
+        type: '总计',
         icon: 'fas fa-clipboard-list',
         title: '总评估数',
         value: '156',
         description: '已完成的评估总数'
       },
       {
-        type: 'active',
+        type: '活跃',
         icon: 'fas fa-play-circle',
         title: '进行中',
         value: '23',
         description: '当前正在进行的评估'
       },
       {
-        type: 'pending',
+        type: '待处理',
         icon: 'fas fa-clock',
         title: '待开始',
         value: '8',
         description: '计划中但未开始的评估'
       },
       {
-        type: 'completed',
+        type: '已完成',
         icon: 'fas fa-check-circle',
         title: '本月完成',
         value: '12',
@@ -537,22 +535,22 @@ export default {
 
     const deleteAssessment = (assessment) => {
       appStore.showModal({
-        title: 'Confirm Delete',
-        content: `Are you sure you want to delete ${assessment.name}'s assessment? This action cannot be undone.`,
+        title: '确认删除',
+        content: `您确定要删除${assessment.name}的评估吗？此操作无法撤销。`,
         type: 'confirm',
         actions: [
           {
-            text: 'Cancel',
+            text: '取消',
             type: 'default'
           },
           {
-            text: 'Confirm Delete',
+            text: '确认删除',
             type: 'danger',
             handler: () => {
               const index = recentAssessments.value.findIndex(a => a.id === assessment.id)
               if (index > -1) {
                 recentAssessments.value.splice(index, 1)
-                appStore.showToast('Delete Success', 'Assessment deleted', 'success')
+                appStore.showToast('删除成功', '评估已删除', 'success')
               }
             }
           }

@@ -1,5 +1,10 @@
 <template>
-  <div class="floating-tab-bar">
+  <div 
+    class="floating-tab-bar"
+    :class="{ dragging: isDragging }"
+    :style="{ transform: `translate(${position.x}px, ${position.y}px)` }"
+    @mousedown="startDrag"
+  >
     <div class="tab-bar-content">
       <!-- Tab Buttons -->
       <div class="tab-buttons">
@@ -12,21 +17,6 @@
           @click="switchTab(index)"
         >
           <i :class="tab.icon"></i>
-          <!-- No labels - using tooltips only -->
-        </button>
-      </div>
-
-      <!-- Quick Actions - Always visible, no expansion -->
-      <div class="quick-actions">
-        <div class="actions-divider"></div>
-        <button class="action-button" data-tooltip="新建评估" @click="createNew">
-          <i class="fas fa-plus"></i>
-        </button>
-        <button class="action-button" data-tooltip="导出数据" @click="exportData">
-          <i class="fas fa-download"></i>
-        </button>
-        <button class="action-button" data-tooltip="设置" @click="openSettings">
-          <i class="fas fa-cog"></i>
         </button>
       </div>
     </div>
@@ -34,7 +24,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 
@@ -45,68 +35,66 @@ export default {
     const router = useRouter()
     const appStore = useAppStore()
     
+    // Drag functionality
+    const isDragging = ref(false)
+    const position = ref({ x: 0, y: 0 })
+    const dragStart = ref({ x: 0, y: 0 })
+    const initialPosition = ref({ x: 0, y: 0 })
+    const hasMoved = ref(false)
+    
     const tabs = [
       {
         name: 'Home',
         path: '/',
         icon: 'fas fa-home',
-        label: '首页',
         tooltip: '首页'
       },
       {
         name: 'Framework',
         path: '/framework',
         icon: 'fas fa-compass',
-        label: '框架',
         tooltip: '框架概述'
       },
       {
         name: 'Core50',
         path: '/core50',
         icon: 'fas fa-bullseye',
-        label: 'Core 50',
         tooltip: 'Core 50 关键岗位'
       },
       {
         name: 'Dashboard',
         path: '/dashboard',
         icon: 'fas fa-tachometer-alt',
-        label: '仪表盘',
         tooltip: '仪表盘'
       },
       {
         name: 'FiveB',
         path: '/5b',
         icon: 'fas fa-star',
-        label: '5B框架',
         tooltip: '5B核心能力'
       },
       {
         name: 'NineGrid',
         path: '/9grid',
         icon: 'fas fa-th',
-        label: '九宫格',
         tooltip: '九宫格人才矩阵'
       },
       {
         name: 'Assessment',
         path: '/assessment',
         icon: 'fas fa-clipboard-check',
-        label: '评估',
         tooltip: '评估中心'
       },
       {
         name: 'Analytics',
         path: '/analytics',
         icon: 'fas fa-chart-line',
-        label: '分析',
         tooltip: '数据分析'
       },
       {
         name: 'Reports',
         path: '/reports',
         icon: 'fas fa-file-alt',
-        label: '报告',
         tooltip: '报告中心'
       }
     ]
@@ -117,41 +105,104 @@ export default {
       return index >= 0 ? index : -1
     })
 
-    // No need for hover state management since we're not expanding
+    // Drag functionality
+    const startDrag = (e) => {
+      e.preventDefault()
+      isDragging.value = true
+      hasMoved.value = false
+      
+      dragStart.value = {
+        x: e.clientX,
+        y: e.clientY
+      }
+      
+      initialPosition.value = {
+        x: position.value.x,
+        y: position.value.y
+      }
+      
+      document.addEventListener('mousemove', onDrag)
+      document.addEventListener('mouseup', stopDrag)
+    }
+
+    const onDrag = (e) => {
+      if (!isDragging.value) return
+      
+      const deltaX = e.clientX - dragStart.value.x
+      const deltaY = e.clientY - dragStart.value.y
+      
+      // Mark as moved if dragged more than 5px
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        hasMoved.value = true
+      }
+      
+      position.value = {
+        x: initialPosition.value.x + deltaX,
+        y: initialPosition.value.y + deltaY
+      }
+      
+      // Keep within viewport bounds
+      const padding = 30
+      const maxX = window.innerWidth - padding
+      const maxY = window.innerHeight - padding
+      
+      position.value.x = Math.max(-window.innerWidth + padding, Math.min(maxX, position.value.x))
+      position.value.y = Math.max(-window.innerHeight + padding, Math.min(maxY, position.value.y))
+    }
+
+    const stopDrag = () => {
+      isDragging.value = false
+      document.removeEventListener('mousemove', onDrag)
+      document.removeEventListener('mouseup', stopDrag)
+      
+      // Save position after drag
+      if (hasMoved.value) {
+        savePosition()
+      }
+    }
+
+    // Load saved position from localStorage
+    const loadPosition = () => {
+      const saved = localStorage.getItem('floating-menu-position')
+      if (saved) {
+        try {
+          position.value = JSON.parse(saved)
+        } catch (e) {
+          console.log('Failed to load saved position')
+        }
+      }
+    }
+
+    // Save position to localStorage
+    const savePosition = () => {
+      localStorage.setItem('floating-menu-position', JSON.stringify(position.value))
+    }
+
+    onMounted(() => {
+      loadPosition()
+    })
+
+    onUnmounted(() => {
+      document.removeEventListener('mousemove', onDrag)
+      document.removeEventListener('mouseup', stopDrag)
+    })
 
     const switchTab = (index) => {
       const tab = tabs[index]
       if (tab) {
         router.push(tab.path).catch(err => {
-          // Handle navigation errors gracefully
           console.log('Navigation error:', err)
         })
       }
     }
 
-    const createNew = () => {
-      appStore.showToast('功能', '新建评估功能即将推出', 'info')
-    }
-
-    const exportData = () => {
-      appStore.showToast('导出', '数据导出功能即将推出', 'info')
-    }
-
-    const openSettings = () => {
-      router.push('/settings')
-    }
-
-    // Debug logging
-    console.log('FloatingTabBar mounted, current route:', route.name)
-    console.log('Active tab index:', activeTab.value)
-
     return {
       tabs,
       activeTab,
+      isDragging,
+      position,
       switchTab,
-      createNew,
-      exportData,
-      openSettings
+      startDrag
     }
   }
 }
@@ -164,20 +215,22 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   z-index: 1000;
-  opacity: 0.25;
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Ensure stable positioning */
-  will-change: opacity;
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+  cursor: grab;
   
   &:hover {
-    opacity: 1; /* 0% transparent = fully opaque */
+    opacity: 1;
+  }
+  
+  &.dragging {
+    cursor: grabbing;
+    opacity: 1;
   }
 }
 
 .tab-bar-content {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 1);
   border: 1px solid rgba(221, 37, 37, 0.1);
   border-radius: 25px;
   padding: 20px 15px;
@@ -186,16 +239,7 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  width: 70px; /* Fixed width - no expansion */
-  min-height: fit-content; /* Ensure proper height calculation */
-  position: relative;
-  overflow: visible; /* Allow tooltips to show outside */
-
-
-
-  /* Removed shimmer effect */
-
-
+  width: 70px;
 }
 
 .tab-buttons {
@@ -209,21 +253,18 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the icon */
+  justify-content: center;
   padding: 12px;
   background: transparent;
   border: 2px solid transparent;
   border-radius: 15px;
   color: #666;
   cursor: pointer;
-  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
   font-weight: 500;
   font-size: 16px;
   width: 100%;
-  overflow: visible; /* Allow tooltips to show */
-
-  /* Removed red bar indicator */
-
+  
   &::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -247,126 +288,42 @@ export default {
     color: #dd2525;
     background: rgba(221, 37, 37, 0.08);
     border-color: rgba(221, 37, 37, 0.2);
-    /* Removed transform to prevent shaking */
-  }
-
-  &.active {
-    color: white; /* White text on red background */
-    background: #dd2525; /* Solid red background */
-    border-color: #dd2525;
-    box-shadow: 0 4px 15px rgba(221, 37, 37, 0.3);
-  }
-
-  // Show tooltip on hover
-  &:hover::after {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  i {
-    font-size: 18px;
-    flex-shrink: 0;
-    width: 20px;
-    text-align: center;
-  }
-
-  /* No tab labels - removed */
-}
-
-.quick-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  opacity: 1; /* Always visible */
-  transform: translateY(0);
-}
-
-.actions-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(221, 37, 37, 0.2), transparent);
-  margin: 10px 0;
-}
-
-.action-button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Center the icon */
-  padding: 10px;
-  background: rgba(221, 37, 37, 0.05);
-  border: 1px solid rgba(221, 37, 37, 0.15);
-  border-radius: 12px;
-  color: #dd2525;
-  cursor: pointer;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  font-weight: 500;
-  width: 100%;
-  overflow: visible; /* Allow tooltips to show */
-
-  &::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    right: calc(100% + 15px);
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 1001;
-    pointer-events: none;
-  }
-
-  &:hover {
-    background: rgba(221, 37, 37, 0.1);
-    border-color: rgba(221, 37, 37, 0.25);
-    /* Removed transform to prevent shaking */
-    box-shadow: 0 2px 8px rgba(221, 37, 37, 0.15);
-
+    
     &::after {
       opacity: 1;
       visibility: visible;
     }
   }
 
+  &.active {
+    color: white;
+    background: #dd2525;
+    border-color: #dd2525;
+    box-shadow: 0 4px 15px rgba(221, 37, 37, 0.3);
+  }
+
   i {
-    font-size: 14px;
+    font-size: 18px;
+    width: 20px;
     text-align: center;
   }
 }
-
-/* Removed collapse indicator since we're not expanding */
 
 // Responsive Design
 @media (max-width: 1024px) {
   .floating-tab-bar {
     right: 15px;
   }
-
-  /* No expansion on hover */
 }
 
 @media (max-width: 768px) {
   .floating-tab-bar {
     right: 10px;
-    opacity: 0.15;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 
   .tab-bar-content {
     padding: 15px 12px;
   }
-
-  /* No expansion on hover */
 
   .tab-button {
     padding: 10px;
@@ -375,55 +332,20 @@ export default {
     i {
       font-size: 16px;
     }
-
-    /* No tab labels */
-  }
-
-  .action-button {
-    padding: 8px 10px;
-    font-size: 12px;
-
-    i {
-      font-size: 13px;
+    
+    &::after {
+      display: none; // Hide tooltips on mobile
     }
-
-    /* No action labels */
   }
 }
 
 @media (max-width: 480px) {
   .floating-tab-bar {
     right: 8px;
-    opacity: 0.1;
   }
-
-  /* No expansion on hover */
 
   .tab-button {
     padding: 8px;
-
-    &::after {
-      display: none; // Hide tooltips on very small screens
-    }
   }
 }
-
-// Animation keyframes
-/* Removed slideInRight animation to prevent positioning conflicts */
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.25;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-// Add subtle pulse animation when not hovered
-.floating-tab-bar:not(:hover) {
-  animation: pulse 3s ease-in-out infinite;
-}
-
-/* Removed shimmer effects to prevent positioning conflicts */
 </style>

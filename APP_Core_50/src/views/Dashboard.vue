@@ -402,7 +402,7 @@ export default {
     const recentActivities = ref([
       {
         id: 1,
-        type: 'assessment',
+        type: '评估',
         icon: 'fas fa-clipboard-check',
         title: 'Carol Wen 完成了360度评估',
         description: '销售总监 Carol Wen 完成了本季度的360度评估',
@@ -410,7 +410,7 @@ export default {
       },
       {
         id: 2,
-        type: 'development',
+        type: '发展',
         icon: 'fas fa-graduation-cap',
         title: 'John Smith 开始了领导力培训',
         description: '市场总监 John Smith 参加了为期3个月的领导力提升项目',
@@ -418,7 +418,7 @@ export default {
       },
       {
         id: 3,
-        type: 'achievement',
+        type: '成就',
         icon: 'fas fa-trophy',
         title: 'Jane Doe 获得了卓越认证',
         description: '技术项目经理 Jane Doe 在能力评估中获得了优秀评级',
@@ -447,10 +447,10 @@ export default {
       const time = new Date(timestamp)
       const diff = now - time
       
-      if (diff < 60000) return 'Just now'
-      if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
-      if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
-      return `${Math.floor(diff / 86400000)}d ago`
+      if (diff < 60000) return '刚刚'
+      if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`
+      if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`
+      return `${Math.floor(diff / 86400000)}天前`
     }
 
     const refreshData = async () => {
@@ -482,7 +482,7 @@ export default {
     const showLightDetail = (light) => {
       appStore.showModal({
         title: light.title,
-        content: `${light.count} employees (${light.percentage}%) are currently in "${light.title}" status. Consider taking appropriate development measures.`,
+        content: `${light.count} 名员工 (${light.percentage}%) 当前处于"${light.title}"状态。建议采取适当的发展措施。`,
         type: 'info'
       })
     }
@@ -508,7 +508,7 @@ export default {
     }
 
     const startAssessment = (member) => {
-      appStore.showToast('Assessment', `Starting assessment process for ${member.name}`, 'info')
+      appStore.showToast('评估', `正在为${member.name}启动评估流程`, 'info')
     }
 
     const viewProgress = (member) => {

@@ -258,6 +258,7 @@ export default {
 
   i {
     font-size: 2rem;
+    animation: spin 3s linear infinite;
   }
 
   span {
@@ -597,6 +598,15 @@ export default {
 
   &:hover {
     background: rgba(221, 37, 37, 0.2);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>
