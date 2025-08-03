@@ -1,11 +1,26 @@
 <template>
   <div 
     class="floating-tab-bar"
-    :class="{ dragging: isDragging }"
+    :class="{ 
+      dragging: isDragging,
+      collapsed: isCollapsed,
+      'show-on-hover': !isCollapsed
+    }"
     :style="{ transform: `translate(${position.x}px, ${position.y}px)` }"
     @mousedown="startDrag"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
   >
-    <div class="tab-bar-content">
+    <!-- Collapse Toggle Button -->
+    <button 
+      class="collapse-toggle"
+      @click="toggleCollapse"
+      @mousedown.stop
+    >
+      <i :class="isCollapsed ? 'fas fa-chevron-left' : 'fas fa-chevron-right'"></i>
+    </button>
+    
+    <div class="tab-bar-content" v-show="!isCollapsed">
       <!-- Tab Buttons -->
       <div class="tab-buttons">
         <button
@@ -34,6 +49,11 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const appStore = useAppStore()
+    
+    // Collapse functionality
+    const isCollapsed = ref(false)
+    const collapseTimer = ref(null)
+    const COLLAPSE_DELAY = 3000 // 3 seconds
     
     // Drag functionality
     const isDragging = ref(false)
@@ -161,6 +181,46 @@ export default {
       }
     }
 
+    // Collapse functionality
+    const startCollapseTimer = () => {
+      clearTimeout(collapseTimer.value)
+      collapseTimer.value = setTimeout(() => {
+        if (!isDragging.value) {
+          isCollapsed.value = true
+        }
+      }, COLLAPSE_DELAY)
+    }
+
+    const clearCollapseTimer = () => {
+      clearTimeout(collapseTimer.value)
+    }
+
+    const toggleCollapse = () => {
+      isCollapsed.value = !isCollapsed.value
+      clearCollapseTimer()
+      
+      // Save collapse state
+      localStorage.setItem('floating-menu-collapsed', JSON.stringify(isCollapsed.value))
+      
+      // If expanding, start timer to collapse again
+      if (!isCollapsed.value) {
+        startCollapseTimer()
+      }
+    }
+
+    const handleMouseEnter = () => {
+      clearCollapseTimer()
+      if (isCollapsed.value) {
+        isCollapsed.value = false
+      }
+    }
+
+    const handleMouseLeave = () => {
+      if (!isCollapsed.value) {
+        startCollapseTimer()
+      }
+    }
+
     // Load saved position from localStorage
     const loadPosition = () => {
       const saved = localStorage.getItem('floating-menu-position')
@@ -173,6 +233,23 @@ export default {
       }
     }
 
+    // Load saved collapse state
+    const loadCollapseState = () => {
+      const saved = localStorage.getItem('floating-menu-collapsed')
+      if (saved) {
+        try {
+          isCollapsed.value = JSON.parse(saved)
+        } catch (e) {
+          console.log('Failed to load saved collapse state')
+        }
+      }
+      
+      // Start collapse timer if not collapsed
+      if (!isCollapsed.value) {
+        startCollapseTimer()
+      }
+    }
+
     // Save position to localStorage
     const savePosition = () => {
       localStorage.setItem('floating-menu-position', JSON.stringify(position.value))
@@ -180,11 +257,13 @@ export default {
 
     onMounted(() => {
       loadPosition()
+      loadCollapseState()
     })
 
     onUnmounted(() => {
       document.removeEventListener('mousemove', onDrag)
       document.removeEventListener('mouseup', stopDrag)
+      clearCollapseTimer()
     })
 
     const switchTab = (index) => {
@@ -201,8 +280,12 @@ export default {
       activeTab,
       isDragging,
       position,
+      isCollapsed,
       switchTab,
-      startDrag
+      startDrag,
+      toggleCollapse,
+      handleMouseEnter,
+      handleMouseLeave
     }
   }
 }
@@ -216,16 +299,61 @@ export default {
   transform: translateY(-50%);
   z-index: 1000;
   opacity: 0.2;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   
-  &:hover {
+  &:hover,
+  &.show-on-hover:hover {
     opacity: 1;
   }
   
   &.dragging {
     cursor: grabbing;
     opacity: 1;
+  }
+  
+  &.collapsed {
+    opacity: 0.6;
+    
+    &:hover {
+      opacity: 1;
+    }
+    
+    .tab-bar-content {
+      transform: translateX(100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+.collapse-toggle {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(221, 37, 37, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    background: rgba(221, 37, 37, 0.1);
+    color: #dd2525;
+    border-color: rgba(221, 37, 37, 0.4);
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
   }
 }
 
@@ -240,6 +368,8 @@ export default {
   align-items: center;
   gap: 15px;
   width: 70px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: right center;
 }
 
 .tab-buttons {
@@ -321,8 +451,15 @@ export default {
     right: 10px;
   }
 
+  .collapse-toggle {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
+  }
+
   .tab-bar-content {
     padding: 15px 12px;
+    width: 60px;
   }
 
   .tab-button {
@@ -342,6 +479,16 @@ export default {
 @media (max-width: 480px) {
   .floating-tab-bar {
     right: 8px;
+  }
+
+  .collapse-toggle {
+    width: 32px;
+    height: 32px;
+    font-size: 11px;
+  }
+
+  .tab-bar-content {
+    width: 55px;
   }
 
   .tab-button {
