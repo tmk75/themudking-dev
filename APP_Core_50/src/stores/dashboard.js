@@ -200,14 +200,14 @@ export const useDashboardStore = defineStore('dashboard', () => {
     assessmentData,
     teamMembers,
     developmentPlans,
-    
+
     // Getters
     totalScore,
     averageScore,
     criticalMembers,
     readyMembers,
     activePlans,
-    
+
     // Actions
     updateMetrics,
     updateTrafficLights,

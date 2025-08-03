@@ -1,196 +1,294 @@
 <template>
   <div class="dashboard-page">
-    <div class="page-header">
-      <div class="header-content">
-        <h1 class="page-title">
-          <i class="fas fa-tachometer-alt"></i>
-          Dashboard
-        </h1>
-        <p class="page-subtitle">Real-time monitoring of team development status and key metrics</p>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-primary" @click="refreshData">
-          <i class="fas fa-sync-alt" :class="{ 'fa-spin': isRefreshing }"></i>
-          Refresh Data
-        </button>
-        <button class="btn btn-outline" @click="exportReport">
-          <i class="fas fa-download"></i>
-          Export Report
-        </button>
-      </div>
-    </div>
-
-    <div class="metrics-grid">
-      <div 
-        v-for="(metric, index) in metricsData" 
-        :key="index"
-        class="metric-card"
-        @click="showMetricDetail(metric)"
-      >
-        <div class="metric-icon">
-          <i :class="metric.icon"></i>
-        </div>
-        <div class="metric-content">
-          <div class="metric-value">{{ metric.value }}</div>
-          <div class="metric-label">{{ metric.label }}</div>
-          <div class="metric-trend" :class="metric.trend.type">
-            <i :class="getTrendIcon(metric.trend.type)"></i>
-            {{ metric.trend.value }}
+    <!-- Hero Section with Dashboard Overview -->
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span>Executive Dashboard</span>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-header">
-      <h2 class="section-title">Talent Status Overview</h2>
-      <div class="section-actions">
-        <select v-model="selectedDepartment" class="filter-select">
-          <option value="all">All Departments</option>
-          <option value="sales">Sales</option>
-          <option value="marketing">Marketing</option>
-          <option value="tech">Technology</option>
-          <option value="hr">Human Resources</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="traffic-lights-grid">
-      <div 
-        v-for="(light, index) in trafficLightsData" 
-        :key="index"
-        class="traffic-light-card"
-        @click="showLightDetail(light)"
-      >
-        <div class="light-header">
-          <div class="light-icon">
-            <i class="fas fa-circle" :class="`text-${light.status}`"></i>
+          
+          <h1 class="hero-title">
+            Talent Management Dashboard
+          </h1>
+          
+          <p class="hero-subtitle">
+            Real-time monitoring of team development status and key performance metrics. 
+            Transform your organization with data-driven talent insights.
+          </p>
+          
+          <div class="hero-actions">
+            <button class="btn btn-primary" @click="refreshData">
+              <i class="fas fa-sync-alt" :class="{ 'fa-spin': isRefreshing }"></i>
+              Refresh Data
+            </button>
+            <button class="btn btn-secondary" @click="exportReport">
+              <i class="fas fa-download"></i>
+              Export Report
+            </button>
           </div>
-          <div class="light-info">
-            <h3 class="light-title">{{ light.title }}</h3>
-            <span class="urgency-badge" :class="light.urgency">{{ light.urgencyText }}</span>
+
+          <div class="hero-stats">
+            <div class="stat-item" v-for="(stat, index) in heroStats" :key="index">
+              <div class="stat-number">{{ stat.value }}</div>
+              <div class="stat-label">{{ stat.label }}</div>
+            </div>
           </div>
         </div>
         
-        <div class="light-metrics">
-          <div class="light-percentage">{{ light.percentage }}%</div>
-          <div class="percentage-label">{{ light.count }} people</div>
-        </div>
-
-        <div class="progress-container">
-          <div class="progress-track">
-            <div 
-              class="progress-fill" 
-              :class="light.status"
-              :style="{ width: light.percentage + '%' }"
-            ></div>
+        <div class="hero-visual">
+          <div class="visual-card">
+            <div class="card-header">
+              <div class="card-title">Live Metrics</div>
+              <div class="card-status">Active</div>
+            </div>
+            <div class="card-content">
+              <div class="metric-row">
+                <span class="metric-label">Team Performance</span>
+                <span class="metric-value">{{ metricsData[2]?.value || '0' }}</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">In Development</span>
+                <span class="metric-value">{{ metricsData[1]?.value || '0' }}</span>
+              </div>
+              <div class="metric-row">
+                <span class="metric-label">Success Rate</span>
+                <span class="metric-value">87%</span>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div class="light-actions">
-          <button class="btn btn-outline btn-sm" @click.stop="viewDetails(light)">
-            <i class="fas fa-eye"></i>
-            View Details
-          </button>
-          <button class="btn btn-primary btn-sm" @click.stop="takeAction(light)">
-            <i class="fas fa-play"></i>
-            Take Action
-          </button>
-        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="section-header">
-      <h2 class="section-title">Team Members</h2>
-      <div class="section-actions">
-        <div class="search-box">
-          <input 
-            v-model="searchQuery" 
-            type="text" 
-            placeholder="Search members..."
-            class="search-input"
-          >
-          <i class="fas fa-search"></i>
-        </div>
-        <button class="btn btn-primary" @click="addMember">
-          <i class="fas fa-plus"></i>
-          Add Member
-        </button>
-      </div>
-    </div>
-
-    <div class="team-grid">
-      <div 
-        v-for="member in filteredMembers" 
-        :key="member.id"
-        class="member-card"
-        @click="viewMemberProfile(member)"
-      >
-        <div class="member-avatar">
-          <img :src="member.avatar" :alt="member.name">
-          <div class="member-status" :class="member.status"></div>
+    <!-- Core Capabilities Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Performance Metrics</h2>
+          <p class="section-description">
+            Real-time insights into your team's development and performance
+          </p>
         </div>
         
-        <div class="member-info">
-          <h4 class="member-name">{{ member.name }}</h4>
-          <p class="member-position">{{ member.position }}</p>
-          <p class="member-department">{{ member.department }}</p>
-        </div>
-
-        <div class="member-score">
-          <div class="score-display">
-            <span class="score-value">{{ member.score }}</span>
-            <span class="score-label">Overall Score</span>
-          </div>
-        </div>
-
-        <div class="member-actions">
-          <button class="btn btn-outline btn-sm" @click.stop="startAssessment(member)">
-            <i class="fas fa-clipboard-check"></i>
-            Assess
-          </button>
-          <button class="btn btn-primary btn-sm" @click.stop="viewProgress(member)">
-            <i class="fas fa-chart-line"></i>
-            Progress
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="activities-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <i class="fas fa-clock"></i>
-          Recent Activities
-        </h2>
-        <button class="btn btn-outline" @click="viewAllActivities">
-          View All
-        </button>
-      </div>
-
-      <div class="activities-container">
-        <div class="activities-list">
+        <div class="features-grid">
           <div 
-            v-for="activity in recentActivities" 
-            :key="activity.id"
-            class="activity-item"
+            class="feature-card" 
+            v-for="(metric, index) in metricsData" 
+            :key="index"
+            @click="showMetricDetail(metric)"
           >
-            <div class="activity-icon">
-              <i :class="activity.icon"></i>
+            <div class="feature-icon">
+              <i :class="metric.icon"></i>
             </div>
-            <div class="activity-content">
-              <h4 class="activity-title">{{ activity.title }}</h4>
-              <p class="activity-description">{{ activity.description }}</p>
-              <span class="activity-time">{{ formatTime(activity.timestamp) }}</span>
+            
+            <div class="feature-content">
+              <h3 class="feature-title">{{ metric.label }}</h3>
+              <p class="feature-description">Monitor and track {{ metric.label.toLowerCase() }} across your organization</p>
+              
+              <div class="feature-stat">
+                <span class="stat-value">{{ metric.value }}</span>
+                <span class="stat-label">{{ metric.trend.value }}</span>
+              </div>
             </div>
-            <div class="activity-actions">
-              <button class="btn btn-outline btn-sm" @click="viewActivity(activity)">
-                View
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Talent Status Overview</h2>
+          <p class="section-description">
+            Current status distribution across your organization
+          </p>
+          <div class="section-actions">
+            <select v-model="selectedDepartment" class="filter-select">
+              <option value="all">All Departments</option>
+              <option value="sales">Sales</option>
+              <option value="marketing">Marketing</option>
+              <option value="tech">Technology</option>
+              <option value="hr">Human Resources</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="process-grid">
+          <div 
+            v-for="(light, index) in trafficLightsData" 
+            :key="index" 
+            class="process-card"
+            @click="showLightDetail(light)"
+          >
+            <div class="process-number" :class="light.status">{{ light.percentage }}%</div>
+            <div class="process-content">
+              <h4 class="process-title">{{ light.title }}</h4>
+              <p class="process-description">{{ light.count }} team members currently in this status</p>
+              <div class="process-duration">{{ light.urgencyText }}</div>
+            </div>
+            <div class="process-actions">
+              <button class="btn btn-outline btn-sm" @click.stop="viewDetails(light)">
+                <i class="fas fa-eye"></i>
+                View Details
+              </button>
+              <button class="btn btn-primary btn-sm" @click.stop="takeAction(light)">
+                <i class="fas fa-play"></i>
+                Take Action
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-content">
+          <div class="stats-header">
+            <h3 class="stats-title">Team Members Overview</h3>
+            <p class="stats-subtitle">Current team composition and performance metrics</p>
+            <div class="stats-actions">
+              <div class="search-box">
+                <input 
+                  v-model="searchQuery" 
+                  type="text" 
+                  placeholder="Search members..."
+                  class="search-input"
+                >
+                <i class="fas fa-search"></i>
+              </div>
+              <button class="btn btn-primary" @click="addMember">
+                <i class="fas fa-plus"></i>
+                Add Member
+              </button>
+            </div>
+          </div>
+          
+          <div class="stats-grid">
+            <div 
+              v-for="member in filteredMembers.slice(0, 4)" 
+              :key="member.id"
+              class="stat-card member-stat-card"
+              @click="viewMemberProfile(member)"
+            >
+              <div class="stat-icon member-avatar-icon">
+                <img :src="member.avatar" :alt="member.name">
+                <div class="member-status-dot" :class="member.status"></div>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">{{ member.score }}</div>
+                <div class="stat-label">{{ member.name }}</div>
+                <div class="stat-sublabel">{{ member.position }}</div>
+              </div>
+              <div class="member-quick-actions">
+                <button class="btn btn-outline btn-xs" @click.stop="startAssessment(member)">
+                  <i class="fas fa-clipboard-check"></i>
+                </button>
+                <button class="btn btn-primary btn-xs" @click.stop="viewProgress(member)">
+                  <i class="fas fa-chart-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="view-all-members">
+            <button class="btn btn-outline" @click="viewAllMembers">
+              <span>View All {{ filteredMembers.length }} Members</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Executive Action Section -->
+    <section class="executive-action-section">
+      <div class="container">
+        <div class="action-content">
+          <div class="action-header">
+            <div class="action-badge">
+              <i class="fas fa-clock"></i>
+              <span>Recent Activities</span>
+            </div>
+            
+            <h2 class="action-title">
+              Stay Updated with Latest Progress
+            </h2>
+            
+            <p class="action-description">
+              Monitor real-time activities and take immediate action to optimize your team's 
+              performance and development trajectory.
+            </p>
+          </div>
+          
+          <div class="action-grid activities-action-grid">
+            <div 
+              v-for="activity in recentActivities" 
+              :key="activity.id"
+              class="action-card activity-action-card"
+            >
+              <div class="card-header">
+                <div class="card-icon">
+                  <i :class="activity.icon"></i>
+                </div>
+                <h3 class="card-title">{{ activity.title }}</h3>
+              </div>
+              
+              <div class="card-content">
+                <p class="card-description">
+                  {{ activity.description }}
+                </p>
+                
+                <div class="card-features">
+                  <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <span>{{ formatTime(activity.timestamp) }}</span>
+                  </div>
+                  <div class="feature-item">
+                    <i class="fas fa-tag"></i>
+                    <span>{{ activity.type }}</span>
+                  </div>
+                </div>
+                
+                <button class="action-btn secondary" @click="viewActivity(activity)">
+                  <span>View Details</span>
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="trust-indicators">
+            <div class="trust-item">
+              <i class="fas fa-shield-alt"></i>
+              <span>Real-time Updates</span>
+            </div>
+            <div class="trust-item">
+              <i class="fas fa-chart-line"></i>
+              <span>Performance Tracking</span>
+            </div>
+            <div class="trust-item">
+              <i class="fas fa-users"></i>
+              <span>Team Collaboration</span>
+            </div>
+            <div class="trust-item">
+              <i class="fas fa-bell"></i>
+              <span>Smart Notifications</span>
+            </div>
+          </div>
+          
+          <div class="view-all-activities">
+            <button class="btn btn-primary" @click="viewAllActivities">
+              <span>View All Activities</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -212,6 +310,13 @@ export default {
     const isRefreshing = ref(false)
     const selectedDepartment = ref('all')
     const searchQuery = ref('')
+
+    const heroStats = [
+      { value: '87%', label: 'Success Rate' },
+      { value: '24/7', label: 'Monitoring' },
+      { value: '95%', label: 'Satisfaction' },
+      { value: '100+', label: 'Active Users' }
+    ]
 
     const metricsData = computed(() => [
       {
@@ -443,7 +548,12 @@ export default {
       }
     })
 
+    const viewAllMembers = () => {
+      router.push('/team')
+    }
+
     return {
+      heroStats,
       isRefreshing,
       selectedDepartment,
       searchQuery,
@@ -466,7 +576,8 @@ export default {
       startAssessment,
       viewProgress,
       viewAllActivities,
-      viewActivity
+      viewActivity,
+      viewAllMembers
     }
   }
 }
@@ -474,514 +585,740 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px;
   background: #ffffff;
   min-height: 100vh;
 }
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 40px;
-  gap: 20px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
 
-  .header-content {
-    flex: 1;
-  }
-
-  .page-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #212529;
-    margin-bottom: 8px;
-    display: flex;
+// Hero Section
+.hero-section {
+  padding: 120px 0;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  
+  .hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
     align-items: center;
-    gap: 16px;
-    letter-spacing: -0.02em;
-
-    i {
-      font-size: 2rem;
-      color: #dd2525;
-    }
   }
-
-  .page-subtitle {
-    font-size: 1.125rem;
-    color: #6c757d;
-    line-height: 1.5;
-  }
-
-  .header-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.metric-card {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 32px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  &:hover {
-    border-color: #dd2525;
-    box-shadow: 0 8px 25px rgba(221, 37, 37, 0.1);
-    transform: translateY(-4px);
-  }
-
-  .metric-icon {
-    width: 56px;
-    height: 56px;
-    background: #dd2525;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    i {
-      font-size: 1.5rem;
-      color: #ffffff;
-    }
-  }
-
-  .metric-content {
-    flex: 1;
-  }
-
-  .metric-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #212529;
-    margin-bottom: 4px;
-  }
-
-  .metric-label {
-    font-size: 0.875rem;
-    color: #6c757d;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .metric-trend {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 4px 8px;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-
-    &.up {
-      color: #10b981;
-      background: rgba(16, 185, 129, 0.1);
-    }
-
-    &.down {
-      color: #ef4444;
-      background: rgba(239, 68, 68, 0.1);
-    }
-
-    &.stable {
-      color: #6b7280;
-      background: rgba(107, 114, 128, 0.1);
-    }
-  }
-}
-
-// Clean McKinsey-Style Metrics - No Excessive Animations
-
-// Section Headers
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-
-  i {
-    font-size: 1.8rem;
-    color: #dd2525;
-  }
-}
-
-.section-actions {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-
-.filter-select {
-  padding: 8px 15px;
-  background: white;
-  border: 1px solid rgba(221, 37, 37, 0.2);
-  border-radius: 20px;
-  color: #333;
-  font-size: 14px;
-  cursor: pointer;
-
-  option {
-    background: white;
-    color: #333;
-  }
-}
-
-.traffic-lights-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
-  margin-bottom: 48px;
-}
-
-.traffic-light-card {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 32px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #007bff;
-  }
-
-  .light-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .light-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    .text-red {
-      color: #dc3545;
+  
+  .hero-content {
+    .hero-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6c757d;
+      margin-bottom: 32px;
     }
     
-    .text-yellow {
-      color: #ffc107;
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #212529;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
     }
     
-    .text-green {
-      color: #28a745;
+    .hero-subtitle {
+      font-size: 1.25rem;
+      line-height: 1.6;
+      color: #6c757d;
+      margin-bottom: 40px;
+      max-width: 500px;
     }
     
-    i {
-      font-size: 1.5rem;
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+    
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      
+      .stat-item {
+        .stat-number {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #212529;
+          margin-bottom: 4px;
+        }
+        
+        .stat-label {
+          font-size: 0.875rem;
+          color: #6c757d;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+      }
     }
   }
-
-  .light-info {
-    flex: 1;
-  }
-
-  .light-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 8px;
-  }
-
-  .urgency-badge {
-    font-size: 0.75rem;
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-
-    &.high {
-      background: rgba(220, 53, 69, 0.1);
-      color: #dc3545;
+  
+  .hero-visual {
+    .visual-card {
+      background: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        
+        .card-title {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: #212529;
+        }
+        
+        .card-status {
+          padding: 4px 12px;
+          background: #d1ecf1;
+          color: #0c5460;
+          border-radius: 16px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+      }
+      
+      .card-content {
+        .metric-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 12px 0;
+          border-bottom: 1px solid #f8f9fa;
+          
+          &:last-child {
+            border-bottom: none;
+          }
+          
+          .metric-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+          }
+          
+          .metric-value {
+            font-weight: 600;
+            color: #212529;
+          }
+        }
+      }
     }
-
-    &.moderate {
-      background: rgba(255, 193, 7, 0.1);
-      color: #ffc107;
-    }
-
-    &.low {
-      background: rgba(40, 167, 69, 0.1);
-      color: #28a745;
-    }
   }
+}
 
-  .light-metrics {
+// Features Section
+.features-section {
+  padding: 120px 0;
+  
+  .section-header {
     text-align: center;
-    margin-bottom: 24px;
-  }
-
-  .light-percentage {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #212529;
-    margin-bottom: 4px;
-  }
-
-  .percentage-label {
-    color: #6c757d;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .progress-container {
-    margin: 24px 0;
-  }
-
-  .progress-track {
-    background: #f8f9fa;
-    border-radius: 8px;
-    height: 8px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    border-radius: 8px;
-    transition: width 1s ease;
-
-    &.red {
-      background: #dc3545;
+    margin-bottom: 80px;
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #212529;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
     }
-
-    &.yellow {
-      background: #ffc107;
-    }
-
-    &.green {
-      background: #28a745;
+    
+    .section-description {
+      font-size: 1.125rem;
+      color: #6c757d;
+      max-width: 600px;
+      margin: 0 auto;
     }
   }
-
-  .light-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
   }
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
-  margin-bottom: 48px;
-}
-
-.member-card {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 32px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-align: center;
-
-  &:hover {
-    transform: translateY(-4px);
-    border-color: #007bff;
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
-  }
-
-  .member-avatar {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 24px;
-
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #f8f9fa;
-    }
-
-    .member-status {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 3px solid #ffffff;
-
-      &.ready { background: #28a745; }
-      &.development { background: #ffc107; }
-      &.critical { background: #dc3545; }
-    }
-  }
-
-  .member-info {
-    margin-bottom: 24px;
-  }
-
-  .member-name {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 8px;
-  }
-
-  .member-position {
-    color: #6c757d;
-    font-size: 0.875rem;
-    margin-bottom: 4px;
-    font-weight: 500;
-  }
-
-  .member-department {
-    color: #adb5bd;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .member-score {
-    margin-bottom: 24px;
-  }
-
-  .score-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .score-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #007bff;
-  }
-
-  .score-label {
-    color: #6c757d;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .member-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-  }
-}
-
-.activities-section {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 32px;
-
-  .activities-list {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .activity-item {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 24px;
-    background: #f8f9fa;
+  
+  .feature-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
     border-radius: 12px;
+    padding: 40px;
     transition: all 0.3s ease;
-
+    cursor: pointer;
+    
     &:hover {
-      background: #e9ecef;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border-color: #dd2525;
+      box-shadow: 0 8px 25px rgba(221, 37, 37, 0.1);
+      transform: translateY(-4px);
+    }
+    
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: #dd2525;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      
+      i {
+        font-size: 1.5rem;
+        color: #ffffff;
+      }
+    }
+    
+    .feature-content {
+      .feature-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 12px;
+      }
+      
+      .feature-description {
+        color: #6c757d;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      
+      .feature-stat {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        
+        .stat-value {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #dd2525;
+        }
+        
+        .stat-label {
+          font-size: 0.875rem;
+          color: #6c757d;
+        }
+      }
     }
   }
+}
 
-  .activity-icon {
-    width: 48px;
-    height: 48px;
+// Process Section
+.process-section {
+  padding: 120px 0;
+  background: #fafafa;
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 80px;
+    position: relative;
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #212529;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    
+    .section-description {
+      font-size: 1.125rem;
+      color: #6c757d;
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    
+    .section-actions {
+      display: flex;
+      justify-content: center;
+      
+      .filter-select {
+        padding: 8px 16px;
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        color: #212529;
+        font-size: 0.875rem;
+        cursor: pointer;
+
+        &:focus {
+          outline: none;
+          border-color: #dd2525;
+        }
+      }
+    }
+  }
+  
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  
+  .process-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    color: #ffffff;
-    flex-shrink: 0;
-
-    i {
-      &.fa-clipboard-check {
-        background: #007bff;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      border-color: #dd2525;
+      box-shadow: 0 8px 25px rgba(221, 37, 37, 0.1);
+      transform: translateY(-4px);
+    }
+    
+    .process-number {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 auto 24px;
+      color: #ffffff;
+      
+      &.red {
+        background: #dc3545;
       }
       
-      &.fa-graduation-cap {
-        background: #17a2b8;
+      &.yellow {
+        background: #ffc107;
       }
       
-      &.fa-trophy {
+      &.green {
         background: #28a745;
       }
     }
+    
+    .process-content {
+      margin-bottom: 24px;
+      
+      .process-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 12px;
+      }
+      
+      .process-description {
+        color: #6c757d;
+        line-height: 1.6;
+        margin-bottom: 16px;
+        font-size: 0.875rem;
+      }
+      
+      .process-duration {
+        font-size: 0.75rem;
+        color: #dd2525;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+    
+    .process-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
   }
+}
 
-  .activity-content {
-    flex: 1;
+// Statistics Section
+.stats-section {
+  padding: 120px 0;
+  
+  .stats-content {
+    .stats-header {
+      text-align: center;
+      margin-bottom: 80px;
+      
+      .stats-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 16px;
+        letter-spacing: -0.02em;
+      }
+      
+      .stats-subtitle {
+        font-size: 1.125rem;
+        color: #6c757d;
+        max-width: 600px;
+        margin: 0 auto 32px;
+      }
+      
+      .stats-actions {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      
+      &:hover {
+        border-color: #dd2525;
+        box-shadow: 0 8px 25px rgba(221, 37, 37, 0.1);
+        transform: translateY(-4px);
+      }
+      
+      &.member-stat-card {
+        position: relative;
+        
+        .member-quick-actions {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          display: flex;
+          gap: 4px;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        &:hover .member-quick-actions {
+          opacity: 1;
+        }
+      }
+      
+      .stat-icon {
+        width: 56px;
+        height: 56px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        
+        i {
+          font-size: 1.5rem;
+          color: #dd2525;
+        }
+        
+        &.member-avatar-icon {
+          position: relative;
+          background: transparent;
+          
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #f8f9fa;
+          }
+          
+          .member-status-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+
+            &.ready { background: #28a745; }
+            &.development { background: #ffc107; }
+            &.critical { background: #dc3545; }
+          }
+        }
+      }
+      
+      .stat-content {
+        .stat-value {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #212529;
+          margin-bottom: 8px;
+        }
+        
+        .stat-label {
+          font-size: 0.875rem;
+          color: #6c757d;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 4px;
+        }
+        
+        .stat-sublabel {
+          font-size: 0.75rem;
+          color: #adb5bd;
+        }
+      }
+    }
+    
+    .view-all-members {
+      text-align: center;
+    }
   }
+}
 
-  .activity-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 8px;
-  }
-
-  .activity-description {
-    color: #6c757d;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin-bottom: 8px;
-  }
-
-  .activity-time {
-    color: #adb5bd;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .activity-actions {
-    flex-shrink: 0;
+// Executive Action Section - McKinsey Style
+.executive-action-section {
+  padding: 120px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  position: relative;
+  
+  .action-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    margin: 0 auto;
+    
+    .action-header {
+      text-align: center;
+      margin-bottom: 80px;
+      
+      .action-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 20px;
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 24px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 32px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        
+        i {
+          color: #dd2525;
+          font-size: 12px;
+        }
+      }
+      
+      .action-title {
+        font-size: 2.75rem;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 24px;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+      
+      .action-description {
+        font-size: 1.125rem;
+        color: #6c757d;
+        line-height: 1.6;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+    }
+    
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 60px;
+      
+      &.activities-action-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .action-card {
+      background: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #dd2525 0%, #b91c1c 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+      
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        border-color: #dd2525;
+        
+        &::before {
+          transform: scaleX(1);
+        }
+      }
+      
+      &.activity-action-card {
+        .card-icon {
+          background: #f8f9fa;
+          color: #495057;
+          border: 2px solid #e9ecef;
+        }
+      }
+      
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        
+        .card-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.25rem;
+          transition: all 0.3s ease;
+        }
+        
+        .card-title {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: #212529;
+          margin: 0;
+          line-height: 1.3;
+        }
+      }
+      
+      .card-content {
+        .card-description {
+          color: #6c757d;
+          line-height: 1.6;
+          margin-bottom: 24px;
+          font-size: 0.875rem;
+        }
+        
+        .card-features {
+          margin-bottom: 24px;
+          
+          .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            
+            i {
+              color: #dd2525;
+              font-size: 0.75rem;
+              width: 12px;
+            }
+            
+            span {
+              color: #495057;
+              font-size: 0.75rem;
+              font-weight: 500;
+            }
+          }
+        }
+        
+        .action-btn {
+          width: 100%;
+          padding: 12px 20px;
+          border: none;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          text-transform: none;
+          
+          &.secondary {
+            background: #ffffff;
+            color: #495057;
+            border: 2px solid #e9ecef;
+            
+            &:hover {
+              background: #f8f9fa;
+              border-color: #dd2525;
+              color: #dd2525;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+          }
+          
+          i {
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+          }
+          
+          &:hover i {
+            transform: translateX(4px);
+          }
+        }
+      }
+    }
+    
+    .trust-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 32px 0;
+      border-top: 1px solid #e9ecef;
+      margin-bottom: 32px;
+      
+      .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #6c757d;
+        font-size: 0.875rem;
+        font-weight: 500;
+        
+        i {
+          color: #dd2525;
+          font-size: 1rem;
+        }
+      }
+    }
+    
+    .view-all-activities {
+      text-align: center;
+    }
   }
 }
 
@@ -991,7 +1328,7 @@ export default {
   display: flex;
   align-items: center;
   
-  input {
+  .search-input {
     width: 200px;
     padding: 8px 40px 8px 15px;
     background: rgba(255, 255, 255, 0.9);
@@ -1021,121 +1358,13 @@ export default {
   }
 }
 
-// Responsive Design
-@media (max-width: 1024px) {
-  .dashboard-page {
-    padding: 20px;
-  }
-
-  .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .traffic-lights-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  .dashboard-page {
-    padding: 15px;
-  }
-
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .page-title {
-    font-size: 2rem;
-  }
-
-  .metrics-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .traffic-lights-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .team-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .section-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .search-box input {
-    width: 150px;
-    
-    &:focus {
-      width: 200px;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .dashboard-page {
-    padding: 10px;
-  }
-
-  .page-title {
-    font-size: 1.8rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .metric-card {
-    padding: 20px;
-    flex-direction: column;
-    text-align: center;
-    gap: 15px;
-  }
-
-  .traffic-light-card {
-    padding: 20px;
-  }
-
-  .member-card {
-    padding: 20px;
-  }
-
-  .activities-section {
-    padding: 20px;
-  }
-
-  .search-box {
-    display: none;
-  }
-}
-
-// Removed duplicate search-input styles - using the ones below
-
+// Button Styles
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
@@ -1144,13 +1373,26 @@ export default {
   border: none;
   
   &.btn-primary {
-    background: #007bff;
+    background: #dd2525;
     color: #ffffff;
     
     &:hover {
-      background: #0056b3;
+      background: #c41e1e;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(221, 37, 37, 0.3);
+    }
+  }
+  
+  &.btn-secondary {
+    background: #ffffff;
+    color: #dd2525;
+    border: 2px solid #dd2525;
+    
+    &:hover {
+      background: #dd2525;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(221, 37, 37, 0.3);
     }
   }
   
@@ -1161,8 +1403,8 @@ export default {
     
     &:hover {
       background: #f8f9fa;
-      border-color: #007bff;
-      color: #007bff;
+      border-color: #dd2525;
+      color: #dd2525;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
@@ -1173,484 +1415,158 @@ export default {
     font-size: 0.75rem;
   }
   
+  &.btn-xs {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
+  
   i {
     font-size: 0.875rem;
   }
 }
 
-// Removed duplicate action-btn styles - using btn classes instead
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #212529;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  i {
-    font-size: 1.25rem;
-    color: #007bff;
-  }
-}
-
-.section-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.filter-select {
-  padding: 8px 16px;
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  color: #212529;
-  font-size: 0.875rem;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-}
-
-.traffic-lights-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.traffic-light-card {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 32px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-
-  &:hover {
-    border-color: #007bff;
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
-    transform: translateY(-4px);
-  }
-
-  .light-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .light-icon {
-    font-size: 1.5rem;
-
-    .text-red { color: #dc3545; }
-    .text-yellow { color: #ffc107; }
-    .text-green { color: #28a745; }
-  }
-
-  .light-info {
-    flex: 1;
-  }
-
-  .light-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 4px;
-  }
-
-  .urgency-badge {
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-
-    &.high {
-      background: rgba(220, 53, 69, 0.1);
-      color: #dc3545;
-    }
-
-    &.moderate {
-      background: rgba(255, 193, 7, 0.1);
-      color: #ffc107;
-    }
-
-    &.low {
-      background: rgba(40, 167, 69, 0.1);
-      color: #28a745;
-    }
-  }
-
-  .light-metrics {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-
-  .light-percentage {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #212529;
-    margin-bottom: 4px;
-  }
-
-  .percentage-label {
-    color: #6c757d;
-    font-size: 0.875rem;
-  }
-
-  .progress-container {
-    margin-bottom: 24px;
-  }
-
-  .progress-track {
-    background: #f8f9fa;
-    border-radius: 8px;
-    height: 8px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    border-radius: 8px;
-    transition: width 0.3s ease;
-
-    &.red { background: #dc3545; }
-    &.yellow { background: #ffc107; }
-    &.green { background: #28a745; }
-  }
-
-  .light-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
-}
-
-.search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  padding: 8px 40px 8px 16px;
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  color: #212529;
-  font-size: 0.875rem;
-  width: 200px;
-
-  &::placeholder {
-    color: #6c757d;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-}
-
-.search-box i {
-  position: absolute;
-  right: 12px;
-  color: #6c757d;
-  pointer-events: none;
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
-}
-
-.member-card {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 24px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-align: center;
-
-  &:hover {
-    border-color: #007bff;
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.1);
-    transform: translateY(-4px);
-  }
-
-  .member-avatar {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 16px;
-
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #e9ecef;
-    }
-
-    .member-status {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 2px solid white;
-
-      &.ready { background: #28a745; }
-      &.development { background: #ffc107; }
-      &.critical { background: #dc3545; }
-    }
-  }
-
-  .member-info {
-    margin-bottom: 16px;
-  }
-
-  .member-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 4px;
-  }
-
-  .member-position {
-    color: #6c757d;
-    font-size: 0.875rem;
-    margin-bottom: 2px;
-  }
-
-  .member-department {
-    color: #6c757d;
-    font-size: 0.75rem;
-  }
-
-  .member-score {
-    margin-bottom: 16px;
-  }
-
-  .score-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .score-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #007bff;
-  }
-
-  .score-label {
-    color: #6c757d;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .member-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
-}
-
-.activities-section {
-  margin-bottom: 40px;
-}
-
-.activities-container {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 24px;
-}
-
-.activities-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.activity-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: #e9ecef;
-  }
-
-  .activity-icon {
-    width: 40px;
-    height: 40px;
-    background: #007bff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    flex-shrink: 0;
-
-    i {
-      font-size: 1rem;
-    }
-  }
-
-  .activity-content {
-    flex: 1;
-  }
-
-  .activity-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 4px;
-  }
-
-  .activity-description {
-    color: #6c757d;
-    font-size: 0.875rem;
-    line-height: 1.4;
-    margin-bottom: 4px;
-  }
-
-  .activity-time {
-    color: #6c757d;
-    font-size: 0.75rem;
-  }
-
-  .activity-actions {
-    flex-shrink: 0;
-  }
-}
-
-.btn-sm {
-  padding: 6px 12px;
-  font-size: 0.75rem;
-}
-
+// Responsive Design
 @media (max-width: 1024px) {
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
+  .hero-section .hero-container {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    text-align: center;
   }
 
-  .header-actions {
-    width: 100%;
-    justify-content: flex-start;
+  .features-section .features-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
 
-  .metrics-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+  .process-section .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
 
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  .stats-section .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
   }
 
-  .section-actions {
-    width: 100%;
-    justify-content: flex-start;
+  .executive-action-section .action-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }
 
 @media (max-width: 768px) {
-  .dashboard-page {
-    padding: 16px;
+  .hero-section {
+    padding: 80px 0;
+    
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
   }
 
-  .page-title {
+  .features-section,
+  .process-section,
+  .stats-section,
+  .executive-action-section {
+    padding: 80px 0;
+  }
+
+  .section-title,
+  .stats-title,
+  .action-title {
     font-size: 2rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
   }
 
-  .metrics-grid {
+  .process-section .process-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 24px;
   }
 
-  .metric-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-  }
-
-  .traffic-lights-grid {
+  .stats-section .stats-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 24px;
   }
 
-  .team-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .activity-item {
+  .stats-section .stats-actions {
     flex-direction: column;
-    text-align: center;
-    gap: 12px;
+    gap: 16px;
   }
 
-  .search-input {
-    width: 150px;
+  .search-box .search-input {
+    width: 100%;
+    max-width: 300px;
+    
+    &:focus {
+      width: 100%;
+    }
+  }
+
+  .executive-action-section .trust-indicators {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
 }
 
-// Removed duplicate 768px media query - using the one above
-
 @media (max-width: 480px) {
-  .metric-card {
-    flex-direction: column;
+  .hero-section {
+    padding: 60px 0;
+    
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-stats {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    .hero-actions {
+      flex-direction: column;
+      width: 100%;
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+
+  .features-section,
+  .process-section,
+  .stats-section,
+  .executive-action-section {
+    padding: 60px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .section-title,
+  .stats-title,
+  .action-title {
+    font-size: 1.75rem;
+  }
+
+  .feature-card,
+  .process-card,
+  .stat-card,
+  .action-card {
+    padding: 24px;
+  }
+
+  .executive-action-section .trust-indicators {
+    grid-template-columns: 1fr;
+    gap: 16px;
     text-align: center;
-    gap: 15px;
   }
 
-  .light-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-
-  .light-actions {
-    flex-direction: column;
-  }
-
-  .member-actions {
-    flex-direction: column;
-  }
-
-  .btn {
+  .search-box {
     width: 100%;
-    justify-content: center;
   }
 }
 </style>
