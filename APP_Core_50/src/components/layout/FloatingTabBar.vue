@@ -2,12 +2,9 @@
   <div 
     class="floating-tab-bar"
     :class="{ 
-      dragging: isDragging,
       collapsed: isCollapsed,
       'show-on-hover': !isCollapsed
     }"
-    :style="{ transform: `translate(${position.x}px, ${position.y}px)` }"
-    @mousedown="startDrag"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
@@ -15,9 +12,9 @@
     <button 
       class="collapse-toggle"
       @click="toggleCollapse"
-      @mousedown.stop
+      v-show="isCollapsed"
     >
-      <i :class="isCollapsed ? 'fas fa-chevron-left' : 'fas fa-chevron-right'"></i>
+      <i class="fas fa-compass spinning"></i>
     </button>
     
     <div class="tab-bar-content" v-show="!isCollapsed">
@@ -55,12 +52,7 @@ export default {
     const collapseTimer = ref(null)
     const COLLAPSE_DELAY = 3000 // 3 seconds
     
-    // Drag functionality
-    const isDragging = ref(false)
-    const position = ref({ x: 0, y: 0 })
-    const dragStart = ref({ x: 0, y: 0 })
-    const initialPosition = ref({ x: 0, y: 0 })
-    const hasMoved = ref(false)
+
     
     const tabs = [
       {
@@ -125,69 +117,13 @@ export default {
       return index >= 0 ? index : -1
     })
 
-    // Drag functionality
-    const startDrag = (e) => {
-      e.preventDefault()
-      isDragging.value = true
-      hasMoved.value = false
-      
-      dragStart.value = {
-        x: e.clientX,
-        y: e.clientY
-      }
-      
-      initialPosition.value = {
-        x: position.value.x,
-        y: position.value.y
-      }
-      
-      document.addEventListener('mousemove', onDrag)
-      document.addEventListener('mouseup', stopDrag)
-    }
 
-    const onDrag = (e) => {
-      if (!isDragging.value) return
-      
-      const deltaX = e.clientX - dragStart.value.x
-      const deltaY = e.clientY - dragStart.value.y
-      
-      // Mark as moved if dragged more than 5px
-      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-        hasMoved.value = true
-      }
-      
-      position.value = {
-        x: initialPosition.value.x + deltaX,
-        y: initialPosition.value.y + deltaY
-      }
-      
-      // Keep within viewport bounds
-      const padding = 30
-      const maxX = window.innerWidth - padding
-      const maxY = window.innerHeight - padding
-      
-      position.value.x = Math.max(-window.innerWidth + padding, Math.min(maxX, position.value.x))
-      position.value.y = Math.max(-window.innerHeight + padding, Math.min(maxY, position.value.y))
-    }
-
-    const stopDrag = () => {
-      isDragging.value = false
-      document.removeEventListener('mousemove', onDrag)
-      document.removeEventListener('mouseup', stopDrag)
-      
-      // Save position after drag
-      if (hasMoved.value) {
-        savePosition()
-      }
-    }
 
     // Collapse functionality
     const startCollapseTimer = () => {
       clearTimeout(collapseTimer.value)
       collapseTimer.value = setTimeout(() => {
-        if (!isDragging.value) {
-          isCollapsed.value = true
-        }
+        isCollapsed.value = true
       }, COLLAPSE_DELAY)
     }
 
@@ -198,14 +134,6 @@ export default {
     const toggleCollapse = () => {
       isCollapsed.value = !isCollapsed.value
       clearCollapseTimer()
-      
-      // Save collapse state
-      localStorage.setItem('floating-menu-collapsed', JSON.stringify(isCollapsed.value))
-      
-      // If expanding, start timer to collapse again
-      if (!isCollapsed.value) {
-        startCollapseTimer()
-      }
     }
 
     const handleMouseEnter = () => {
@@ -217,19 +145,7 @@ export default {
 
     const handleMouseLeave = () => {
       if (!isCollapsed.value) {
-        startCollapseTimer()
-      }
-    }
-
-    // Load saved position from localStorage
-    const loadPosition = () => {
-      const saved = localStorage.getItem('floating-menu-position')
-      if (saved) {
-        try {
-          position.value = JSON.parse(saved)
-        } catch (e) {
-          console.log('Failed to load saved position')
-        }
+        isCollapsed.value = true
       }
     }
 
@@ -250,19 +166,11 @@ export default {
       }
     }
 
-    // Save position to localStorage
-    const savePosition = () => {
-      localStorage.setItem('floating-menu-position', JSON.stringify(position.value))
-    }
-
     onMounted(() => {
-      loadPosition()
       loadCollapseState()
     })
 
     onUnmounted(() => {
-      document.removeEventListener('mousemove', onDrag)
-      document.removeEventListener('mouseup', stopDrag)
       clearCollapseTimer()
     })
 
@@ -278,11 +186,8 @@ export default {
     return {
       tabs,
       activeTab,
-      isDragging,
-      position,
       isCollapsed,
       switchTab,
-      startDrag,
       toggleCollapse,
       handleMouseEnter,
       handleMouseLeave
@@ -295,23 +200,16 @@ export default {
 .floating-tab-bar {
   position: fixed;
   right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 20px;
   z-index: 1000;
   opacity: 0.2;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: grab;
   display: flex;
   align-items: center;
   gap: 10px;
   
   &:hover,
   &.show-on-hover:hover {
-    opacity: 1;
-  }
-  
-  &.dragging {
-    cursor: grabbing;
     opacity: 1;
   }
   
@@ -331,8 +229,8 @@ export default {
 }
 
 .collapse-toggle {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(221, 37, 37, 0.2);
+  background: #dd2525;
+  border: 1px solid #dd2525;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -341,19 +239,30 @@ export default {
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #666;
+  color: white;
   font-size: 14px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   
   &:hover {
-    background: rgba(221, 37, 37, 0.1);
-    color: #dd2525;
-    border-color: rgba(221, 37, 37, 0.4);
+    background: rgba(221, 37, 37, 0.9);
     transform: scale(1.05);
   }
   
   &:active {
     transform: scale(0.95);
+  }
+  
+  .spinning {
+    animation: spin 2s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 

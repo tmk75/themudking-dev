@@ -430,7 +430,7 @@ export default {
 // Hero Section
 .hero-section {
   padding: 120px 0;
-  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  background: #ffffff;
   
   .hero-container {
     max-width: 1200px;
