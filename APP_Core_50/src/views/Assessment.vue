@@ -5,11 +5,11 @@
       <div class="hero-container">
         <div class="hero-content">
           <div class="hero-badge">
-            <span>Assessment Center</span>
+            <span>评估中心</span>
           </div>
           
           <h1 class="hero-title">
-            360° Comprehensive Assessment
+            360° 全面评估
           </h1>
           
           <p class="hero-subtitle">
@@ -20,11 +20,11 @@
           <div class="hero-actions">
             <button class="btn btn-primary" @click="startNewAssessment">
               <i class="fas fa-plus"></i>
-              Start Assessment
+              开始评估
             </button>
             <button class="btn btn-secondary" @click="viewHistory">
               <i class="fas fa-history"></i>
-              View History
+              查看历史
             </button>
           </div>
 
@@ -39,20 +39,20 @@
         <div class="hero-visual">
           <div class="visual-card">
             <div class="card-header">
-              <div class="card-title">Assessment Overview</div>
+              <div class="card-title">评估概览</div>
               <div class="card-status">Active</div>
             </div>
             <div class="card-content">
               <div class="metric-row">
-                <span class="metric-label">Total Assessments</span>
+                <span class="metric-label">总评估数</span>
                 <span class="metric-value">{{ overviewCards[0]?.value || '0' }}</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">In Progress</span>
+                <span class="metric-label">进行中</span>
                 <span class="metric-value">{{ overviewCards[1]?.value || '0' }}</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">Completion Rate</span>
+                <span class="metric-label">完成率</span>
                 <span class="metric-value">87%</span>
               </div>
             </div>
@@ -65,9 +65,9 @@
     <section class="features-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Assessment Overview</h2>
+          <h2 class="section-title">评估概览</h2>
           <p class="section-description">
-            Real-time insights into your assessment activities and progress
+            实时洞察您的评估活动和进展
           </p>
         </div>
         
@@ -100,9 +100,9 @@
     <section class="process-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Assessment Types</h2>
+          <h2 class="section-title">评估类型</h2>
           <p class="section-description">
-            Choose the right assessment type to begin your leadership development journey
+            选择合适的评估类型开始您的领导力发展之旅
           </p>
         </div>
         
@@ -146,11 +146,11 @@
       <div class="container">
         <div class="stats-content">
           <div class="stats-header">
-            <h3 class="stats-title">Recent Assessments</h3>
+            <h3 class="stats-title">最近评估</h3>
             <p class="stats-subtitle">Current assessment activities and participant progress</p>
             <div class="stats-actions">
               <button class="btn btn-outline" @click="viewAllAssessments">
-                <span>View All Assessments</span>
+                <span>查看所有评估</span>
                 <i class="fas fa-arrow-right"></i>
               </button>
             </div>
@@ -193,11 +193,11 @@
           <div class="action-header">
             <div class="action-badge">
               <i class="fas fa-chart-line"></i>
-              <span>Assessment Analytics</span>
+              <span>评估分析</span>
             </div>
             
             <h2 class="action-title">
-              Drive Excellence Through Assessment
+              通过评估推动卓越
             </h2>
             
             <p class="action-description">
@@ -212,7 +212,7 @@
                 <div class="card-icon">
                   <i class="fas fa-play"></i>
                 </div>
-                <h3 class="card-title">Start New Assessment</h3>
+                <h3 class="card-title">开始新评估</h3>
               </div>
               
               <div class="card-content">
@@ -223,7 +223,7 @@
                 <div class="card-features">
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>360° Multi-source feedback</span>
+                    <span>360° 多源反馈</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
@@ -236,7 +236,7 @@
                 </div>
                 
                 <button class="action-btn primary" @click="startNewAssessment">
-                  <span>Create Assessment</span>
+                  <span>创建评估</span>
                   <i class="fas fa-arrow-right"></i>
                 </button>
               </div>
@@ -247,12 +247,12 @@
                 <div class="card-icon">
                   <i class="fas fa-chart-bar"></i>
                 </div>
-                <h3 class="card-title">Analytics Dashboard</h3>
+                <h3 class="card-title">分析仪表盘</h3>
               </div>
               
               <div class="card-content">
                 <p class="card-description">
-                  View comprehensive assessment analytics and trends
+                  查看全面的评估分析和趋势
                 </p>
                 
                 <div class="card-features">
@@ -271,7 +271,7 @@
                 </div>
                 
                 <button class="action-btn secondary" @click="viewAnalytics">
-                  <span>View Analytics</span>
+                  <span>查看分析</span>
                   <i class="fas fa-chart-line"></i>
                 </button>
               </div>
@@ -281,19 +281,19 @@
           <div class="trust-indicators">
             <div class="trust-item">
               <i class="fas fa-shield-alt"></i>
-              <span>Secure & Confidential</span>
+              <span>安全保密</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-users"></i>
-              <span>Multi-source Feedback</span>
+              <span>多源反馈</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-chart-line"></i>
-              <span>Data-driven Insights</span>
+              <span>数据驱动洞察</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-award"></i>
-              <span>Industry Validated</span>
+              <span>行业验证</span>
             </div>
           </div>
         </div>
@@ -314,10 +314,10 @@ export default {
     const appStore = useAppStore()
 
     const heroStats = [
-      { value: '156', label: 'Total Assessments' },
-      { value: '23', label: 'In Progress' },
-      { value: '87%', label: 'Completion Rate' },
-      { value: '95%', label: 'Satisfaction' }
+      { value: '156', label: '总评估数' },
+      { value: '23', label: '进行中' },
+      { value: '87%', label: '完成率' },
+      { value: '95%', label: '满意度' }
     ]
 
     const overviewCards = [
@@ -561,7 +561,7 @@ export default {
     }
 
     const viewAnalytics = () => {
-      appStore.showToast('Navigation', 'Redirecting to analytics dashboard', 'info')
+      appStore.showToast('导航', '正在跳转到分析仪表盘', 'info')
     }
 
     return {

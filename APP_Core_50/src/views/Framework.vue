@@ -5,26 +5,26 @@
       <div class="hero-container">
         <div class="hero-content">
           <div class="hero-badge">
-            <span>Executive Talent Framework</span>
+            <span>高管人才框架</span>
           </div>
           
           <h1 class="hero-title">
-            Global Talents Management Framework
+            全球人才管理框架
           </h1>
           
           <p class="hero-subtitle">
-            Comprehensive executive talent assessment and development system based on modern 
-            leadership theory and best practices, covering 50 core competency dimensions.
+            基于现代领导力理论和最佳实践的综合性高管人才评估与发展系统，
+            涵盖50个核心能力维度。
           </p>
           
           <div class="hero-actions">
             <button class="btn btn-primary" @click="downloadFramework">
               <i class="fas fa-download"></i>
-              Download Framework
+              下载框架
             </button>
             <button class="btn btn-secondary" @click="viewDemo">
               <i class="fas fa-play"></i>
-              View Demo
+              查看演示
             </button>
           </div>
 
@@ -39,20 +39,20 @@
         <div class="hero-visual">
           <div class="visual-card">
             <div class="card-header">
-              <div class="card-title">Framework Overview</div>
-              <div class="card-status">Active</div>
+              <div class="card-title">框架概览</div>
+              <div class="card-status">活跃</div>
             </div>
             <div class="card-content">
               <div class="metric-row">
-                <span class="metric-label">Core Dimensions</span>
+                <span class="metric-label">核心维度</span>
                 <span class="metric-value">5B</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">Competencies</span>
+                <span class="metric-label">能力项</span>
                 <span class="metric-value">50+</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">Success Rate</span>
+                <span class="metric-label">成功率</span>
                 <span class="metric-value">85%</span>
               </div>
             </div>
@@ -65,9 +65,9 @@
     <section class="features-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Framework Foundation</h2>
+          <h2 class="section-title">框架基础</h2>
           <p class="section-description">
-            Four core pillars that ensure effective talent development and assessment
+            确保有效人才发展和评估的四大核心支柱
           </p>
         </div>
         
@@ -100,9 +100,9 @@
     <section class="process-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">5B Core Framework</h2>
+          <h2 class="section-title">5B核心框架</h2>
           <p class="section-description">
-            Five key dimensions of executive talent development
+            高管人才发展的五个关键维度
           </p>
         </div>
         
@@ -117,7 +117,7 @@
             <div class="process-content">
               <h4 class="process-title">{{ dimension.title }}</h4>
               <p class="process-description">{{ dimension.description }}</p>
-              <div class="process-duration">{{ dimension.competencies.length }} Competencies</div>
+              <div class="process-duration">{{ dimension.competencies.length }} 项能力</div>
             </div>
             <div class="competencies-preview">
               <div class="competency-tags">
@@ -129,7 +129,7 @@
                   {{ competency }}
                 </span>
                 <span v-if="dimension.competencies.length > 3" class="more-tag">
-                  +{{ dimension.competencies.length - 3 }} more
+                  +{{ dimension.competencies.length - 3 }} 更多
                 </span>
               </div>
             </div>
@@ -143,8 +143,8 @@
       <div class="container">
         <div class="stats-content">
           <div class="stats-header">
-            <h3 class="stats-title">Implementation Process</h3>
-            <p class="stats-subtitle">Standardized approach ensuring effective framework application</p>
+            <h3 class="stats-title">实施流程</h3>
+            <p class="stats-subtitle">确保框架有效应用的标准化方法</p>
           </div>
           
           <div class="stats-grid">
@@ -160,7 +160,7 @@
               <div class="stat-content">
                 <div class="stat-value">{{ phase.duration }}</div>
                 <div class="stat-label">{{ phase.title }}</div>
-                <div class="stat-sublabel">{{ phase.deliverables.length }} deliverables</div>
+                <div class="stat-sublabel">{{ phase.deliverables.length }} 项交付物</div>
               </div>
             </div>
           </div>
@@ -175,16 +175,16 @@
           <div class="action-header">
             <div class="action-badge">
               <i class="fas fa-chart-line"></i>
-              <span>Success Metrics</span>
+              <span>成功指标</span>
             </div>
             
             <h2 class="action-title">
-              Proven Framework Effectiveness
+              验证框架有效性
             </h2>
             
             <p class="action-description">
-              Measure framework implementation effectiveness through key performance indicators 
-              that demonstrate tangible business impact and talent development success.
+              通过关键绩效指标衡量框架实施效果，
+              展示切实的业务影响和人才发展成功。
             </p>
           </div>
           
@@ -210,16 +210,16 @@
                 <div class="card-features">
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Validated Results</span>
+                    <span>验证结果</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-trending-up"></i>
-                    <span>Continuous Improvement</span>
+                    <span>持续改进</span>
                   </div>
                 </div>
                 
                 <button class="action-btn secondary" @click="viewMetricDetails(metric)">
-                  <span>View Details</span>
+                  <span>查看详情</span>
                   <i class="fas fa-arrow-right"></i>
                 </button>
               </div>
@@ -229,19 +229,19 @@
           <div class="trust-indicators">
             <div class="trust-item">
               <i class="fas fa-award"></i>
-              <span>Industry Validated</span>
+              <span>行业验证</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-users"></i>
-              <span>Enterprise Proven</span>
+              <span>企业验证</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-chart-bar"></i>
-              <span>Data Driven</span>
+              <span>数据驱动</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-globe"></i>
-              <span>Globally Applied</span>
+              <span>全球应用</span>
             </div>
           </div>
         </div>
@@ -260,44 +260,44 @@ export default {
     const appStore = useAppStore()
 
     const heroStats = [
-      { value: '5B', label: 'Core Dimensions' },
-      { value: '50+', label: 'Competencies' },
-      { value: '85%', label: 'Success Rate' },
-      { value: '92%', label: 'Satisfaction' }
+      { value: '5B', label: '核心维度' },
+      { value: '50+', label: '能力项' },
+      { value: '85%', label: '成功率' },
+      { value: '92%', label: '满意度' }
     ]
 
     const frameworkPillars = [
       {
         icon: 'fas fa-eye',
-        title: 'Scientific Assessment',
-        description: 'Based on psychology and management theory, using multi-dimensional assessment methods to ensure objectivity and accuracy of results.',
-        stat: { value: '360°', label: 'Assessment' }
+        title: '科学评估',
+        description: '基于心理学和管理学理论，采用多维度评估方法，确保结果的客观性和准确性。',
+        stat: { value: '360°', label: '评估' }
       },
       {
         icon: 'fas fa-user-cog',
-        title: 'Personalized Development',
-        description: 'Develop targeted development plans and learning paths based on individual characteristics and organizational needs.',
-        stat: { value: '95%', label: 'Customization' }
+        title: '个性化发展',
+        description: '基于个人特点和组织需求，制定针对性的发展计划和学习路径。',
+        stat: { value: '95%', label: '定制化' }
       },
       {
         icon: 'fas fa-sync-alt',
-        title: 'Continuous Improvement',
-        description: 'Establish continuous feedback mechanisms, regularly evaluate and adjust development strategies to ensure continuous progress.',
-        stat: { value: '24/7', label: 'Monitoring' }
+        title: '持续改进',
+        description: '建立持续反馈机制，定期评估和调整发展策略，确保持续进步。',
+        stat: { value: '24/7', label: '监控' }
       },
       {
         icon: 'fas fa-users',
-        title: 'Organizational Synergy',
-        description: 'Combine individual development with organizational goals to achieve win-win personal growth and organizational development.',
-        stat: { value: '100%', label: 'Alignment' }
+        title: '组织协同',
+        description: '将个人发展与组织目标相结合，实现个人成长与组织发展的双赢。',
+        stat: { value: '100%', label: '一致性' }
       }
     ]
 
     const fiveBDimensions = [
       {
         letter: 'B',
-        title: 'Business Acumen',
-        subtitle: '商业敏锐度',
+        title: '商业敏锐度',
+        subtitle: 'Business Acumen',
         description: '理解商业环境、市场动态和组织战略的能力，能够做出明智的商业决策。',
         competencies: [
           '战略思维',
@@ -312,8 +312,8 @@ export default {
       },
       {
         letter: 'B',
-        title: 'Building Relationships',
-        subtitle: '关系建立',
+        title: '关系建立',
+        subtitle: 'Building Relationships',
         description: '建立和维护有效关系的能力，包括内部协作和外部合作伙伴关系。',
         competencies: [
           '沟通技巧',
@@ -328,8 +328,8 @@ export default {
       },
       {
         letter: 'B',
-        title: 'Building Teams',
-        subtitle: '团队建设',
+        title: '团队建设',
+        subtitle: 'Building Teams',
         description: '组建、发展和领导高效团队的能力，激发团队潜能实现共同目标。',
         competencies: [
           '团队领导',
@@ -344,8 +344,8 @@ export default {
       },
       {
         letter: 'B',
-        title: 'Building Self',
-        subtitle: '自我建设',
+        title: '自我建设',
+        subtitle: 'Building Self',
         description: '持续自我发展和完善的能力，包括自我认知、学习能力和适应能力。',
         competencies: [
           '自我认知',
@@ -360,8 +360,8 @@ export default {
       },
       {
         letter: 'B',
-        title: 'Building the Business',
-        subtitle: '业务建设',
+        title: '业务建设',
+        subtitle: 'Building the Business',
         description: '推动业务增长和组织发展的能力，实现可持续的商业成功。',
         competencies: [
           '执行力',
@@ -378,47 +378,47 @@ export default {
 
     const implementationPhases = [
       {
-        title: 'Preparation Phase',
-        duration: '2-4 weeks',
-        description: 'Define assessment objectives, prepare assessment tools, train assessment team.',
+        title: '准备阶段',
+        duration: '2-4周',
+        description: '定义评估目标，准备评估工具，培训评估团队。',
         deliverables: [
-          'Assessment Plan',
-          'Assessment Toolkit',
-          'Team Training Materials',
-          'Project Kickoff Meeting'
+          '评估计划',
+          '评估工具包',
+          '团队培训材料',
+          '项目启动会议'
         ]
       },
       {
-        title: 'Assessment Phase',
-        duration: '4-6 weeks',
-        description: 'Execute 360-degree assessment, collect multi-dimensional data.',
+        title: '评估阶段',
+        duration: '4-6周',
+        description: '执行360度评估，收集多维度数据。',
         deliverables: [
-          'Assessment Data Collection',
-          'Data Quality Check',
-          'Preliminary Analysis Report',
-          'Feedback Collection'
+          '评估数据收集',
+          '数据质量检查',
+          '初步分析报告',
+          '反馈收集'
         ]
       },
       {
-        title: 'Analysis Phase',
-        duration: '2-3 weeks',
-        description: 'In-depth analysis of assessment results, generate personalized reports.',
+        title: '分析阶段',
+        duration: '2-3周',
+        description: '深入分析评估结果，生成个性化报告。',
         deliverables: [
-          'Individual Assessment Report',
-          'Team Analysis Report',
-          'Development Recommendations',
-          'Action Plan Template'
+          '个人评估报告',
+          '团队分析报告',
+          '发展建议',
+          '行动计划模板'
         ]
       },
       {
-        title: 'Development Phase',
-        duration: '6-12 months',
-        description: 'Implement personalized development plans, continuously track progress.',
+        title: '发展阶段',
+        duration: '6-12个月',
+        description: '实施个性化发展计划，持续跟踪进度。',
         deliverables: [
-          'Development Plan Execution',
-          'Progress Tracking Report',
-          'Periodic Assessment',
-          'Adjustment Optimization Plan'
+          '发展计划执行',
+          '进度跟踪报告',
+          '定期评估',
+          '调整优化方案'
         ]
       }
     ]
@@ -426,38 +426,38 @@ export default {
     const successMetrics = [
       {
         icon: 'fas fa-chart-line',
-        title: 'Capability Enhancement',
+        title: '能力提升',
         value: '85%',
-        description: 'Participants average 85% improvement in core competencies'
+        description: '参与者核心能力平均提升85%'
       },
       {
         icon: 'fas fa-users',
-        title: 'Participation Satisfaction',
+        title: '参与满意度',
         value: '92%',
-        description: 'Participant satisfaction with framework implementation reaches 92%'
+        description: '参与者对框架实施的满意度达到92%'
       },
       {
         icon: 'fas fa-trophy',
-        title: 'Promotion Success Rate',
+        title: '晋升成功率',
         value: '78%',
-        description: '78% promotion success rate for participants completing development plans'
+        description: '完成发展计划的参与者晋升成功率为78%'
       },
       {
         icon: 'fas fa-building',
-        title: 'Organizational Benefits',
+        title: '组织效益',
         value: '65%',
-        description: '65% improvement in overall organizational performance'
+        description: '整体组织绩效提升65%'
       }
     ]
 
     const downloadFramework = () => {
-      appStore.showToast('Download', 'Global Talents Management framework document download started', 'success')
+      appStore.showToast('下载', '全球人才管理框架文档下载已开始', 'success')
     }
 
     const viewDemo = () => {
       appStore.showModal({
-        title: 'Framework Demo',
-        content: 'Interactive framework demo coming soon!',
+        title: '框架演示',
+        content: '交互式框架演示即将推出！',
         type: 'info'
       })
     }
@@ -473,7 +473,7 @@ export default {
     const showDimensionDetail = (dimension) => {
       appStore.showModal({
         title: `${dimension.letter} - ${dimension.title}`,
-        content: `${dimension.description}\n\nCore competencies: ${dimension.competencies.join(', ')}`,
+        content: `${dimension.description}\n\n核心能力：${dimension.competencies.join('、')}`,
         type: 'info'
       })
     }
@@ -481,7 +481,7 @@ export default {
     const showPhaseDetail = (phase) => {
       appStore.showModal({
         title: phase.title,
-        content: `${phase.description}\n\nKey deliverables: ${phase.deliverables.join(', ')}`,
+        content: `${phase.description}\n\n关键交付物：${phase.deliverables.join('、')}`,
         type: 'info'
       })
     }
@@ -489,7 +489,7 @@ export default {
     const viewMetricDetails = (metric) => {
       appStore.showModal({
         title: metric.title,
-        content: `${metric.description}\n\nCurrent performance: ${metric.value}`,
+        content: `${metric.description}\n\n当前表现：${metric.value}`,
         type: 'info'
       })
     }

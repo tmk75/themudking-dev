@@ -21,11 +21,20 @@ const routes = [
     }
   },
   {
+    path: '/core50',
+    name: 'Core50',
+    component: () => import('@/views/Core50.vue'),
+    meta: {
+      title: 'Core 50',
+      transition: 'slide-left'
+    }
+  },
+  {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('@/views/Dashboard.vue'),
     meta: {
-      title: 'Dashboard',
+      title: '仪表盘',
       transition: 'slide-up'
     }
   },

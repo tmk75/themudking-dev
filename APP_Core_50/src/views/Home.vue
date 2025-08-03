@@ -5,25 +5,25 @@
       <div class="hero-container">
         <div class="hero-content">
           <div class="hero-badge">
-            <span>Executive Talent Framework</span>
+            <span>高管人才框架</span>
           </div>
           
           <h1 class="hero-title">
-            Global Talents Management
+            全球人才管理
           </h1>
           
           <p class="hero-subtitle">
-            Build exceptional leadership through comprehensive assessment and development. 
-            Transform your organization with data-driven talent insights.
+            通过全面的评估和发展建立卓越的领导力。
+            用数据驱动的人才洞察转变您的组织。
           </p>
           
           <div class="hero-actions">
             <button class="btn btn-primary" @click="startAssessment">
-              Start Assessment
+              开始评估
             </button>
             <button class="btn btn-secondary" @click="watchDemo">
               <i class="fas fa-play"></i>
-              Watch Demo
+              观看演示
             </button>
           </div>
 
@@ -38,20 +38,20 @@
         <div class="hero-visual">
           <div class="visual-card">
             <div class="card-header">
-              <div class="card-title">Assessment Dashboard</div>
-              <div class="card-status">Live</div>
+              <div class="card-title">评估仪表板</div>
+              <div class="card-status">实时</div>
             </div>
             <div class="card-content">
               <div class="metric-row">
-                <span class="metric-label">Leadership Score</span>
+                <span class="metric-label">领导力评分</span>
                 <span class="metric-value">87%</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">Team Performance</span>
+                <span class="metric-label">团队表现</span>
                 <span class="metric-value">92%</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">Growth Rate</span>
+                <span class="metric-label">增长率</span>
                 <span class="metric-value">+15%</span>
               </div>
             </div>
@@ -64,9 +64,9 @@
     <section class="features-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Core Capabilities</h2>
+          <h2 class="section-title">核心能力</h2>
           <p class="section-description">
-            Comprehensive tools designed for executive talent development
+            为高管人才发展设计的综合工具
           </p>
         </div>
         
@@ -99,9 +99,9 @@
     <section class="process-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Implementation Process</h2>
+          <h2 class="section-title">实施流程</h2>
           <p class="section-description">
-            A structured approach to talent development
+            人才发展的结构化方法
           </p>
         </div>
         
@@ -127,8 +127,8 @@
       <div class="container">
         <div class="stats-content">
           <div class="stats-header">
-            <h3 class="stats-title">Trusted by Industry Leaders</h3>
-            <p class="stats-subtitle">Join thousands of companies transforming their talent</p>
+            <h3 class="stats-title">行业领导者的信赖之选</h3>
+            <p class="stats-subtitle">加入数千家正在转变人才管理的企业</p>
           </div>
           
           <div class="stats-grid">
@@ -157,16 +157,16 @@
           <div class="action-header">
             <div class="action-badge">
               <i class="fas fa-rocket"></i>
-              <span>Executive Decision Point</span>
+              <span>高管决策点</span>
             </div>
             
             <h2 class="action-title">
-              Accelerate Your Leadership Excellence
+              加速您的领导力卓越
             </h2>
             
             <p class="action-description">
-              Join forward-thinking organizations leveraging data-driven talent insights 
-              to build exceptional leadership capabilities and drive sustainable growth.
+              加入具有前瞻性思维的组织，利用数据驱动的人才洞察
+              构建卓越的领导能力，推动可持续增长。
             </p>
           </div>
           
@@ -176,31 +176,31 @@
                 <div class="card-icon">
                   <i class="fas fa-play"></i>
                 </div>
-                <h3 class="card-title">Start Assessment</h3>
+                <h3 class="card-title">开始评估</h3>
               </div>
               
               <div class="card-content">
                 <p class="card-description">
-                  Begin with our comprehensive 360° leadership assessment
+                  从我们全面的360°领导力评估开始
                 </p>
                 
                 <div class="card-features">
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Complete in 15 minutes</span>
+                    <span>15分钟完成</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Instant insights</span>
+                    <span>即时洞察</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>No commitment required</span>
+                    <span>无需承诺</span>
                   </div>
                 </div>
                 
                 <button class="action-btn primary" @click="startTrial">
-                  <span>Begin Assessment</span>
+                  <span>开始评估</span>
                   <i class="fas fa-arrow-right"></i>
                 </button>
               </div>
@@ -211,31 +211,31 @@
                 <div class="card-icon">
                   <i class="fas fa-users"></i>
                 </div>
-                <h3 class="card-title">Enterprise Solution</h3>
+                <h3 class="card-title">企业解决方案</h3>
               </div>
               
               <div class="card-content">
                 <p class="card-description">
-                  Discuss enterprise implementation with our specialists
+                  与我们的专家讨论企业实施方案
                 </p>
                 
                 <div class="card-features">
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Custom implementation</span>
+                    <span>定制实施</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>Dedicated support</span>
+                    <span>专属支持</span>
                   </div>
                   <div class="feature-item">
                     <i class="fas fa-check"></i>
-                    <span>ROI analysis</span>
+                    <span>ROI分析</span>
                   </div>
                 </div>
                 
                 <button class="action-btn secondary" @click="contactSales">
-                  <span>Schedule Consultation</span>
+                  <span>预约咨询</span>
                   <i class="fas fa-calendar"></i>
                 </button>
               </div>
@@ -245,19 +245,19 @@
           <div class="trust-indicators">
             <div class="trust-item">
               <i class="fas fa-shield-alt"></i>
-              <span>Enterprise Security</span>
+              <span>企业级安全</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-award"></i>
-              <span>Industry Certified</span>
+              <span>行业认证</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-headset"></i>
-              <span>24/7 Support</span>
+              <span>24/7支持</span>
             </div>
             <div class="trust-item">
               <i class="fas fa-chart-line"></i>
-              <span>Proven ROI</span>
+              <span>验证ROI</span>
             </div>
           </div>
         </div>
@@ -280,71 +280,71 @@ export default {
 
     
     const heroStats = [
-      { value: '500+', label: 'Companies' },
-      { value: '10K+', label: 'Users' },
-      { value: '85%', label: 'Success Rate' },
-      { value: '98%', label: 'Satisfaction' }
+      { value: '500+', label: '合作企业' },
+      { value: '10K+', label: '用户数量' },
+      { value: '85%', label: '成功率' },
+      { value: '98%', label: '满意度' }
     ]
 
     const features = [
       {
         type: 'assessment',
         icon: 'fas fa-chart-bar',
-        title: '360° Assessment',
-        description: 'Multi-dimensional evaluation system ensuring objective and comprehensive results',
-        stat: { value: '50+', label: 'Assessment Dimensions' }
+        title: '360°评估',
+        description: '多维度评估系统，确保客观全面的结果',
+        stat: { value: '50+', label: '评估维度' }
       },
       {
         type: 'development',
         icon: 'fas fa-route',
-        title: 'Personalized Development',
-        description: 'Customized development plans and learning paths based on assessment results',
-        stat: { value: '95%', label: 'Satisfaction Rate' }
+        title: '个性化发展',
+        description: '基于评估结果的定制化发展计划和学习路径',
+        stat: { value: '95%', label: '满意度' }
       },
       {
         type: 'analytics',
         icon: 'fas fa-analytics',
-        title: 'Data-Driven Insights',
-        description: 'Real-time progress monitoring and data analysis for strategy optimization',
-        stat: { value: '24/7', label: 'Real-time Monitoring' }
+        title: '数据驱动洞察',
+        description: '实时进度监控和数据分析，优化策略',
+        stat: { value: '24/7', label: '实时监控' }
       },
       {
         type: 'collaboration',
         icon: 'fas fa-users',
-        title: 'Team Collaboration',
-        description: 'Support team collaboration and knowledge sharing to build learning culture',
-        stat: { value: '100+', label: 'Enterprise Users' }
+        title: '团队协作',
+        description: '支持团队协作和知识共享，建立学习文化',
+        stat: { value: '100+', label: '企业用户' }
       }
     ]
 
     const processSteps = [
       {
-        title: 'Assessment Preparation',
-        description: 'Define assessment targets, configure parameters, and prepare evaluation tools',
-        duration: '1-2 weeks'
+        title: '评估准备',
+        description: '定义评估目标，配置参数，准备评估工具',
+        duration: '1-2周'
       },
       {
-        title: 'Data Collection',
-        description: 'Execute 360-degree assessment and collect multi-dimensional feedback data',
-        duration: '2-3 weeks'
+        title: '数据收集',
+        description: '执行360度评估，收集多维度反馈数据',
+        duration: '2-3周'
       },
       {
-        title: 'Analysis & Reporting',
-        description: 'Generate personalized analysis reports and development recommendations',
-        duration: '1 week'
+        title: '分析报告',
+        description: '生成个性化分析报告和发展建议',
+        duration: '1周'
       },
       {
-        title: 'Continuous Development',
-        description: 'Implement development plans with continuous tracking and optimization',
-        duration: 'Ongoing'
+        title: '持续发展',
+        description: '实施发展计划，持续跟踪和优化',
+        duration: '持续进行'
       }
     ]
 
     const statistics = [
-      { icon: 'fas fa-building', value: '500+', label: 'Partner Companies' },
-      { icon: 'fas fa-users', value: '10,000+', label: 'Assessment Users' },
-      { icon: 'fas fa-chart-line', value: '85%', label: 'Improvement Rate' },
-      { icon: 'fas fa-award', value: '98%', label: 'Customer Satisfaction' }
+      { icon: 'fas fa-building', value: '500+', label: '合作企业' },
+      { icon: 'fas fa-users', value: '10,000+', label: '评估用户' },
+      { icon: 'fas fa-chart-line', value: '85%', label: '改善率' },
+      { icon: 'fas fa-award', value: '98%', label: '客户满意度' }
     ]
 
 
@@ -367,10 +367,10 @@ export default {
 
     const showFeatureDetail = (featureType) => {
       const features = {
-        assessment: { title: '360° Assessment', description: 'Comprehensive multi-dimensional evaluation system' },
-        development: { title: 'Personalized Development', description: 'Customized development plans and learning paths' },
-        analytics: { title: 'Data-Driven Insights', description: 'Real-time monitoring and analytics' },
-        collaboration: { title: 'Team Collaboration', description: 'Enhanced team collaboration and knowledge sharing' }
+        assessment: { title: '360°评估', description: '全面的多维度评估系统' },
+        development: { title: '个性化发展', description: '定制化发展计划和学习路径' },
+        analytics: { title: '数据驱动洞察', description: '实时监控和分析' },
+        collaboration: { title: '团队协作', description: '增强团队协作和知识共享' }
       }
       const feature = features[featureType]
       appStore.showModal({

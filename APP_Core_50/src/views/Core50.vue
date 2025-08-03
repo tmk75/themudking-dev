@@ -1,30 +1,29 @@
 <template>
-  <div class="dashboard-page">
-    <!-- Hero Section with Dashboard Overview -->
+  <div class="core50-page">
+    <!-- Clean Hero Section -->
     <section class="hero-section">
       <div class="hero-container">
         <div class="hero-content">
           <div class="hero-badge">
-            <span>高管仪表盘</span>
+            <span>核心50计划</span>
           </div>
           
           <h1 class="hero-title">
-            人才管理仪表盘
+            Core 50 关键岗位计划
           </h1>
           
           <p class="hero-subtitle">
-            实时监控团队发展状态和关键绩效指标。
-            用数据驱动的人才洞察转变您的组织。
+            识别和发展组织中最关键的50个岗位，确保关键人才供应链的稳定性和可持续性，
+            为企业战略目标的实现提供强有力的人才保障。
           </p>
           
           <div class="hero-actions">
-            <button class="btn btn-primary" @click="refreshData">
-              <i class="fas fa-sync-alt" :class="{ 'fa-spin': isRefreshing }"></i>
-              刷新数据
+            <button class="btn btn-primary" @click="startPositionMapping">
+              开始岗位识别
             </button>
-            <button class="btn btn-secondary" @click="exportReport">
-              <i class="fas fa-download"></i>
-              导出报告
+            <button class="btn btn-secondary" @click="viewMethodology">
+              <i class="fas fa-book"></i>
+              查看方法论
             </button>
           </div>
 
@@ -39,21 +38,21 @@
         <div class="hero-visual">
           <div class="visual-card">
             <div class="card-header">
-              <div class="card-title">实时指标</div>
-              <div class="card-status">活跃</div>
+              <div class="card-title">关键岗位分布</div>
+              <div class="card-status">实时</div>
             </div>
             <div class="card-content">
               <div class="metric-row">
-                <span class="metric-label">团队表现</span>
-                <span class="metric-value">{{ metricsData[2]?.value || '0' }}</span>
+                <span class="metric-label">战略岗位</span>
+                <span class="metric-value">15</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">发展中</span>
-                <span class="metric-value">{{ metricsData[1]?.value || '0' }}</span>
+                <span class="metric-label">运营岗位</span>
+                <span class="metric-value">25</span>
               </div>
               <div class="metric-row">
-                <span class="metric-label">成功率</span>
-                <span class="metric-value">87%</span>
+                <span class="metric-label">支持岗位</span>
+                <span class="metric-value">10</span>
               </div>
             </div>
           </div>
@@ -61,34 +60,34 @@
       </div>
     </section>
 
-    <!-- Core Capabilities Section -->
+    <!-- Features Section -->
     <section class="features-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">绩效指标</h2>
+          <h2 class="section-title">Core 50 核心要素</h2>
           <p class="section-description">
-            团队发展和绩效的实时洞察
+            基于业务影响力和人才稀缺性的关键岗位识别与管理体系
           </p>
         </div>
         
         <div class="features-grid">
           <div 
             class="feature-card" 
-            v-for="(metric, index) in metricsData" 
+            v-for="(element, index) in coreElements" 
             :key="index"
-            @click="showMetricDetail(metric)"
+            @click="showElementDetail(element)"
           >
             <div class="feature-icon">
-              <i :class="metric.icon"></i>
+              <i :class="element.icon"></i>
             </div>
             
             <div class="feature-content">
-              <h3 class="feature-title">{{ metric.label }}</h3>
-              <p class="feature-description">监控和跟踪组织中的{{ metric.label.toLowerCase() }}</p>
+              <h3 class="feature-title">{{ element.title }}</h3>
+              <p class="feature-description">{{ element.description }}</p>
               
               <div class="feature-stat">
-                <span class="stat-value">{{ metric.value }}</span>
-                <span class="stat-label">{{ metric.trend.value }}</span>
+                <span class="stat-value">{{ element.stat.value }}</span>
+                <span class="stat-label">{{ element.stat.label }}</span>
               </div>
             </div>
           </div>
@@ -100,43 +99,38 @@
     <section class="process-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">人才状态概览</h2>
+          <h2 class="section-title">岗位识别方法论</h2>
           <p class="section-description">
-            组织中当前状态分布情况
+            科学的关键岗位识别和评估流程
           </p>
-          <div class="section-actions">
-            <select v-model="selectedDepartment" class="filter-select">
-              <option value="all">所有部门</option>
-              <option value="sales">销售部</option>
-              <option value="marketing">市场部</option>
-              <option value="tech">技术部</option>
-              <option value="hr">人力资源部</option>
-            </select>
-          </div>
         </div>
         
         <div class="process-grid">
           <div 
-            v-for="(light, index) in trafficLightsData" 
+            v-for="(step, index) in identificationSteps" 
             :key="index" 
             class="process-card"
-            @click="showLightDetail(light)"
+            @click="showStepDetail(step)"
           >
-            <div class="process-number" :class="light.status">{{ light.percentage }}%</div>
+            <div class="process-number">{{ index + 1 }}</div>
             <div class="process-content">
-              <h4 class="process-title">{{ light.title }}</h4>
-              <p class="process-description">{{ light.count }} 名团队成员当前处于此状态</p>
-              <div class="process-duration">{{ light.urgencyText }}</div>
+              <h4 class="process-title">{{ step.title }}</h4>
+              <p class="process-description">{{ step.description }}</p>
+              <div class="process-duration">{{ step.criteria }}</div>
             </div>
-            <div class="process-actions">
-              <button class="btn btn-outline btn-sm" @click.stop="viewDetails(light)">
-                <i class="fas fa-eye"></i>
-                查看详情
-              </button>
-              <button class="btn btn-primary btn-sm" @click.stop="takeAction(light)">
-                <i class="fas fa-play"></i>
-                采取行动
-              </button>
+            <div class="step-preview">
+              <div class="criteria-tags">
+                <span 
+                  v-for="criterion in step.keyFactors.slice(0, 2)" 
+                  :key="criterion"
+                  class="criteria-tag"
+                >
+                  {{ criterion }}
+                </span>
+                <span v-if="step.keyFactors.length > 2" class="more-tag">
+                  +{{ step.keyFactors.length - 2 }} 更多
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -148,57 +142,28 @@
       <div class="container">
         <div class="stats-content">
           <div class="stats-header">
-            <h3 class="stats-title">团队成员概览</h3>
-            <p class="stats-subtitle">当前团队组成和绩效指标</p>
-            <div class="stats-actions">
-              <div class="search-box">
-                <input 
-                  v-model="searchQuery" 
-                  type="text" 
-                  placeholder="搜索成员..."
-                  class="search-input"
-                >
-                <i class="fas fa-search"></i>
-              </div>
-              <button class="btn btn-primary" @click="addMember">
-                <i class="fas fa-plus"></i>
-                添加成员
-              </button>
-            </div>
+            <h3 class="stats-title">岗位分类体系</h3>
+            <p class="stats-subtitle">基于业务影响和人才稀缺性的四象限分类</p>
           </div>
           
           <div class="stats-grid">
             <div 
-              v-for="member in filteredMembers.slice(0, 4)" 
-              :key="member.id"
-              class="stat-card member-stat-card"
-              @click="viewMemberProfile(member)"
+              v-for="(category, index) in positionCategories" 
+              :key="index" 
+              class="stat-card category-card"
+              @click="showCategoryDetail(category)"
             >
-              <div class="stat-icon member-avatar-icon">
-                <img :src="member.avatar" :alt="member.name">
-                <div class="member-status-dot" :class="member.status"></div>
+              <div class="stat-icon">
+                <div class="category-icon" :class="category.type">
+                  <i :class="category.icon"></i>
+                </div>
               </div>
               <div class="stat-content">
-                <div class="stat-value">{{ member.score }}</div>
-                <div class="stat-label">{{ member.name }}</div>
-                <div class="stat-sublabel">{{ member.position }}</div>
-              </div>
-              <div class="member-quick-actions">
-                <button class="btn btn-outline btn-xs" @click.stop="startAssessment(member)">
-                  <i class="fas fa-clipboard-check"></i>
-                </button>
-                <button class="btn btn-primary btn-xs" @click.stop="viewProgress(member)">
-                  <i class="fas fa-chart-line"></i>
-                </button>
+                <div class="stat-value">{{ category.count }}</div>
+                <div class="stat-label">{{ category.title }}</div>
+                <div class="stat-sublabel">{{ category.description }}</div>
               </div>
             </div>
-          </div>
-          
-          <div class="view-all-members">
-            <button class="btn btn-outline" @click="viewAllMembers">
-              <span>View All {{ filteredMembers.length }} Members</span>
-              <i class="fas fa-arrow-right"></i>
-            </button>
           </div>
         </div>
       </div>
@@ -210,52 +175,87 @@
         <div class="action-content">
           <div class="action-header">
             <div class="action-badge">
-              <i class="fas fa-clock"></i>
-              <span>最近活动</span>
+              <i class="fas fa-target"></i>
+              <span>实施策略</span>
             </div>
             
             <h2 class="action-title">
-              保持最新进展更新
+              构建关键岗位人才供应链
             </h2>
             
             <p class="action-description">
-              监控实时活动并立即采取行动，优化团队的
-              绩效和发展轨迹。
+              通过系统性的关键岗位识别和人才发展策略，
+              确保组织核心业务的人才供应链稳定性和可持续性。
             </p>
           </div>
           
-          <div class="action-grid activities-action-grid">
-            <div 
-              v-for="activity in recentActivities" 
-              :key="activity.id"
-              class="action-card activity-action-card"
-            >
+          <div class="action-grid">
+            <div class="action-card primary-action">
               <div class="card-header">
                 <div class="card-icon">
-                  <i :class="activity.icon"></i>
+                  <i class="fas fa-search"></i>
                 </div>
-                <h3 class="card-title">{{ activity.title }}</h3>
+                <h3 class="card-title">岗位识别评估</h3>
               </div>
               
               <div class="card-content">
                 <p class="card-description">
-                  {{ activity.description }}
+                  开始系统性的关键岗位识别和评估流程
                 </p>
                 
                 <div class="card-features">
                   <div class="feature-item">
-                    <i class="fas fa-clock"></i>
-                    <span>{{ formatTime(activity.timestamp) }}</span>
+                    <i class="fas fa-check"></i>
+                    <span>业务影响力分析</span>
                   </div>
                   <div class="feature-item">
-                    <i class="fas fa-tag"></i>
-                    <span>{{ activity.type }}</span>
+                    <i class="fas fa-check"></i>
+                    <span>人才稀缺性评估</span>
+                  </div>
+                  <div class="feature-item">
+                    <i class="fas fa-check"></i>
+                    <span>继任风险分析</span>
                   </div>
                 </div>
                 
-                <button class="action-btn secondary" @click="viewActivity(activity)">
-                  <span>查看详情</span>
+                <button class="action-btn primary" @click="startPositionMapping">
+                  <span>开始评估</span>
                   <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="action-card secondary-action">
+              <div class="card-header">
+                <div class="card-icon">
+                  <i class="fas fa-users-cog"></i>
+                </div>
+                <h3 class="card-title">人才发展计划</h3>
+              </div>
+              
+              <div class="card-content">
+                <p class="card-description">
+                  为关键岗位制定针对性的人才发展策略
+                </p>
+                
+                <div class="card-features">
+                  <div class="feature-item">
+                    <i class="fas fa-check"></i>
+                    <span>继任者培养</span>
+                  </div>
+                  <div class="feature-item">
+                    <i class="fas fa-check"></i>
+                    <span>能力发展路径</span>
+                  </div>
+                  <div class="feature-item">
+                    <i class="fas fa-check"></i>
+                    <span>风险缓解措施</span>
+                  </div>
+                </div>
+                
+                <button class="action-btn secondary" @click="viewDevelopmentPlan">
+                  <span>查看计划</span>
+                  <i class="fas fa-chart-line"></i>
                 </button>
               </div>
             </div>
@@ -264,27 +264,20 @@
           <div class="trust-indicators">
             <div class="trust-item">
               <i class="fas fa-shield-alt"></i>
-              <span>实时更新</span>
+              <span>风险管控</span>
             </div>
             <div class="trust-item">
-              <i class="fas fa-chart-line"></i>
-              <span>绩效跟踪</span>
+              <i class="fas fa-chart-bar"></i>
+              <span>数据驱动</span>
             </div>
             <div class="trust-item">
-              <i class="fas fa-users"></i>
-              <span>团队协作</span>
+              <i class="fas fa-sync-alt"></i>
+              <span>持续优化</span>
             </div>
             <div class="trust-item">
-              <i class="fas fa-bell"></i>
-              <span>智能通知</span>
+              <i class="fas fa-award"></i>
+              <span>最佳实践</span>
             </div>
-          </div>
-          
-          <div class="view-all-activities">
-            <button class="btn btn-primary" @click="viewAllActivities">
-              <span>查看所有活动</span>
-              <i class="fas fa-arrow-right"></i>
-            </button>
           </div>
         </div>
       </div>
@@ -293,298 +286,180 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
-import { useDashboardStore } from '@/stores/dashboard'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 export default {
-  name: 'Dashboard',
+  name: 'Core50',
   setup() {
     const router = useRouter()
     const appStore = useAppStore()
-    const dashboardStore = useDashboardStore()
-
-    const isRefreshing = ref(false)
-    const selectedDepartment = ref('all')
-    const searchQuery = ref('')
 
     const heroStats = [
-      { value: '87%', label: '成功率' },
-      { value: '24/7', label: '监控' },
-      { value: '95%', label: '满意度' },
-      { value: '100+', label: '活跃用户' }
+      { value: '50', label: '关键岗位' },
+      { value: '4', label: '分类维度' },
+      { value: '90%', label: '覆盖率' },
+      { value: '85%', label: '准确性' }
     ]
 
-    const metricsData = computed(() => [
+    const coreElements = [
       {
-        icon: 'fas fa-exclamation-triangle',
-        label: '需要关注',
-        value: dashboardStore.metrics.critical,
-        color: 'secondary',
-        trend: { type: 'down', value: '↓ 5%' }
+        icon: 'fas fa-bullseye',
+        title: '业务影响力',
+        description: '评估岗位对组织战略目标实现和业务成果的直接影响程度',
+        stat: { value: '高影响', label: '战略关键' }
+      },
+      {
+        icon: 'fas fa-gem',
+        title: '人才稀缺性',
+        description: '分析岗位所需技能的市场稀缺程度和替代难度',
+        stat: { value: '稀缺技能', label: '难以替代' }
+      },
+      {
+        icon: 'fas fa-network-wired',
+        title: '组织网络',
+        description: '考量岗位在组织网络中的连接度和影响范围',
+        stat: { value: '网络中心', label: '关键节点' }
       },
       {
         icon: 'fas fa-clock',
-        label: '发展中',
-        value: dashboardStore.metrics.development,
-        color: 'red',
-        trend: { type: 'up', value: '↑ 12%' }
+        title: '继任风险',
+        description: '评估岗位空缺对业务连续性的影响和继任准备情况',
+        stat: { value: '高风险', label: '需要关注' }
+      }
+    ]
+
+    const identificationSteps = [
+      {
+        title: '业务分析',
+        description: '分析组织战略、业务模式和价值链，识别关键业务环节',
+        criteria: '战略一致性',
+        keyFactors: ['战略目标', '价值创造', '业务流程', '核心能力']
       },
       {
-        icon: 'fas fa-check-circle',
-        label: '已就绪',
-        value: dashboardStore.metrics.ready,
-        color: 'green',
-        trend: { type: 'up', value: '↑ 8%' }
+        title: '岗位映射',
+        description: '将业务关键环节映射到具体岗位，建立岗位-业务关联矩阵',
+        criteria: '业务关联度',
+        keyFactors: ['职责范围', '决策权限', '业务贡献', '影响范围']
       },
       {
-        icon: 'fas fa-users',
-        label: '总人数',
-        value: dashboardStore.metrics.total,
-        color: 'purple',
-        trend: { type: 'stable', value: '→ 0%' }
-      }
-    ])
-
-    const trafficLightsData = computed(() => [
-      {
-        status: 'red',
-        emoji: '🔴',
-        title: '需要立即关注',
-        urgency: 'high',
-        urgencyText: '高优先级',
-        percentage: dashboardStore.trafficLights.red,
-        count: Math.round(dashboardStore.metrics.total * dashboardStore.trafficLights.red / 100)
+        title: '影响评估',
+        description: '评估每个岗位对业务成果的直接和间接影响程度',
+        criteria: '影响程度',
+        keyFactors: ['收入影响', '成本影响', '风险影响', '创新影响']
       },
       {
-        status: 'yellow',
-        emoji: '🟡',
-        title: '发展中',
-        urgency: 'moderate',
-        urgencyText: '中优先级',
-        percentage: dashboardStore.trafficLights.yellow,
-        count: Math.round(dashboardStore.metrics.total * dashboardStore.trafficLights.yellow / 100)
+        title: '稀缺性分析',
+        description: '分析岗位所需技能的市场供给情况和获取难度',
+        criteria: '获取难度',
+        keyFactors: ['技能稀缺性', '经验要求', '培养周期', '市场竞争']
       },
       {
-        status: 'green',
-        emoji: '🟢',
-        title: '卓越表现',
-        urgency: 'low',
-        urgencyText: '低优先级',
-        percentage: dashboardStore.trafficLights.green,
-        count: Math.round(dashboardStore.metrics.total * dashboardStore.trafficLights.green / 100)
+        title: '综合评定',
+        description: '综合业务影响和人才稀缺性，确定最终的Core 50岗位清单',
+        criteria: '综合评分',
+        keyFactors: ['影响权重', '稀缺权重', '风险评估', '优先级排序']
       }
-    ])
+    ]
 
-    const filteredMembers = computed(() => {
-      let members = dashboardStore.teamMembers
-      
-      if (selectedDepartment.value !== 'all') {
-        members = members.filter(member => 
-          member.department.includes(selectedDepartment.value)
-        )
-      }
-      
-      if (searchQuery.value) {
-        members = members.filter(member =>
-          member.name.includes(searchQuery.value) ||
-          member.position.includes(searchQuery.value) ||
-          member.department.includes(searchQuery.value)
-        )
-      }
-      
-      return members
-    })
-
-    const recentActivities = ref([
+    const positionCategories = [
       {
-        id: 1,
-        type: 'assessment',
-        icon: 'fas fa-clipboard-check',
-        title: 'Carol Wen 完成了360度评估',
-        description: '销售总监 Carol Wen 完成了本季度的360度评估',
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000)
+        type: 'strategic',
+        icon: 'fas fa-crown',
+        title: '战略核心岗位',
+        description: '高影响 + 高稀缺',
+        count: '15',
+        priority: '最高优先级'
       },
       {
-        id: 2,
-        type: 'development',
-        icon: 'fas fa-graduation-cap',
-        title: 'John Smith 开始了领导力培训',
-        description: '市场总监 John Smith 参加了为期3个月的领导力提升项目',
-        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000)
+        type: 'operational',
+        icon: 'fas fa-cogs',
+        title: '运营关键岗位',
+        description: '高影响 + 中稀缺',
+        count: '20',
+        priority: '高优先级'
       },
       {
-        id: 3,
-        type: 'achievement',
-        icon: 'fas fa-trophy',
-        title: 'Jane Doe 获得了卓越认证',
-        description: '技术项目经理 Jane Doe 在能力评估中获得了优秀评级',
-        timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000)
+        type: 'specialist',
+        icon: 'fas fa-user-graduate',
+        title: '专业稀缺岗位',
+        description: '中影响 + 高稀缺',
+        count: '10',
+        priority: '中优先级'
+      },
+      {
+        type: 'support',
+        icon: 'fas fa-hands-helping',
+        title: '重要支持岗位',
+        description: '中影响 + 中稀缺',
+        count: '5',
+        priority: '关注岗位'
       }
-    ])
+    ]
 
-    const getTrendIcon = (type) => {
-      const icons = {
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        stable: 'fas fa-minus'
-      }
-      return icons[type] || icons.stable
-    }
-
-    const getScoreClass = (score) => {
-      if (score >= 80) return 'excellent'
-      if (score >= 70) return 'good'
-      if (score >= 60) return 'average'
-      return 'poor'
-    }
-
-    const formatTime = (timestamp) => {
-      const now = new Date()
-      const time = new Date(timestamp)
-      const diff = now - time
-      
-      if (diff < 60000) return 'Just now'
-      if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
-      if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
-      return `${Math.floor(diff / 86400000)}d ago`
-    }
-
-    const refreshData = async () => {
-      isRefreshing.value = true
-      try {
-        await dashboardStore.loadDashboardData()
-        appStore.showToast('数据刷新', '仪表盘数据已更新', 'success')
-      } catch (error) {
-        appStore.showToast('刷新失败', '数据刷新失败，请重试', 'error')
-      } finally {
-        setTimeout(() => {
-          isRefreshing.value = false
-        }, 1000)
-      }
-    }
-
-    const exportReport = () => {
-      appStore.showToast('Export Report', 'Report export feature coming soon', 'info')
-    }
-
-    const showMetricDetail = (metric) => {
+    const startPositionMapping = () => {
       appStore.showModal({
-        title: metric.label,
-        content: `Currently ${metric.value} employees are in "${metric.label}" status. Trend: ${metric.trend.value}`,
+        title: '开始岗位识别',
+        content: '即将启动Core 50关键岗位识别流程，这将帮助您系统性地识别组织中最关键的50个岗位。',
         type: 'info'
       })
     }
 
-    const showLightDetail = (light) => {
+    const viewMethodology = () => {
       appStore.showModal({
-        title: light.title,
-        content: `${light.count} employees (${light.percentage}%) are currently in "${light.title}" status. Consider taking appropriate development measures.`,
+        title: '方法论详情',
+        content: 'Core 50方法论基于业务影响力和人才稀缺性两个维度，通过科学的评估流程识别关键岗位。',
         type: 'info'
       })
     }
 
-    const viewDetails = (light) => {
-      router.push(`/analytics?filter=${light.status}`)
-    }
-
-    const takeAction = (light) => {
-      appStore.showToast('Action', `Creating action plan for employees in "${light.title}" status`, 'info')
-    }
-
-    const viewMemberProfile = (member) => {
-      router.push(`/profile/${member.id}`)
-    }
-
-    const addMember = () => {
+    const showElementDetail = (element) => {
       appStore.showModal({
-        title: 'Add Team Member',
-        content: 'Add new member feature coming soon!',
+        title: element.title,
+        content: element.description,
         type: 'info'
       })
     }
 
-    const startAssessment = (member) => {
-      appStore.showToast('Assessment', `Starting assessment process for ${member.name}`, 'info')
-    }
-
-    const viewProgress = (member) => {
-      router.push(`/profile/${member.id}?tab=progress`)
-    }
-
-    const viewAllActivities = () => {
-      router.push('/activities')
-    }
-
-    const viewActivity = (activity) => {
+    const showStepDetail = (step) => {
       appStore.showModal({
-        title: activity.title,
-        content: activity.description,
+        title: step.title,
+        content: `${step.description}\n\n关键因素：${step.keyFactors.join('、')}`,
         type: 'info'
       })
     }
 
-    const animateMetric = (index) => {
-      // Add metric animation logic
-      console.log(`Animating metric ${index}`)
+    const showCategoryDetail = (category) => {
+      appStore.showModal({
+        title: category.title,
+        content: `${category.description}\n\n岗位数量：${category.count}\n优先级：${category.priority}`,
+        type: 'info'
+      })
     }
 
-    onMounted(async () => {
-      // Initialize AOS
-      AOS.init({
-        duration: 800,
-        easing: 'ease-out-cubic',
-        once: true,
-        offset: 100
-      })
-
-      try {
-        await dashboardStore.loadDashboardData()
-      } catch (error) {
-        appStore.showToast('加载失败', '无法加载仪表盘数据', 'error')
-      }
-    })
-
-    const viewAllMembers = () => {
-      router.push('/team')
+    const viewDevelopmentPlan = () => {
+      appStore.showToast('导航', '跳转到人才发展计划页面', 'info')
     }
 
     return {
       heroStats,
-      isRefreshing,
-      selectedDepartment,
-      searchQuery,
-      metricsData,
-      trafficLightsData,
-      filteredMembers,
-      recentActivities,
-      getTrendIcon,
-      getScoreClass,
-      formatTime,
-      animateMetric,
-      refreshData,
-      exportReport,
-      showMetricDetail,
-      showLightDetail,
-      viewDetails,
-      takeAction,
-      viewMemberProfile,
-      addMember,
-      startAssessment,
-      viewProgress,
-      viewAllActivities,
-      viewActivity,
-      viewAllMembers
+      coreElements,
+      identificationSteps,
+      positionCategories,
+      startPositionMapping,
+      viewMethodology,
+      showElementDetail,
+      showStepDetail,
+      showCategoryDetail,
+      viewDevelopmentPlan
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.dashboard-page {
+.core50-page {
   background: #ffffff;
   min-height: 100vh;
 }
@@ -828,7 +703,6 @@ export default {
   .section-header {
     text-align: center;
     margin-bottom: 80px;
-    position: relative;
     
     .section-title {
       font-size: 2.5rem;
@@ -842,33 +716,13 @@ export default {
       font-size: 1.125rem;
       color: #6c757d;
       max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .section-actions {
-      display: flex;
-      justify-content: center;
-      
-      .filter-select {
-        padding: 8px 16px;
-        background: #ffffff;
-        border: 1px solid #e9ecef;
-        border-radius: 6px;
-        color: #212529;
-        font-size: 0.875rem;
-        cursor: pointer;
-
-        &:focus {
-          outline: none;
-          border-color: #dd2525;
-        }
-      }
+      margin: 0 auto;
     }
   }
   
   .process-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 32px;
   }
   
@@ -890,26 +744,15 @@ export default {
     .process-number {
       width: 64px;
       height: 64px;
+      background: #dd2525;
+      color: #ffffff;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 700;
       margin: 0 auto 24px;
-      color: #ffffff;
-      
-      &.red {
-        background: #dc3545;
-      }
-      
-      &.yellow {
-        background: #ffc107;
-      }
-      
-      &.green {
-        background: #28a745;
-      }
     }
     
     .process-content {
@@ -938,10 +781,31 @@ export default {
       }
     }
     
-    .process-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
+    .step-preview {
+      .criteria-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        
+        .criteria-tag {
+          background: #f8f9fa;
+          color: #495057;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+        
+        .more-tag {
+          background: #dd2525;
+          color: #ffffff;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+      }
     }
   }
 }
@@ -967,15 +831,7 @@ export default {
         font-size: 1.125rem;
         color: #6c757d;
         max-width: 600px;
-        margin: 0 auto 32px;
-      }
-      
-      .stats-actions {
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-        align-items: center;
-        flex-wrap: wrap;
+        margin: 0 auto;
       }
     }
     
@@ -983,7 +839,6 @@ export default {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 40px;
-      margin-bottom: 40px;
     }
     
     .stat-card {
@@ -1001,21 +856,35 @@ export default {
         transform: translateY(-4px);
       }
       
-      &.member-stat-card {
-        position: relative;
-        
-        .member-quick-actions {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          display: flex;
-          gap: 4px;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        
-        &:hover .member-quick-actions {
-          opacity: 1;
+      &.category-card {
+        .stat-icon {
+          .category-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #ffffff;
+            
+            &.strategic {
+              background: #dd2525;
+            }
+            
+            &.operational {
+              background: #28a745;
+            }
+            
+            &.specialist {
+              background: #17a2b8;
+            }
+            
+            &.support {
+              background: #ffc107;
+              color: #212529;
+            }
+          }
         }
       }
       
@@ -1032,33 +901,6 @@ export default {
         i {
           font-size: 1.5rem;
           color: #dd2525;
-        }
-        
-        &.member-avatar-icon {
-          position: relative;
-          background: transparent;
-          
-          img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #f8f9fa;
-          }
-          
-          .member-status-dot {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid #ffffff;
-
-            &.ready { background: #28a745; }
-            &.development { background: #ffc107; }
-            &.critical { background: #dc3545; }
-          }
         }
       }
       
@@ -1083,10 +925,6 @@ export default {
           color: #adb5bd;
         }
       }
-    }
-    
-    .view-all-members {
-      text-align: center;
     }
   }
 }
@@ -1147,20 +985,16 @@ export default {
     
     .action-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
       margin-bottom: 60px;
-      
-      &.activities-action-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
     }
     
     .action-card {
       background: #ffffff;
       border: 1px solid #e9ecef;
       border-radius: 16px;
-      padding: 32px;
+      padding: 40px;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -1187,7 +1021,17 @@ export default {
         }
       }
       
-      &.activity-action-card {
+      &.primary-action {
+        border-color: #dd2525;
+        background: linear-gradient(135deg, #ffffff 0%, #fff8f8 100%);
+        
+        .card-icon {
+          background: #dd2525;
+          color: #ffffff;
+        }
+      }
+      
+      &.secondary-action {
         .card-icon {
           background: #f8f9fa;
           color: #495057;
@@ -1213,11 +1057,10 @@ export default {
         }
         
         .card-title {
-          font-size: 1.125rem;
+          font-size: 1.375rem;
           font-weight: 600;
           color: #212529;
           margin: 0;
-          line-height: 1.3;
         }
       }
       
@@ -1226,27 +1069,27 @@ export default {
           color: #6c757d;
           line-height: 1.6;
           margin-bottom: 24px;
-          font-size: 0.875rem;
+          font-size: 1rem;
         }
         
         .card-features {
-          margin-bottom: 24px;
+          margin-bottom: 32px;
           
           .feature-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 12px;
             
             i {
               color: #dd2525;
-              font-size: 0.75rem;
-              width: 12px;
+              font-size: 0.875rem;
+              width: 16px;
             }
             
             span {
               color: #495057;
-              font-size: 0.75rem;
+              font-size: 0.875rem;
               font-weight: 500;
             }
           }
@@ -1254,18 +1097,29 @@ export default {
         
         .action-btn {
           width: 100%;
-          padding: 12px 20px;
+          padding: 16px 24px;
           border: none;
           border-radius: 8px;
-          font-size: 0.875rem;
+          font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
+          gap: 12px;
           text-transform: none;
+          
+          &.primary {
+            background: #dd2525;
+            color: #ffffff;
+            
+            &:hover {
+              background: #b91c1c;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(221, 37, 37, 0.3);
+            }
+          }
           
           &.secondary {
             background: #ffffff;
@@ -1282,7 +1136,7 @@ export default {
           }
           
           i {
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             transition: transform 0.3s ease;
           }
           
@@ -1299,7 +1153,6 @@ export default {
       gap: 48px;
       padding: 32px 0;
       border-top: 1px solid #e9ecef;
-      margin-bottom: 32px;
       
       .trust-item {
         display: flex;
@@ -1315,46 +1168,6 @@ export default {
         }
       }
     }
-    
-    .view-all-activities {
-      text-align: center;
-    }
-  }
-}
-
-// Search Box
-.search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-  
-  .search-input {
-    width: 200px;
-    padding: 8px 40px 8px 15px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(221, 37, 37, 0.2);
-    border-radius: 20px;
-    color: #333;
-    font-size: 14px;
-    transition: all 0.3s ease;
-
-    &::placeholder {
-      color: #999;
-    }
-
-    &:focus {
-      outline: none;
-      background: white;
-      border-color: #dd2525;
-      width: 250px;
-    }
-  }
-
-  i {
-    position: absolute;
-    right: 15px;
-    color: #999;
-    pointer-events: none;
   }
 }
 
@@ -1394,30 +1207,6 @@ export default {
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(221, 37, 37, 0.3);
     }
-  }
-  
-  &.btn-outline {
-    background: transparent;
-    color: #6c757d;
-    border: 1px solid #e9ecef;
-    
-    &:hover {
-      background: #f8f9fa;
-      border-color: #dd2525;
-      color: #dd2525;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-  }
-  
-  &.btn-sm {
-    padding: 8px 16px;
-    font-size: 0.75rem;
-  }
-  
-  &.btn-xs {
-    padding: 6px 12px;
-    font-size: 0.7rem;
   }
   
   i {
@@ -1491,20 +1280,6 @@ export default {
     gap: 24px;
   }
 
-  .stats-section .stats-actions {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .search-box .search-input {
-    width: 100%;
-    max-width: 300px;
-    
-    &:focus {
-      width: 100%;
-    }
-  }
-
   .executive-action-section .trust-indicators {
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
@@ -1563,10 +1338,6 @@ export default {
     grid-template-columns: 1fr;
     gap: 16px;
     text-align: center;
-  }
-
-  .search-box {
-    width: 100%;
   }
 }
 </style>

@@ -61,6 +61,13 @@ export default {
         tooltip: '框架概述'
       },
       {
+        name: 'Core50',
+        path: '/core50',
+        icon: 'fas fa-bullseye',
+        label: 'Core 50',
+        tooltip: 'Core 50 关键岗位'
+      },
+      {
         name: 'Dashboard',
         path: '/dashboard',
         icon: 'fas fa-tachometer-alt',

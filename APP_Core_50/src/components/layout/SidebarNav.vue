@@ -68,6 +68,12 @@ export default {
         icon: 'fas fa-compass'
       },
       {
+        name: 'Core50',
+        path: '/core50',
+        title: 'Core 50',
+        icon: 'fas fa-bullseye'
+      },
+      {
         name: 'Dashboard',
         path: '/dashboard',
         title: '仪表盘',
