@@ -1,0 +1,390 @@
+// Mobile-First Component Styles
+// This file contains mobile-specific styles and optimizations
+
+// Mobile Navigation Patterns
+.mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(221, 37, 37, 0.1);
+  padding: 8px 16px;
+  z-index: 1000;
+  
+  .nav-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      min-width: 44px;
+      
+      &.active {
+        color: #dd2525;
+      }
+      
+      i {
+        font-size: 18px;
+        margin-bottom: 4px;
+      }
+      
+      span {
+        font-size: 10px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Mobile Cards
+.mobile-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #212529;
+      margin: 0;
+    }
+    
+    .card-action {
+      color: #dd2525;
+      font-size: 14px;
+      text-decoration: none;
+    }
+  }
+  
+  .card-content {
+    font-size: 0.875rem;
+    color: #6c757d;
+    line-height: 1.5;
+  }
+}
+
+// Mobile Lists
+.mobile-list {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  .list-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #f8f9fa;
+    text-decoration: none;
+    color: inherit;
+    min-height: 44px;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    &:active {
+      background: #f8f9fa;
+    }
+    
+    .item-icon {
+      width: 40px;
+      height: 40px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: #dd2525;
+    }
+    
+    .item-content {
+      flex: 1;
+      
+      .item-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #212529;
+        margin-bottom: 2px;
+      }
+      
+      .item-subtitle {
+        font-size: 0.875rem;
+        color: #6c757d;
+      }
+    }
+    
+    .item-action {
+      color: #adb5bd;
+      font-size: 18px;
+    }
+  }
+}
+
+// Mobile Forms
+.mobile-form {
+  .form-group {
+    margin-bottom: 20px;
+    
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #212529;
+      margin-bottom: 6px;
+    }
+    
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 16px; // Prevents zoom on iOS
+      background: #ffffff;
+      transition: border-color 0.3s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: #dd2525;
+        box-shadow: 0 0 0 3px rgba(221, 37, 37, 0.1);
+      }
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+    
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+// Mobile Modals
+.mobile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  
+  .modal-content {
+    background: #ffffff;
+    border-radius: 16px 16px 0 0;
+    padding: 24px 16px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      
+      .modal-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #212529;
+        margin: 0;
+      }
+      
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #adb5bd;
+        cursor: pointer;
+        padding: 4px;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    
+    .modal-body {
+      font-size: 0.875rem;
+      color: #6c757d;
+      line-height: 1.5;
+    }
+  }
+}
+
+// Mobile Tabs
+.mobile-tabs {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  .tab-nav {
+    display: flex;
+    background: #f8f9fa;
+    
+    .tab-button {
+      flex: 1;
+      padding: 12px 8px;
+      background: none;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6c757d;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 44px;
+      
+      &.active {
+        background: #ffffff;
+        color: #dd2525;
+        box-shadow: 0 -2px 0 #dd2525 inset;
+      }
+    }
+  }
+  
+  .tab-content {
+    padding: 16px;
+  }
+}
+
+// Mobile Alerts
+.mobile-alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  
+  &.alert-success {
+    background: #d1edff;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+  }
+  
+  &.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+  }
+  
+  &.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+  
+  &.alert-info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+  }
+}
+
+// Mobile Loading States
+.mobile-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #f8f9fa;
+    border-top: 3px solid #dd2525;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+  
+  .loading-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    text-align: center;
+  }
+}
+
+// Mobile-specific animations
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+// Safe area handling for devices with notches
+@supports (padding: max(0px)) {
+  .safe-area-top {
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  
+  .safe-area-left {
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+  
+  .safe-area-right {
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}

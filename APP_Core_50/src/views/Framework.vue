@@ -520,22 +520,43 @@ export default {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 16px;
+  
+  @media (min-width: 768px) {
+    padding: 0 24px;
+  }
 }
 
-// Hero Section
+// Hero Section - Mobile First
 .hero-section {
-  padding: 120px 0;
+  padding: 60px 0 40px;
   background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
   
   .hero-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 16px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    grid-template-columns: 1fr;
+    gap: 40px;
     align-items: center;
+    text-align: center;
+    
+    @media (min-width: 768px) {
+      padding: 0 24px;
+      gap: 60px;
+    }
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      text-align: left;
+      padding: 80px 24px 60px;
+    }
+    
+    @media (min-width: 1200px) {
+      padding: 120px 24px 80px;
+    }
   }
   
   .hero-content {
@@ -680,8 +701,17 @@ export default {
   
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+    
+    @media (min-width: 1024px) {
+      gap: 40px;
+    }
   }
   
   .feature-card {
@@ -775,8 +805,18 @@ export default {
   
   .process-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 32px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
   }
   
   .process-card {
@@ -890,8 +930,18 @@ export default {
     
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 40px;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      
+      @media (min-width: 640px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+      
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+      }
     }
     
     .stat-card {

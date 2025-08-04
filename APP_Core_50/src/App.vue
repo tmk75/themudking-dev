@@ -74,9 +74,13 @@ export default {
 
 .main-content {
   margin-left: 0;
-  padding: 100px 20px 20px 20px;
+  padding: 80px 16px 20px 16px;
   min-height: 100vh;
   transition: all 0.3s ease;
+
+  @media (min-width: 768px) {
+    padding: 90px 24px 30px 24px;
+  }
 
   @media (min-width: 1024px) {
     padding: 100px 40px 40px 40px;

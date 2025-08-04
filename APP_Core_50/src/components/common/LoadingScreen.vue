@@ -110,54 +110,113 @@ export default {
 }
 
 .loading-logo {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   animation: fadeInUp 0.8s ease-out;
+  
+  @media (min-width: 768px) {
+    margin-bottom: 32px;
+  }
+  
+  @media (min-width: 1024px) {
+    margin-bottom: 40px;
+  }
 }
 
 .logo-circle {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   background: rgba(221, 37, 37, 0.1);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(15px);
   border: 2px solid rgba(221, 37, 37, 0.3);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
+  margin: 0 auto 16px;
   animation: rotate 3s linear infinite;
 
   i {
-    font-size: 3rem;
+    font-size: 2rem;
     color: #dd2525;
     animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @media (min-width: 768px) {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 18px;
+    backdrop-filter: blur(18px);
+    
+    i {
+      font-size: 2.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    backdrop-filter: blur(20px);
+    
+    i {
+      font-size: 3rem;
+    }
   }
 }
 
 .logo-text {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: #dd2525;
-  text-shadow: 0 4px 20px rgba(221, 37, 37, 0.3);
-  letter-spacing: 2px;
+  text-shadow: 0 2px 12px rgba(221, 37, 37, 0.3);
+  letter-spacing: 1px;
+  
+  @media (min-width: 768px) {
+    font-size: 2rem;
+    letter-spacing: 1.5px;
+    text-shadow: 0 3px 16px rgba(221, 37, 37, 0.3);
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    text-shadow: 0 4px 20px rgba(221, 37, 37, 0.3);
+  }
 }
 
 .loading-progress {
-  margin: 40px 0;
+  margin: 24px 0;
   animation: fadeInUp 0.8s ease-out 0.3s both;
+  
+  @media (min-width: 768px) {
+    margin: 32px 0;
+  }
+  
+  @media (min-width: 1024px) {
+    margin: 40px 0;
+  }
 }
 
 .progress-bar {
-  width: 300px;
-  height: 6px;
+  width: 200px;
+  height: 4px;
   background: rgba(221, 37, 37, 0.2);
-  border-radius: 3px;
-  margin: 0 auto 15px;
+  border-radius: 2px;
+  margin: 0 auto 12px;
   overflow: hidden;
   position: relative;
 
-  @media (max-width: 480px) {
+  @media (min-width: 640px) {
     width: 250px;
+    height: 5px;
+    margin: 0 auto 13px;
+  }
+  
+  @media (min-width: 1024px) {
+    width: 300px;
+    height: 6px;
+    border-radius: 3px;
+    margin: 0 auto 15px;
   }
 }
 

@@ -199,14 +199,14 @@ export default {
 <style lang="scss" scoped>
 .floating-tab-bar {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 12px;
+  bottom: 12px;
   z-index: 1000;
-  opacity: 0.2;
+  opacity: 0.3;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   
   &:hover,
   &.show-on-hover:hover {
@@ -214,7 +214,7 @@ export default {
   }
   
   &.collapsed {
-    opacity: 0.6;
+    opacity: 0.7;
     
     &:hover {
       opacity: 1;
@@ -226,22 +226,38 @@ export default {
       pointer-events: none;
     }
   }
+  
+  @media (min-width: 768px) {
+    right: 16px;
+    bottom: 16px;
+    opacity: 0.2;
+    gap: 10px;
+    
+    &.collapsed {
+      opacity: 0.6;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    right: 20px;
+    bottom: 20px;
+  }
 }
 
 .collapse-toggle {
   background: #dd2525;
   border: 1px solid #dd2525;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
   color: white;
-  font-size: 14px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   
   &:hover {
     background: rgba(221, 37, 37, 0.9);
@@ -254,6 +270,20 @@ export default {
   
   .spinning {
     animation: spin 2s linear infinite;
+  }
+  
+  @media (min-width: 768px) {
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  @media (min-width: 1024px) {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -269,16 +299,32 @@ export default {
 .tab-bar-content {
   background: rgba(255, 255, 255, 1);
   border: 1px solid rgba(221, 37, 37, 0.1);
-  border-radius: 25px;
-  padding: 20px 15px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 16px 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  width: 70px;
+  gap: 12px;
+  width: 60px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: right center;
+  
+  @media (min-width: 768px) {
+    border-radius: 22px;
+    padding: 18px 13px;
+    gap: 13px;
+    width: 65px;
+    box-shadow: 0 9px 36px rgba(0, 0, 0, 0.11);
+  }
+  
+  @media (min-width: 1024px) {
+    border-radius: 25px;
+    padding: 20px 15px;
+    gap: 15px;
+    width: 70px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .tab-buttons {
@@ -293,34 +339,38 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 10px;
   background: transparent;
   border: 2px solid transparent;
-  border-radius: 15px;
+  border-radius: 12px;
   color: #666;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   width: 100%;
   
   &::after {
     content: attr(data-tooltip);
     position: absolute;
-    right: calc(100% + 15px);
+    right: calc(100% + 12px);
     top: 50%;
     transform: translateY(-50%);
     background: rgba(0, 0, 0, 0.9);
     color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 1001;
     pointer-events: none;
+    
+    @media (max-width: 767px) {
+      display: none; // Hide tooltips on mobile
+    }
   }
 
   &:hover {
@@ -338,13 +388,57 @@ export default {
     color: white;
     background: #dd2525;
     border-color: #dd2525;
-    box-shadow: 0 4px 15px rgba(221, 37, 37, 0.3);
+    box-shadow: 0 3px 12px rgba(221, 37, 37, 0.3);
   }
 
   i {
-    font-size: 18px;
-    width: 20px;
+    font-size: 16px;
+    width: 18px;
     text-align: center;
+  }
+  
+  @media (min-width: 768px) {
+    padding: 11px;
+    border-radius: 13px;
+    font-size: 15px;
+    
+    &::after {
+      right: calc(100% + 13px);
+      padding: 7px 11px;
+      border-radius: 7px;
+      font-size: 11.5px;
+    }
+    
+    &.active {
+      box-shadow: 0 3.5px 13px rgba(221, 37, 37, 0.3);
+    }
+    
+    i {
+      font-size: 17px;
+      width: 19px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 12px;
+    border-radius: 15px;
+    font-size: 16px;
+    
+    &::after {
+      right: calc(100% + 15px);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    
+    &.active {
+      box-shadow: 0 4px 15px rgba(221, 37, 37, 0.3);
+    }
+    
+    i {
+      font-size: 18px;
+      width: 20px;
+    }
   }
 }
 

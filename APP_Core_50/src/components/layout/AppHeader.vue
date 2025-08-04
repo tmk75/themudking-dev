@@ -213,19 +213,25 @@ export default {
 <style lang="scss" scoped>
 .app-header {
   position: fixed;
-  top: 20px;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  width: calc(100% - 40px);
-  max-width: 1400px;
-  padding: 15px 30px;
+  width: calc(100% - 16px);
+  padding: 12px 16px;
   transition: all 0.3s ease;
 
-  @media (max-width: 768px) {
-    width: calc(100% - 20px);
-    padding: 15px 20px;
-    top: 10px;
+  @media (min-width: 768px) {
+    width: calc(100% - 32px);
+    padding: 15px 24px;
+    top: 15px;
+  }
+
+  @media (min-width: 1024px) {
+    width: calc(100% - 40px);
+    max-width: 1400px;
+    padding: 15px 30px;
+    top: 20px;
   }
 }
 
@@ -245,8 +251,8 @@ export default {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1.8rem;
+  gap: 8px;
+  font-size: 1.2rem;
   font-weight: 800;
   color: #dd2525;
   text-decoration: none;
@@ -257,14 +263,42 @@ export default {
   }
 
   i {
-    font-size: 2rem;
+    font-size: 1.4rem;
     animation: spin 3s linear infinite;
+    
+    @media (min-width: 768px) {
+      font-size: 1.8rem;
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: 2rem;
+    }
   }
 
   span {
-    @media (max-width: 480px) {
-      display: none;
+    display: none;
+    
+    @media (min-width: 640px) {
+      display: inline;
+      font-size: 1rem;
     }
+    
+    @media (min-width: 768px) {
+      font-size: 1.2rem;
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: 1.8rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    gap: 10px;
+    font-size: 1.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: 1.8rem;
   }
 }
 
@@ -286,21 +320,21 @@ export default {
 
 .search-box {
   position: relative;
-  display: flex;
+  display: none;
   align-items: center;
 
-  @media (max-width: 640px) {
-    display: none;
+  @media (min-width: 768px) {
+    display: flex;
   }
 
   input {
-    width: 200px;
-    padding: 8px 40px 8px 15px;
+    width: 160px;
+    padding: 6px 32px 6px 12px;
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(221, 37, 37, 0.2);
-    border-radius: 20px;
+    border-radius: 16px;
     color: #333;
-    font-size: 14px;
+    font-size: 13px;
     transition: all 0.3s ease;
 
     &::placeholder {
@@ -311,15 +345,32 @@ export default {
       outline: none;
       background: white;
       border-color: #dd2525;
-      width: 250px;
+      width: 200px;
+    }
+    
+    @media (min-width: 1024px) {
+      width: 200px;
+      padding: 8px 40px 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      
+      &:focus {
+        width: 250px;
+      }
     }
   }
 
   i {
     position: absolute;
-    right: 15px;
+    right: 12px;
     color: #999;
     pointer-events: none;
+    font-size: 12px;
+    
+    @media (min-width: 1024px) {
+      right: 15px;
+      font-size: 14px;
+    }
   }
 }
 
@@ -333,14 +384,15 @@ export default {
   background: rgba(221, 37, 37, 0.1);
   border: 1px solid rgba(221, 37, 37, 0.2);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #dd2525;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 14px;
 
   &:hover {
     background: rgba(221, 37, 37, 0.2);
@@ -349,16 +401,41 @@ export default {
 
   .notification-badge {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: -4px;
+    right: -4px;
     background: #ff4757;
     color: white;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
-    padding: 2px 6px;
-    border-radius: 10px;
-    min-width: 16px;
+    padding: 1px 4px;
+    border-radius: 8px;
+    min-width: 14px;
     text-align: center;
+  }
+  
+  @media (min-width: 768px) {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+    
+    .notification-badge {
+      top: -5px;
+      right: -5px;
+      font-size: 10px;
+      padding: 2px 5px;
+      border-radius: 10px;
+      min-width: 16px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    
+    .notification-badge {
+      padding: 2px 6px;
+    }
   }
 }
 
@@ -474,17 +551,23 @@ export default {
 .user-name {
   color: #333;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  display: none;
   
-  @media (max-width: 768px) {
-    display: none;
+  @media (min-width: 640px) {
+    display: block;
+    font-size: 0.85rem;
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: 0.9rem;
   }
 }
 
 .user-avatar {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
 
   img {
@@ -503,12 +586,12 @@ export default {
 
   .user-status {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 12px;
-    height: 12px;
+    bottom: 1px;
+    right: 1px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    border: 2px solid white;
+    border: 1px solid white;
 
     &.online {
       background: #28a745;
@@ -520,6 +603,30 @@ export default {
 
     &.offline {
       background: #6c757d;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    width: 36px;
+    height: 36px;
+    
+    .user-status {
+      bottom: 2px;
+      right: 2px;
+      width: 11px;
+      height: 11px;
+      border: 1.5px solid white;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    width: 40px;
+    height: 40px;
+    
+    .user-status {
+      width: 12px;
+      height: 12px;
+      border: 2px solid white;
     }
   }
 }
@@ -580,24 +687,32 @@ export default {
 }
 
 .mobile-menu-btn {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(221, 37, 37, 0.1);
   border: 1px solid rgba(221, 37, 37, 0.2);
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
   color: #dd2525;
   cursor: pointer;
   transition: all 0.3s ease;
-
-  @media (max-width: 1024px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  font-size: 14px;
 
   &:hover {
     background: rgba(221, 37, 37, 0.2);
+  }
+  
+  @media (min-width: 768px) {
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+    font-size: 15px;
+  }
+  
+  @media (min-width: 1024px) {
+    display: none;
   }
 }
 
