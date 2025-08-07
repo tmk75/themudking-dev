@@ -30,6 +30,11 @@
         >
           <i :class="tab.icon"></i>
         </button>
+        
+        <!-- Simple User Indicator -->
+        <div class="user-indicator" :data-tooltip="'用户'">
+          <div class="user-dot"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -202,7 +207,7 @@ export default {
   right: 12px;
   bottom: 12px;
   z-index: 1000;
-  opacity: 0.3;
+  opacity: 0.8; // More visible since it's the main navigation
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
@@ -214,7 +219,7 @@ export default {
   }
   
   &.collapsed {
-    opacity: 0.7;
+    opacity: 0.9; // Keep it more visible
     
     &:hover {
       opacity: 1;
@@ -297,7 +302,7 @@ export default {
 }
 
 .tab-bar-content {
-  background: rgba(255, 255, 255, 1);
+  background: #FFFFFF;
   border: 1px solid rgba(221, 37, 37, 0.1);
   border-radius: 20px;
   padding: 16px 12px;
@@ -440,6 +445,53 @@ export default {
       width: 20px;
     }
   }
+}
+
+.user-indicator {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(221, 37, 37, 0.1);
+  
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1001;
+    pointer-events: none;
+    
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+  
+  &:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.user-dot {
+  width: 8px;
+  height: 8px;
+  background: #28a745;
+  border-radius: 50%;
+  border: 1px solid white;
+  box-shadow: 0 0 0 1px rgba(221, 37, 37, 0.2);
 }
 
 // Responsive Design

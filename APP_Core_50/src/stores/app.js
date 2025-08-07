@@ -124,7 +124,19 @@ export const useAppStore = defineStore('app', () => {
   const loadInitialData = async () => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 400))
-    // Load initial dashboard data
+    
+    // Add some sample notifications
+    addNotification({
+      title: '系统通知',
+      message: '欢迎使用全球人才管理系统',
+      type: 'info'
+    })
+    
+    addNotification({
+      title: '评估提醒',
+      message: '您有3个待完成的评估任务',
+      type: 'warning'
+    })
   }
 
   return {

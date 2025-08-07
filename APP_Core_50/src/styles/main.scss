@@ -2,6 +2,8 @@
 @import './scrollbar.scss';
 // Import mobile-specific styles
 @import './mobile.scss';
+// Import iPhone 15 specific optimizations
+@import './iphone15.scss';
 
 // Reset and Base Styles
 * {
@@ -27,7 +29,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.5; // Tighter line height for mobile
   color: #333;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  background: #FFFFFF;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -534,7 +536,54 @@ textarea:disabled {
   }
 }
 
-// Mobile-First Responsive Utilities
+// Device-Specific Responsive Utilities
+// These work with JavaScript device detection classes
+
+// Mobile device utilities
+.mobile-device {
+  .grid-mobile-1 { display: grid; grid-template-columns: 1fr; }
+  .grid-mobile-2 { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .flex-mobile-col { display: flex; flex-direction: column; }
+  .text-mobile-center { text-align: center; }
+  .gap-mobile-sm { gap: 0.5rem; }
+  .gap-mobile-md { gap: 1rem; }
+  .p-mobile-sm { padding: 0.5rem; }
+  .p-mobile-md { padding: 1rem; }
+  .m-mobile-sm { margin: 0.5rem; }
+  .m-mobile-md { margin: 1rem; }
+}
+
+// Tablet device utilities
+.tablet-device {
+  .grid-tablet-2 { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .grid-tablet-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .flex-tablet-row { display: flex; flex-direction: row; }
+  .gap-tablet-md { gap: 1rem; }
+  .gap-tablet-lg { gap: 1.5rem; }
+  .p-tablet-md { padding: 1rem; }
+  .p-tablet-lg { padding: 1.5rem; }
+}
+
+// Desktop device utilities
+.desktop-device {
+  .grid-desktop-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .grid-desktop-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .flex-desktop-row { display: flex; flex-direction: row; }
+  .gap-desktop-lg { gap: 1.5rem; }
+  .gap-desktop-xl { gap: 2rem; }
+  .p-desktop-lg { padding: 1.5rem; }
+  .p-desktop-xl { padding: 2rem; }
+}
+
+// iPhone-specific utilities
+.iphone15-device {
+  .safe-top { padding-top: max(44px, env(safe-area-inset-top)); }
+  .safe-bottom { padding-bottom: max(34px, env(safe-area-inset-bottom)); }
+  .touch-target { min-height: 44px; min-width: 44px; }
+  .compact-text { font-size: 0.8rem; line-height: 1.3; }
+}
+
+// Mobile-First Responsive Utilities (legacy support)
 // Base styles are mobile-first, then scale up
 
 // Mobile utilities (default)
@@ -675,4 +724,227 @@ textarea:disabled {
   
   --transition: all 0.3s ease;
   --transition-fast: all 0.15s ease;
+  
+  // iPhone 15 Plus/Pro Max specific properties
+  --iphone15-width: 430px;
+  --iphone15-height: 932px;
+  --iphone15-safe-top: 44px;
+  --iphone15-safe-bottom: 34px;
+  --iphone15-touch-min: 44px;
+  --iphone15-font-base: 15px;
+  --iphone15-line-height: 1.4;
+  --iphone15-border-radius: 12px;
+  --iphone15-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+// Device-specific classes applied by JavaScript
+.mobile-layout {
+  font-size: 14px;
+  line-height: 1.4;
+  
+  // Mobile-specific optimizations
+  .container {
+    padding: 0 12px;
+  }
+  
+  .btn {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+  
+  // Touch-friendly spacing
+  .hero-section,
+  .features-section,
+  .process-section,
+  .stats-section {
+    padding: 40px 0; // Reduced for mobile
+  }
+}
+
+.desktop-layout {
+  font-size: 16px;
+  line-height: 1.6;
+  
+  // Desktop-specific optimizations
+  .container {
+    padding: 0 24px;
+  }
+  
+  .btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+  
+  // Desktop spacing
+  .hero-section,
+  .features-section,
+  .process-section,
+  .stats-section {
+    padding: 120px 0;
+  }
+}
+
+.tablet-layout {
+  font-size: 15px;
+  line-height: 1.5;
+  
+  // Tablet-specific optimizations
+  .container {
+    padding: 0 20px;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+  
+  // Tablet spacing
+  .hero-section,
+  .features-section,
+  .process-section,
+  .stats-section {
+    padding: 80px 0;
+  }
+}
+
+// iOS-specific optimizations
+.ios-device {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  // iOS-specific touch behavior
+  * {
+    -webkit-tap-highlight-color: rgba(221, 37, 37, 0.2);
+    -webkit-touch-callout: none;
+  }
+  
+  input, textarea {
+    -webkit-appearance: none;
+    border-radius: 8px;
+  }
+}
+
+.android-device {
+  // Android-specific optimizations
+  * {
+    -webkit-tap-highlight-color: rgba(221, 37, 37, 0.3);
+  }
+}
+
+// iPhone model-specific classes
+.iphone15-device {
+  .main-content {
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  
+  .floating-tab-bar {
+    bottom: max(8px, env(safe-area-inset-bottom, 8px));
+  }
+}
+
+.iphone15plus-device,
+.iphone15promax-device {
+  // iPhone 15 Plus/Pro Max optimizations (430x932)
+  .container {
+    max-width: 430px;
+    padding: 0 16px;
+  }
+  
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  
+  .mobile-header-content {
+    padding: 12px 20px;
+  }
+  
+  .main-content {
+    padding-top: 24px; // Clean spacing without header
+  }
+}
+
+// Screen size classes
+.small-screen {
+  // ≤ 480px
+  .hero-title {
+    font-size: 1.6rem;
+  }
+  
+  .section-title {
+    font-size: 1.4rem;
+  }
+}
+
+.medium-screen {
+  // 481px - 768px
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+}
+
+.large-screen {
+  // 769px - 1024px
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 2.2rem;
+  }
+}
+
+.xlarge-screen {
+  // > 1024px
+  .hero-title {
+    font-size: 3.5rem;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+  }
+}
+
+// Pixel density classes
+.high-dpi {
+  // 3x and above
+  .feature-icon,
+  .stat-icon {
+    i {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.medium-dpi {
+  // 2x
+  .feature-icon,
+  .stat-icon {
+    i {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+.low-dpi {
+  // 1x
+  .feature-icon,
+  .stat-icon {
+    i {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+// iPhone 15 specific class (backward compatibility)
+.iphone15-optimized {
+  @media screen and (max-width: 393px) and (max-height: 852px) {
+    font-size: var(--iphone15-font-base);
+    line-height: var(--iphone15-line-height);
+  }
 }

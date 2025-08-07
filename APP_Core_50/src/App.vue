@@ -5,8 +5,8 @@
     
     <!-- Main App -->
     <div v-else class="app-container">
-      <!-- Header -->
-      <AppHeader />
+      <!-- Mobile Navigation Button -->
+      <MobileNavButton />
       
       <!-- Floating Tab Bar -->
       <FloatingTabBar />
@@ -32,8 +32,8 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { useAppStore } from '@/stores/app'
-import AppHeader from '@/components/layout/AppHeader.vue'
 import FloatingTabBar from '@/components/layout/FloatingTabBar.vue'
+import MobileNavButton from '@/components/layout/MobileNavButton.vue'
 import LoadingScreen from '@/components/common/LoadingScreen.vue'
 import ToastContainer from '@/components/common/ToastContainer.vue'
 import GlobalModal from '@/components/common/GlobalModal.vue'
@@ -41,8 +41,8 @@ import GlobalModal from '@/components/common/GlobalModal.vue'
 export default {
   name: 'App',
   components: {
-    AppHeader,
     FloatingTabBar,
+    MobileNavButton,
     LoadingScreen,
     ToastContainer,
     GlobalModal
@@ -68,22 +68,30 @@ export default {
 <style lang="scss">
 .app-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  background: #FFFFFF;
   position: relative;
+  
+  // iPhone 15 safe area support
+  @supports (padding: max(0px)) {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
 }
 
 .main-content {
   margin-left: 0;
-  padding: 80px 16px 20px 16px;
+  padding: 100px 16px 20px 16px; // Top padding for nav button clearance
   min-height: 100vh;
   transition: all 0.3s ease;
 
   @media (min-width: 768px) {
-    padding: 90px 24px 30px 24px;
+    padding: 110px 24px 30px 24px;
   }
 
   @media (min-width: 1024px) {
-    padding: 100px 40px 40px 40px;
+    padding: 120px 40px 40px 40px;
   }
 }
 

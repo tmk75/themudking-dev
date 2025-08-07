@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page">
+  <div class="home-page device-optimized">
     <!-- Clean Hero Section -->
     <section class="hero-section">
       <div class="hero-container">
@@ -70,7 +70,7 @@
           </p>
         </div>
         
-        <div class="features-grid">
+        <div class="features-grid grid-mobile-1 grid-tablet-2 grid-desktop-2">
           <div 
             class="feature-card" 
             v-for="(feature, index) in features" 
@@ -105,7 +105,7 @@
           </p>
         </div>
         
-        <div class="process-grid">
+        <div class="process-grid grid-mobile-1 grid-tablet-2 grid-desktop-4">
           <div 
             v-for="(step, index) in processSteps" 
             :key="index" 
@@ -131,7 +131,7 @@
             <p class="stats-subtitle">加入数千家正在转变人才管理的企业</p>
           </div>
           
-          <div class="stats-grid">
+          <div class="stats-grid grid-mobile-1 grid-tablet-2 grid-desktop-4">
             <div 
               v-for="(stat, index) in statistics" 
               :key="index" 
@@ -417,7 +417,7 @@ export default {
 
 <style lang="scss" scoped>
 .home-page {
-  background: #ffffff;
+  background: #FFFFFF;
   min-height: 100vh;
 }
 
@@ -431,10 +431,10 @@ export default {
   }
 }
 
-// Hero Section - Mobile First
+// Hero Section - Mobile First (No Header)
 .hero-section {
-  padding: 60px 0 40px;
-  background: #ffffff;
+  padding: 40px 0 30px; // Reduced top padding since no header
+  background: #FFFFFF;
   
   .hero-container {
     max-width: 1200px;
@@ -597,7 +597,7 @@ export default {
   
   .hero-visual {
     .visual-card {
-      background: #ffffff;
+      background: #FFFFFF;
       border: 1px solid #e9ecef;
       border-radius: 12px;
       padding: 32px;
@@ -654,7 +654,7 @@ export default {
 
 // Features Section - Mobile First
 .features-section {
-  padding: 60px 0;
+  padding: 50px 0;
   
   .section-header {
     text-align: center;
@@ -718,7 +718,7 @@ export default {
   }
   
   .feature-card {
-    background: #ffffff;
+    background: #FFFFFF;
     border: 1px solid #e9ecef;
     border-radius: 12px;
     padding: 24px;
@@ -882,8 +882,8 @@ export default {
 
 // Process Section - Mobile First
 .process-section {
-  padding: 60px 0;
-  background: #fafafa;
+  padding: 50px 0;
+  background: #FFFFFF;
   
   .section-header {
     text-align: center;
@@ -948,7 +948,7 @@ export default {
   }
   
   .process-card {
-    background: #ffffff;
+    background: #FFFFFF;
     border: 1px solid #e9ecef;
     border-radius: 12px;
     padding: 24px;
@@ -1107,7 +1107,7 @@ export default {
     }
     
     .stat-card {
-      background: #ffffff;
+      background: #FFFFFF;
       border: 1px solid #e9ecef;
       border-radius: 12px;
       padding: 32px;
@@ -1158,7 +1158,7 @@ export default {
 // Executive Action Section - McKinsey Style
 .executive-action-section {
   padding: 120px 0;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  background: #FFFFFF;
   position: relative;
   
 
@@ -1178,7 +1178,7 @@ export default {
         align-items: center;
         gap: 8px;
         padding: 8px 20px;
-        background: #ffffff;
+        background: #FFFFFF;
         border: 1px solid #e9ecef;
         border-radius: 24px;
         font-size: 14px;
@@ -1219,7 +1219,7 @@ export default {
     }
     
     .action-card {
-      background: #ffffff;
+      background: #FFFFFF;
       border: 1px solid #e9ecef;
       border-radius: 16px;
       padding: 40px;
@@ -1251,7 +1251,7 @@ export default {
       
       &.primary-action {
         border-color: #dd2525;
-        background: linear-gradient(135deg, #ffffff 0%, #fff8f8 100%);
+        background: #FFFFFF;
         
         &::before {
           background: linear-gradient(90deg, #dd2525 0%, #b91c1c 100%);
@@ -1354,7 +1354,7 @@ export default {
           }
           
           &.secondary {
-            background: #ffffff;
+            background: #FFFFFF;
             color: #495057;
             border: 2px solid #e9ecef;
             
@@ -1432,7 +1432,7 @@ export default {
   }
   
   &.btn-secondary {
-    background: #ffffff;
+    background: #FFFFFF;
     color: #dd2525;
     border: 2px solid #dd2525;
     
