@@ -1,1 +1,0 @@
-import e from"./KanbanBoard-c605ce29.js";import{a as n,b as r,d as o,j as t}from"./index-91d93be3.js";const s={class:"hiring-manager-kanban"},d={__name:"HiringManagerKanban",setup(i){return(c,a)=>(n(),r("div",s,[a[0]||(a[0]=o("h2",null,"Hiring Manager View",-1)),t(e)]))}};export{d as default};

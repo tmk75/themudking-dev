@@ -1,0 +1,1 @@
+import r from"./KanbanBoard-a3b548f5.js";import{a,b as t,d as n,j as o}from"./index-b91ebeae.js";const s={class:"recruiter-kanban"},d={__name:"RecruiterKanban",setup(c){return(i,e)=>(a(),t("div",s,[e[0]||(e[0]=n("h2",null,"Recruiter View",-1)),o(r)]))}};export{d as default};

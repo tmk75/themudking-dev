@@ -92,12 +92,27 @@
         </div>
       </div>
     </div>
+    
+    <div class="lead-time-section">
+      <LeadTimeTracker />
+    </div>
+    
+    <div class="throughput-section">
+      <ThroughputDashboard />
+    </div>
+    
+    <div class="time-to-fill-section">
+      <TimeToFillCalculator />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useWebSocket } from '../composables/useWebSocket.js'
+import LeadTimeTracker from '../components/LeadTimeTracker.vue'
+import ThroughputDashboard from '../components/ThroughputDashboard.vue'
+import TimeToFillCalculator from '../components/TimeToFillCalculator.vue'
 
 const { data: wsData } = useWebSocket('ws://localhost:8080/metrics')
 
@@ -176,7 +191,10 @@ watch(selectedPeriod, () => {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.metric-section.full-width {
+.metric-section.full-width,
+.lead-time-section,
+.throughput-section,
+.time-to-fill-section {
   grid-column: 1 / -1;
 }
 

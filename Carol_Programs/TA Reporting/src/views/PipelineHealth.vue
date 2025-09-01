@@ -92,12 +92,37 @@
         </div>
       </div>
     </div>
+    
+    <div class="cycle-time-section">
+      <CycleTimeAnalysis />
+    </div>
+    
+    <div class="flow-efficiency-section">
+      <FlowEfficiencyCalculator />
+    </div>
+    
+    <div class="analytics-grid">
+      <CumulativeFlowDiagram />
+      <KanbanAgingChart />
+      <KanbanControlCharts />
+      <InteractivePipelineHeatmap />
+      <RealTimeAlertsSystem />
+      <TrendVisualizationCharts />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useWebSocket } from '../composables/useWebSocket.js'
+import CycleTimeAnalysis from '../components/CycleTimeAnalysis.vue'
+import FlowEfficiencyCalculator from '../components/FlowEfficiencyCalculator.vue'
+import CumulativeFlowDiagram from '../components/CumulativeFlowDiagram.vue'
+import KanbanAgingChart from '../components/KanbanAgingChart.vue'
+import KanbanControlCharts from '../components/KanbanControlCharts.vue'
+import InteractivePipelineHeatmap from '../components/InteractivePipelineHeatmap.vue'
+import RealTimeAlertsSystem from '../components/RealTimeAlertsSystem.vue'
+import TrendVisualizationCharts from '../components/TrendVisualizationCharts.vue'
 
 const { data: wsData } = useWebSocket('ws://localhost:8080/pipeline-health')
 
@@ -304,8 +329,24 @@ const getCapacityClass = (utilization) => {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.capacity-analysis {
+.capacity-analysis,
+.cycle-time-section,
+.flow-efficiency-section,
+.analytics-grid {
   grid-column: 1 / -1;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .bottleneck-analysis h3,

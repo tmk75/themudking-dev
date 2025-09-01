@@ -1,1 +1,0 @@
-import e from"./KanbanBoard-c605ce29.js";import{a as s,b as o,d as n,j as t}from"./index-91d93be3.js";const r={class:"asia-kanban"},l={__name:"AsiaKanban",setup(c){return(i,a)=>(s(),o("div",r,[a[0]||(a[0]=n("h2",null,"Asia Pacific Locations",-1)),t(e)]))}};export{l as default};
