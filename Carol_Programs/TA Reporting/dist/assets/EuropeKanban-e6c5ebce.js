@@ -1,0 +1,1 @@
+import a from"./KanbanBoard-c605ce29.js";import{a as o,b as r,d as n,j as t}from"./index-91d93be3.js";const s={class:"europe-kanban"},d={__name:"EuropeKanban",setup(p){return(c,e)=>(o(),r("div",s,[e[0]||(e[0]=n("h2",null,"Europe Locations",-1)),t(a)]))}};export{d as default};
