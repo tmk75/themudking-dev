@@ -1,0 +1,1 @@
+import a from"./KanbanBoard-a3b548f5.js";import{a as t,b as n,d as o,j as r}from"./index-b91ebeae.js";const s={class:"executive-kanban"},d={__name:"ExecutiveKanban",setup(c){return(i,e)=>(t(),n("div",s,[e[0]||(e[0]=o("h2",null,"Executive View",-1)),r(a)]))}};export{d as default};
