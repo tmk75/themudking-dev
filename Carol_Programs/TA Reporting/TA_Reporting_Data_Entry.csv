@@ -1,0 +1,6 @@
+id,name,role,department,location,priority,skills,photo,enteredAt,currentStage,notes,blocked,entryDate
+1,John Smith,Frontend Developer,engineering,us,high,"React,TypeScript,CSS",https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face,2024-01-15,sourcing,Strong technical background,false,2024-01-15
+2,Sarah Johnson,Senior Engineer,engineering,us,medium,"JavaScript,Node.js,AWS",,2024-01-01,technical,Excellent problem solver,false,2024-01-01
+3,Mike Chen,Sales Manager,sales,europe,high,"CRM,Salesforce,Leadership",,2023-12-15,final-interview,Great communication skills,false,2023-12-15
+4,Lisa Wang,Marketing Specialist,marketing,asia,low,"SEO,Content,Analytics",,2024-01-10,screening,Creative thinker,false,2024-01-10
+5,David Brown,Backend Developer,engineering,us,medium,"Python,Django,PostgreSQL",,2024-01-08,interview,Strong database skills,false,2024-01-08
