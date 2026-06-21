@@ -16,7 +16,7 @@ export const products = [
     id: 'wallets',
     title: 'Wallets',
     description: 'Multi-currency wallets with real-time balances and instant internal transfers.',
-    icon: 'wallet',
+    icon: 'wallets',
   },
   {
     id: 'payments',
@@ -65,7 +65,7 @@ export const companyHighlights = [
 
 export const insights = [
   {
-    id: 'insights',
+    id: 'api-operations',
     title: 'API-led operations',
     text: 'Use unified account, wallet and payment data to reduce handoffs and operate with real-time visibility.',
   },
