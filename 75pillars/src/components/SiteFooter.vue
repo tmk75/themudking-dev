@@ -27,7 +27,7 @@ const year = new Date().getFullYear()
     </div>
 
     <div class="container footer-bottom">
-      <span>© {{ year }} 75 Pillars. All rights reserved.</span>
+      <span>&copy; {{ year }} 75 Pillars. All rights reserved.</span>
       <span class="legal">Banking services provided by partner financial institutions.</span>
     </div>
   </footer>

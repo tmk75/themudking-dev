@@ -45,7 +45,7 @@ const iconPaths = {
             <h1>Modern infrastructure for global money movement</h1>
             <p class="hero-sub">
               75 Pillars unifies accounts, wallets, payments and recipients into a single
-              API-driven platform — built for businesses and consumers who expect more from their
+              API-driven platform &mdash; built for businesses and consumers who expect more from their
               financial services.
             </p>
 
@@ -91,7 +91,7 @@ const iconPaths = {
             <span class="eyebrow">Platform</span>
             <h2>One platform, every money-movement need</h2>
             <p>
-              Build and scale financial products on a single, unified core — from accounts and
+              Build and scale financial products on a single, unified core &mdash; from accounts and
               wallets to payments and recipient management.
             </p>
           </div>

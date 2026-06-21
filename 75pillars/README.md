@@ -1,5 +1,13 @@
-# Vue 3 + Vite
+# 75 Pillars
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A Vue/Vite rebuild of the 75 Pillars public landing site.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Scripts
+
+```sh
+npm install
+npm run dev
+npm run build
+```
+
+The `/app` route embeds the existing platform login at `https://app-uat.seventyfivepillars.com/`.

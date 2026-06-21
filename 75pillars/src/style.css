@@ -276,7 +276,7 @@ select {
 }
 
 .hero-trust li:not(:last-child)::after {
-  content: "•";
+  content: "\2022";
   margin-left: 10px;
   color: var(--c-border);
 }
