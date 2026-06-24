@@ -1,1 +1,0 @@
-import n from"./KanbanBoard-a3b548f5.js";import{a,b as r,d as t,j as o}from"./index-b91ebeae.js";const s={class:"engineering-kanban"},_={__name:"EngineeringKanban",setup(i){return(c,e)=>(a(),r("div",s,[e[0]||(e[0]=t("h2",null,"Engineering Department",-1)),o(n)]))}};export{_ as default};

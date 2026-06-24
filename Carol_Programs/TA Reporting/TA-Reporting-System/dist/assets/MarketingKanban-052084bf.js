@@ -1,1 +1,0 @@
-import e from"./KanbanBoard-a3b548f5.js";import{a as t,b as n,d as r,j as o}from"./index-b91ebeae.js";const s={class:"marketing-kanban"},_={__name:"MarketingKanban",setup(m){return(c,a)=>(t(),n("div",s,[a[0]||(a[0]=r("h2",null,"Marketing Department",-1)),o(e)]))}};export{_ as default};

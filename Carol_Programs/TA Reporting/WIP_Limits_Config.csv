@@ -1,9 +1,0 @@
-stage,wipLimit,currentCount,warningThreshold
-sourcing,20,5,16
-screening,15,3,12
-phone-screen,8,2,6
-interview,5,2,4
-technical,4,1,3
-final-interview,3,1,2
-offer,5,0,4
-hired,999,0,999
